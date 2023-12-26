@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Resena;
 
 
 class User extends Authenticatable
@@ -14,9 +16,18 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
 
-    
-    protected $table  = 'usuarios_empleados';
 
+    protected $table  = 'usuarios';
+    protected $primaryKey = 'id_usuario'; //Esta la use para obtener el id en el controlador
+
+    /**
+     * Aqui hacemos igual el metodo de relacion es decir 'estamos en el modelo User' y decimos que el usuario puede tener uno o muchas resenas
+     */
+    //Metodo de relacion
+     public function Resena(): HasMany
+    {
+        return $this->hasMany(Resena::class, 'id_usuario', 'id_resena');
+    }
 
 
 
@@ -36,9 +47,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'nombre_completo',
+        'nombre',
         'email',
-        'contrasena',
     ];
 
     /**
@@ -47,7 +57,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'contrasena',
+
         'remember_token',
     ];
 

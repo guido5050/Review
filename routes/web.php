@@ -3,6 +3,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use  App\Http\Controllers\LoginController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,7 +19,7 @@ use App\Http\Controllers\Auth\AuthController;
 //dd(User::first()->toArray());
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Route::view('login','login')->name('login');
@@ -26,10 +28,12 @@ Route::view('login','login')->name('login');
 //Route::POST('login',[LoginController::class, 'login'])->name('login');
 //Route::POST('logout',[LoginController::class, 'logout'])->name('logout');
 
+Route::post('store',[UserController::class, 'store'])->name('store');
+Route::get('resena', [UserController::class, 'index'])->name('resena');
+
+Route::get('showresena',[UserController::class, 'showresena']);
 //Auth
-
 Route::prefix('auth')->group(function(){
-
 //Auth Register
 Route::get('register',[AuthController::class, 'register'])->name('LoginAuth');
 Route::post('register',[AuthController::class, 'loginverify'])->name('loginverify');
@@ -42,3 +46,5 @@ Route::middleware('auth')->group(function(){
   return 'Estas logueado :V';
  });
 });
+
+
