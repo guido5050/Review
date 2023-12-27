@@ -29,22 +29,16 @@ Route::view('login','login')->name('login');
 //Route::POST('logout',[LoginController::class, 'logout'])->name('logout');
 
 Route::post('store',[UserController::class, 'store'])->name('store');
-Route::get('resena', [UserController::class, 'index'])->name('resena');
-
-Route::get('showresena',[UserController::class, 'showresena']);
+Route::get('resena', [UserController::class, 'index'])->name('resena'); //Vista de usuario lista los usuarios
+Route::get('resena/{id}', [UserController::class, 'saveresena'])->name('save_resena');
+Route::get('showresena',[UserController::class, 'showresena'])->name('showresena');//Ruta de prueba
 //Auth
 Route::prefix('auth')->group(function(){
-//Auth Register
+//Auth Register(rutas pretegidas)
 Route::get('register',[AuthController::class, 'register'])->name('LoginAuth');
 Route::post('register',[AuthController::class, 'loginverify'])->name('loginverify');
 
 });
 
-//Protegidas
-Route::middleware('auth')->group(function(){
- Route::get('dashboard',function(){
-  return 'Estas logueado :V';
- });
-});
 
 

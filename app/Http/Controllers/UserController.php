@@ -15,8 +15,29 @@ class UserController extends Controller
     public function index()
     {
         //Mostrar vista de review
-        $data =Resena::with('User')->get();
+        $data =User::all();
+
+        //dd($data);
+
        return view('pages.resena', compact('data'));
+
+    }
+
+    public function saveresena(int $id){
+
+       $user =  User::where('id_usuario', $id)
+       ->first();
+       //dd($data);
+
+       $resenaData =['id_usuario' =>$user->id_usuario,];
+       //dd($resenaData);
+       Resena::create($resenaData);
+
+       //Aqui solo faltaria programae lo de generar el link 
+
+       return back(); //
+
+
 
     }
 
@@ -29,11 +50,15 @@ class UserController extends Controller
     }
 
     //mostrando datos de resena
-    public function showresena(){
+    public function showresena(){ //Metodo de prueba para debuguear cualquier cosa..
        //$data = Resena::all();
 
-       $data =Resena::with('User')->get();
-       dd($data);
+       //$data =Resena::with('User')->get();
+       //dd($data);
+
+
+
+       return redirect()->route('resena');
 
     }
 
@@ -53,13 +78,11 @@ class UserController extends Controller
         //Insert Method...
        $user= User::Create($data);
 
-       $resenaData =['id_usuario' =>$user->id_usuario,];
-       //dd($resenaData);
-       Resena::create($resenaData);
+
 
         return redirect()->route('resena');
     }
-    
+
 
     /**
      * Display the specified resource.
