@@ -30,7 +30,9 @@ Route::view('login','login')->name('login');
 
 Route::post('store',[UserController::class, 'store'])->name('store');
 Route::get('resena', [UserController::class, 'index'])->name('resena'); //Vista de usuario lista los usuarios
-Route::get('resena/{id}', [UserController::class, 'saveresena'])->name('save_resena');
+
+Route::get('resena/{id}', [UserController::class, 'saveresena'])->name('save_resena');//Guardando resenas
+
 Route::get('showresena',[UserController::class, 'showresena'])->name('showresena');//Ruta de prueba
 //Auth
 Route::prefix('auth')->group(function(){

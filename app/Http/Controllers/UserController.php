@@ -30,10 +30,10 @@ class UserController extends Controller
        //dd($data);
 
        $resenaData =['id_usuario' =>$user->id_usuario,];
-       //dd($resenaData);
-       Resena::create($resenaData);
+    dd($resenaData);
+     //  Resena::create($resenaData);
 
-       //Aqui solo faltaria programae lo de generar el link 
+       //Aqui solo faltaria programae lo de generar el link
 
        return back(); //
 
