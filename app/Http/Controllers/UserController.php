@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Resena;
+use App\Models\Prespuesta;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -21,22 +22,42 @@ class UserController extends Controller
 
        return view('pages.resena', compact('data'));
 
-    }
+    }//
 
     public function saveresena(int $id){
 
        $user =  User::where('id_usuario', $id)
        ->first();
-       //dd($data);
 
-       $resenaData =['id_usuario' =>$user->id_usuario,];
-    dd($resenaData);
-     //  Resena::create($resenaData);
+       // dd($user);
+
+       $resenaData =['id_usuario' =>$user->id_usuario,
+        'comentario' => "sddfff", ];
+         //dd($resenaData);
+         //Resena::create($resenaData);
 
        //Aqui solo faltaria programae lo de generar el link
 
-       return back(); //
+       return redirect()->route('review'); //
+     }//
 
+
+
+
+
+
+     public function showpreguntas(Request $request){ //Esta funcion en el futuro va a recebir la puntuacion de las estrellas(osea el request)
+        /**
+         * Metodo para mostrar las posibles respuestas dependiendo
+         * de la puntuacion y de que tipo de pregunta sea o pertenezca
+         */
+         $limpieza = Prespuesta::where('id_preguntas',1)
+        //tipo de pregunta por ejemplo aqui el id le pertenece a limpieza
+        ->where('puntuacion',$request->puntuacion)//puntuacion.....
+        ->get();
+
+       // dd($request->only('puntuacion'));
+        dd($limpieza);
 
 
     }

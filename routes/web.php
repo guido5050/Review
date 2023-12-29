@@ -32,8 +32,9 @@ Route::post('store',[UserController::class, 'store'])->name('store');
 Route::get('resena', [UserController::class, 'index'])->name('resena'); //Vista de usuario lista los usuarios
 
 Route::get('resena/{id}', [UserController::class, 'saveresena'])->name('save_resena');//Guardando resenas
+Route::get('review',function(){ return view('pages.cuestionario');})->name('review');//Ruta que muestra el cuestionario de las preguntas
 
-Route::get('showresena',[UserController::class, 'showresena'])->name('showresena');//Ruta de prueba
+Route::post('showpreguntas',[UserController::class, 'showpreguntas'])->name('showpreguntas');//Ruta de prueba(mostrar las preguntas)
 //Auth
 Route::prefix('auth')->group(function(){
 //Auth Register(rutas pretegidas)
