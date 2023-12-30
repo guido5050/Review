@@ -16,11 +16,13 @@ class UserController extends Controller
     public function index()
     {
         //Mostrar vista de review
-        $data =User::all();
+        $user =User::all();
 
         //dd($data);
+        
 
-       return view('pages.resena', compact('data'));
+
+       return inertia('Products/Tes', ['user' =>  $user]);
 
     }//
 

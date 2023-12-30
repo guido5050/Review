@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use  App\Http\Controllers\LoginController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\UserController;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +20,9 @@ use App\Http\Controllers\UserController;
 //dd(User::first()->toArray());
 
 Route::get('/', function () {
-    return view('home');
+    return inertia::render('Products/Tes');
 });
+
 
 Route::view('login','login')->name('login');
 
