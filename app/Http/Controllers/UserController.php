@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Resena;
-use App\Models\Prespuesta;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use App\Models\Prespuesta;
+use App\Models\Preguntas;
+
+
 
 class UserController extends Controller
 {
@@ -19,7 +23,7 @@ class UserController extends Controller
         $user =User::all();
 
         //dd($data);
-        
+
 
 
        return inertia('Products/Tes', ['user' =>  $user]);
@@ -36,7 +40,7 @@ class UserController extends Controller
        $resenaData =['id_usuario' =>$user->id_usuario,
         'comentario' => "sddfff", ];
          //dd($resenaData);
-         //Resena::create($resenaData);
+         // Resena::create($resenaData);
 
        //Aqui solo faltaria programae lo de generar el link
 
@@ -48,18 +52,24 @@ class UserController extends Controller
 
 
 
-     public function showpreguntas(Request $request){ //Esta funcion en el futuro va a recebir la puntuacion de las estrellas(osea el request)
-        /**
-         * Metodo para mostrar las posibles respuestas dependiendo
-         * de la puntuacion y de que tipo de pregunta sea o pertenezca
-         */
-         $limpieza = Prespuesta::where('id_preguntas',1)
+
+     public function showpreguntas(Request $request)
+     { //Esta funcion en el futuro va a recebir la puntuacion de las estrellas(osea el request)
+
+        // $preguntas=Preguntas::where('id_preguntas',1)->get();
+        // dd($preguntas);
+
+         //dd($request->only('puntuacion'));
+         //dd($request);
+          $limpieza = Prespuesta::where('id_preguntas',$request->pregunta)
         //tipo de pregunta por ejemplo aqui el id le pertenece a limpieza
-        ->where('puntuacion',$request->puntuacion)//puntuacion.....
+        ->where('puntuacion',$request->score)//puntuacion.....
         ->get();
 
-       // dd($request->only('puntuacion'));
-        dd($limpieza);
+
+        //dd($limpieza);
+
+        return Inertia::render('Preguntas/Stars', ['limpieza' => $limpieza]);
 
 
     }

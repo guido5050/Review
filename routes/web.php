@@ -1,10 +1,10 @@
 <?php
-use App\Models\User;
+
+use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use  App\Http\Controllers\LoginController;
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\UserController;
 use Inertia\Inertia;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,38 +12,25 @@ use Inertia\Inertia;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
 |
 */
 
-//dd(User::first()->toArray());
-
 Route::get('/', function () {
-    return inertia::render('Products/Tes');
+    return Inertia::render('Preguntas/Stars', []);
 });
 
+Route::post('show',[UserController::class,'showpreguntas'])->name('show');
 
-Route::view('login','login')->name('login');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
-//Rutas para Login
-//Route::POST('login',[LoginController::class, 'login'])->name('login');
-//Route::POST('logout',[LoginController::class, 'logout'])->name('logout');
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// });
 
-Route::post('store',[UserController::class, 'store'])->name('store');
-Route::get('resena', [UserController::class, 'index'])->name('resena'); //Vista de usuario lista los usuarios
-
-Route::get('resena/{id}', [UserController::class, 'saveresena'])->name('save_resena');//Guardando resenas
-Route::get('review',function(){ return view('pages.cuestionario');})->name('review');//Ruta que muestra el cuestionario de las preguntas
-
-Route::post('showpreguntas',[UserController::class, 'showpreguntas'])->name('showpreguntas');//Ruta de prueba(mostrar las preguntas)
-//Auth
-Route::prefix('auth')->group(function(){
-//Auth Register(rutas pretegidas)
-Route::get('register',[AuthController::class, 'register'])->name('LoginAuth');
-Route::post('register',[AuthController::class, 'loginverify'])->name('loginverify');
-
-});
-
-
-
+require __DIR__.'/auth.php';
