@@ -17,11 +17,10 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Preguntas/Stars', []);
-});
-
-Route::post('show',[UserController::class,'showpreguntas'])->name('show');
+Route::get('/',[UserController::class,'showStars'])->name('showStars');
+Route::post('/show',[UserController::class,'showpreguntas'])->name('show');
+Route::post('store',[UserController::class,'StorePreguntas'])->name('store');
+//Route::get('preguntas',[UserController::class,'PreguntasClientes']);
 
 // Route::get('/dashboard', function () {
 //     return Inertia::render('Dashboard');

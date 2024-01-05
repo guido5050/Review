@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Prespuesta;
 use App\Models\Preguntas;
+use App\Models\PreguntasClientes;
+
 
 
 
@@ -17,7 +19,14 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+     public function showStars(){
+
+       return Inertia::render('Preguntas/Stars');
+
+      }
+
+     public function index()
     {
         //Mostrar vista de review
         $user =User::all();
@@ -47,11 +56,22 @@ class UserController extends Controller
        return redirect()->route('review'); //
      }//
 
+     public function StorePreguntas(Request $request){
 
+      //dd($request);
 
+        $data = $request->validate([
+            "id_preguntas" => 'required',
+            "pregunta" => "required",
+            "id_posiblesRespuestas" => "required",
+            "NombrePregunta" => "required",
+        ]);
 
+       PreguntasClientes::create($data);
 
+       return redirect()->route('showStars'); //
 
+     }
 
      public function showpreguntas(Request $request)
      { //Esta funcion en el futuro va a recebir la puntuacion de las estrellas(osea el request)
@@ -61,17 +81,25 @@ class UserController extends Controller
 
          //dd($request->only('puntuacion'));
          //dd($request);
-          $limpieza = Prespuesta::where('id_preguntas',$request->pregunta)
-        //tipo de pregunta por ejemplo aqui el id le pertenece a limpieza
-        ->where('puntuacion',$request->score)//puntuacion.....
-        ->get();
+         $limpieza = Prespuesta::where('id_preguntas', $request->pregunta)
+         ->where('puntuacion', $request->score)
+         ->with('pregunta') // Cargar la relación
+         ->get();
+        // dd($limpieza->toArray());
+
+        return Inertia::render('Preguntas/Stars',
+        ['limpieza' => $limpieza,
+        'titulos' => $limpieza->pluck('pregunta.titulo'),]);
 
 
-        //dd($limpieza);
-
-        return Inertia::render('Preguntas/Stars', ['limpieza' => $limpieza]);
+    }
 
 
+
+    public function PreguntasClientes()
+    {
+       $data  = PreguntasClientes::all();
+        dd($data);
     }
 
     /**

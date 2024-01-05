@@ -10,7 +10,11 @@ class Preguntas extends Model
     use HasFactory;
         //Creamos la configuracion del modelo
         protected $table = 'preguntas';
-        protected $primary= 'id_preguntas';
+        //protected $primarykey= 'id_preguntas';
+        protected $primaryKey = 'id_preguntas';
+
+
+
 
 
 }
