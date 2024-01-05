@@ -74,13 +74,7 @@ class UserController extends Controller
      }
 
      public function showpreguntas(Request $request)
-     { //Esta funcion en el futuro va a recebir la puntuacion de las estrellas(osea el request)
-
-        // $preguntas=Preguntas::where('id_preguntas',1)->get();
-        // dd($preguntas);
-
-         //dd($request->only('puntuacion'));
-         //dd($request);
+     {
          $limpieza = Prespuesta::where('id_preguntas', $request->pregunta)
          ->where('puntuacion', $request->score)
          ->with('pregunta') // Cargar la relación
@@ -93,16 +87,15 @@ class UserController extends Controller
 
 
     }
-
-
-
-    public function PreguntasClientes()
+    public function Preguntas(int $id)
     {
-       $data  = PreguntasClientes::all();
-        dd($data);
-    }
+       $data = Preguntas::where('id_preguntas', $id)
+      ->pluck('titulo')->first();
+       //dd($data);
 
-    /**
+       return Inertia::render('components/Titulo',['data'=>$data]);
+    }
+     /**
      * Show the form for creating a new resource.
      */
     public function create()
