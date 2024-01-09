@@ -18,8 +18,10 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/',[UserController::class,'showStars'])->name('showStars');
-Route::post('/show',[UserController::class,'showpreguntas'])->name('show');
-Route::post('store',[UserController::class,'StorePreguntas'])->name('store');
-Route::get('/{id}',[UserController::class,'Preguntas'])->name('preguntas');
 
+
+Route::post('/show',[UserController::class,'showpreguntas'])->name('show');
+Route::post('StorePreguntas',[UserController::class,'StorePreguntas'])->name('StorePreguntas');
+//Route::post('/',[UserController::class,'Preguntas'])->name('preguntas');
+Route::post('storecomments',[UserController::class,'storecomments'])->name('storecomments');
 require __DIR__.'/auth.php';

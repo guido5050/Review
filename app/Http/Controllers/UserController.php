@@ -20,9 +20,13 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
 
-     public function showStars(){
+     public function showStars(Request $request){
 
-       return Inertia::render('Preguntas/Stars');
+      $preguntas = Preguntas::all()->pluck('titulo');
+      $preguntas->prepend('');
+
+
+       return Inertia::render('Preguntas/Stars',['preguntas' => $preguntas]);
 
       }
 
@@ -56,16 +60,18 @@ class UserController extends Controller
        return redirect()->route('review'); //
      }//
 
-     public function StorePreguntas(Request $request){
+     public function StorePreguntas(Request $request){ /* Revisar este metodo....  ejecutarlo cuando sea necesRIO */
 
-      //dd($request);
+     // dd($request);
 
         $data = $request->validate([
             "id_preguntas" => 'required',
             "pregunta" => "required",
-            "id_posiblesRespuestas" => "required",
+            "id_posiblesRespuestas" => "",
             "NombrePregunta" => "required",
         ]);
+
+
 
        PreguntasClientes::create($data);
 
@@ -73,13 +79,33 @@ class UserController extends Controller
 
      }
 
+     public function storecomments(Request $request)
+     {
+
+    // dd($request);
+
+       $data =['comentario' =>$request->comentario];
+         //dd($resenaData);
+       Resena::create($data);
+
+       return inertia('components/Final');
+
+
+    }
+
+
      public function showpreguntas(Request $request)
      {
-         $limpieza = Prespuesta::where('id_preguntas', $request->pregunta)
+
+        //dd($request);
+        $limpieza = Prespuesta::where('id_preguntas', $request->pregunta)
          ->where('puntuacion', $request->score)
          ->with('pregunta') // Cargar la relación
          ->get();
-        // dd($limpieza->toArray());
+         //dd($limpieza->toArray());
+
+
+       // dd($preguntas);
 
         return Inertia::render('Preguntas/Stars',
         ['limpieza' => $limpieza,
@@ -87,14 +113,7 @@ class UserController extends Controller
 
 
     }
-    public function Preguntas(int $id)
-    {
-       $data = Preguntas::where('id_preguntas', $id)
-      ->pluck('titulo')->first();
-       //dd($data);
 
-       return Inertia::render('components/Titulo',['data'=>$data]);
-    }
      /**
      * Show the form for creating a new resource.
      */

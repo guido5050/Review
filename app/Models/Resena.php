@@ -16,6 +16,7 @@ class Resena extends Model
    protected $fillable =  [
     'id_resena',
     'id_usuario',
+    'comentario',
    ];
 /**
  * Para hacer las relaciones en laravel cuando se usa el metodo convencional(explicado en la documentacion) no

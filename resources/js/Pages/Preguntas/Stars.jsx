@@ -5,23 +5,26 @@ import TextArea from "../components/TextArea";
 import Btn from "../components/Btn";
 import Strellas from "../components/Strellas";
 import Titulo from "../components/Titulo";
-export default function Stars({ limpieza }) {
-    //console.log(limpieza);
+export default function Stars({ limpieza, preguntas }) {
     const [currentScore, setCurrentScore] = useState(0);
-    const [pregunta, setPregunta] = useState(1);
-    const [message, setMessage] = useState("siguiente");
+    const [pregunta, setPregunta] = useState(1); //Pregunta que incia 1 este estado es importante maneja varias consultas
+    const [message, setMessage] = useState("siguiente"); //Texto del boton
     const [btn, setBtn] = useState(false);
-    const [titulo, setTitulo] = useState("");
+    const [titulo, setTitulo] = useState(""); //Titulo de las preguntas
     const [respuestaSelec, setRespuestaSelec] = useState({
-        id_preguntas: "",
-        pregunta: "",
-        id_posiblesRespuestas: "",
-        NombrePregunta: "",
+        id_preguntas: null,
+        pregunta: null,
+        id_posiblesRespuestas: null,
+        NombrePregunta: null,
     }); //Almacenar las respuestas seleccionadas
-
+    const textos = ["Mala", "Aceptable", "Buena", "Excelente", "Perfecta"]; //
+    const [texto, setTexto] = useState("Seleccione una calificacion "); //Este estado maneja el texto que se despliega indivudual de puntuaciones de estrellas
+    const [arreglo, setArreglo] = useState(preguntas);
+    //console.log(arreglo);
     // Manejador de clic para cambiar la puntuación
     const handleStarClick = (index) => {
         // Incrementa o disminuye la puntuación según la estrella clicada
+
         const newScore = index + 1 === currentScore ? index : index + 1;
         setCurrentScore(newScore);
         if (newScore > 0) {
@@ -29,45 +32,54 @@ export default function Stars({ limpieza }) {
         } else {
             setBtn(false);
         }
-        router.post("show", { score: newScore, pregunta: pregunta });
+        console.log(newScore - 1);
+        //titulo de arriba : Mala, Aceptable, Buena
+        newScore === 0
+            ? setTexto("seleccione una opcion")
+            : setTexto(textos[newScore - 1]);
+
+        const preguntaInt = parseInt(pregunta);
+        router.post("show", { score: newScore, pregunta: preguntaInt });
     };
+
     //funcion de onclick este es el metodo que ejecuta el boton siguiente...
     const onclick = () => {
         setPregunta(pregunta + 1);
         setCurrentScore(0);
         limpieza.length = 0;
         setBtn(false);
-
-        if (pregunta === 5) {
-            //metodo para guardar
-        }
         //console.log(respuestaSelec);
-        router.post("store", respuestaSelec);
+        router.post("StorePreguntas", respuestaSelec);
     };
 
     const manejarClick = (respuesta) => {
-        setRespuestaSelec((respuestaSelec) => ({
+        setRespuestaSelec((...respuestaSelec) => ({
             id_preguntas: respuesta.id_preguntas,
             pregunta: respuesta.pregunta.titulo,
             id_posiblesRespuestas: respuesta.id_posiblesRespuestas,
             NombrePregunta: respuesta.titulo_respuesta,
         }));
     };
-    
 
     //Funcion para al almanecenar las preguntas
+    console.log(currentScore);
+    console.log(respuestaSelec);
     return (
-        <div className="flex flex-col text-center  h-screen items-center">
-            <h1>APLICACION DE LARAVEL. {pregunta}</h1>
-            {/* @php
-            $id=\App\pregunta::where('id_preguntas',{pregunta})->pluck('titulo')->first();
-        @endphp */}
-            <Titulo pregunta={pregunta}></Titulo>
-
-            <Strellas
-                handleStarClick={handleStarClick}
-                currentScore={currentScore}
-            ></Strellas>
+        <div className="flex flex-col text-center  h-screen items-center animate-fade-down animate-ease-in">
+            <Titulo
+                arreglo={arreglo}
+                pregunta={pregunta} //indice del arreglo
+                titulo={titulo} //titulo texto correspondiente a cada opcion(primero es Limpieza)
+                setTitulo={setTitulo} // funcion que lo modifica
+            ></Titulo>
+            {pregunta && pregunta < 6 ? (
+                <Strellas
+                    texto={texto} //Pasamos por props el titulo de la pregunta Mala, buena... ect
+                    textos={textos}
+                    handleStarClick={handleStarClick}
+                    currentScore={currentScore}
+                ></Strellas>
+            ) : null}
 
             <div className="mt-5 mb-5 p-3 animate-shake">
                 {limpieza && limpieza.length > 0 ? ( // Verificación de limpieza no es undefined y tiene elementos

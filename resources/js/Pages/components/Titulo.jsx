@@ -1,16 +1,36 @@
 import { router } from "@inertiajs/react";
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
+import { MdOutlineCleaningServices } from "react-icons/md";
+import { ImLocation2 } from "react-icons/im";
+import { MdOutlinePriceChange } from "react-icons/md";
+import { LuUsers } from "react-icons/lu";
+import { HiIdentification } from "react-icons/hi2";
 
-const Titulo = ({ pregunta, data }) => {
+const Titulo = ({  arreglo, pregunta, titulo, setTitulo }) => {
+    //console.log(preguntas);
     useEffect(() => {
-        console.log(data);
-        console.log("Holaa");
-        console.log(pregunta);
-        //router.get("/", { id: pregunta });
+        setTitulo(arreglo[pregunta]);
+        console.log(titulo);
     }, [pregunta]);
-
-    return <h1>{data}</h1>;
+    //Menu opc<MdOutlineCleaningServices />
+    //iconos
+    return (
+        <>
+            <div className="flex items-center justify-center gap-x-3">
+                <h1 className="mt-6 font-bold text-[45px] pb-6">{titulo}</h1>
+                <div>
+                    {pregunta === 1 && (
+                        <MdOutlineCleaningServices size={"45px"} />
+                    )}
+                    {pregunta === 2 && <ImLocation2 size={"45px"} />}
+                    {pregunta === 3 && <MdOutlinePriceChange size={"45px"} />}
+                    {pregunta === 4 && <LuUsers size={"45px"} />}
+                    {pregunta === 5 && <HiIdentification size={"45px"} />}
+                </div>
+            </div>
+        </>
+    );
 };
 
 export default Titulo;

@@ -1,16 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
+import { router } from "@inertiajs/react";
 
 const TextArea = () => {
+    const [value, setValues] = useState({
+        comentario: "",
+    });
+
+    function handleChange(e) {
+        const key = e.target.id;
+        const value = e.target.value;
+        setValues((values) => ({
+            ...values,
+            [key]: value,
+        }));
+    }
+
+    console.log(value);
+    function handleSubmit(e) {
+        e.preventDefault();
+        router.post("storecomments", value);
+    }
     return (
         <>
-            <form className="w-[60%]">
+            <h1 className=" font-semibold mb-3">
+                GRACIAS POR RESPONDER A NUESTRA ENCUENSTA 😆
+            </h1>
+            <form className="w-[60%] " onSubmit={handleSubmit}>
                 <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                    <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+                    <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                         <label for="comment" class="sr-only">
                             Your comment
                         </label>
                         <textarea
-                            id="comment"
+                            id="comentario"
+                            onChange={handleChange}
                             rows="4"
                             class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
                             placeholder="Dejanos tu comentatio..."
