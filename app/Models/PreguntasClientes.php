@@ -14,6 +14,7 @@ class PreguntasClientes extends Model
         'pregunta',
         'id_posiblesRespuestas',
         'NombrePregunta',
+        'id_resena'
         // ... otros campos que puedas tener
     ];
         protected $table = 'preguntas_clientes';

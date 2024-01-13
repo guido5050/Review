@@ -11,7 +11,7 @@ const Titulo = ({  arreglo, pregunta, titulo, setTitulo }) => {
     //console.log(preguntas);
     useEffect(() => {
         setTitulo(arreglo[pregunta]);
-        console.log(titulo);
+        //console.log(titulo);
     }, [pregunta]);
     //Menu opc<MdOutlineCleaningServices />
     //iconos

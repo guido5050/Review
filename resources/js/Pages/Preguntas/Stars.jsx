@@ -5,9 +5,11 @@ import Btn from "../components/Btn";
 import Strellas from "../components/Strellas";
 import Titulo from "../components/Titulo";
 
-export default function Stars({ limpieza, preguntas, resenaData }) {
-    console.log('resena'+ resenaData);
-
+export default function Stars({ limpieza, preguntas, id_resena2, idresena }) {
+    //console.log("resena" + idresena);
+    console.log(limpieza);
+    console.log(id_resena2);
+    const [id, setId] = useState(idresena);
     const [currentScore, setCurrentScore] = useState(0);
     const [pregunta, setPregunta] = useState(1); //Pregunta que incia 1 este estado es importante maneja varias consultas
     const [message, setMessage] = useState("siguiente"); //Texto del boton
@@ -21,10 +23,10 @@ export default function Stars({ limpieza, preguntas, resenaData }) {
     const [btnActive, setBtnActive] = useState(null); //prueba de UseRef
     const inputRef = useRef(0); //prueba de UseRef
 
-
-    const handleStarClick = (index) => {
+    const handleStarClick = (index, idresena) => {
         // Incrementa o disminuye la puntuación según la estrella clicada
 
+        console.log(id);
         const newScore = index + 1 === currentScore ? index : index + 1;
         setCurrentScore(newScore);
         if (newScore > 0) {
@@ -36,8 +38,11 @@ export default function Stars({ limpieza, preguntas, resenaData }) {
         // newScore === 1
         //     ? setMalacalificacion("Cuentanos que paso?🙁")
         //     : setMalacalificacion("");
-
-        router.post("show", { score: newScore, pregunta: pregunta });
+        router.post("show", {
+            score: newScore,
+            pregunta: pregunta,
+            idresena: id,
+        });
         if (newScore === 1) {
             setMalacalificacion("Cuentanos que paso?🙁");
         } else {
@@ -58,7 +63,7 @@ export default function Stars({ limpieza, preguntas, resenaData }) {
         setBtn(false);
         setMalacalificacion(""); //reinicio
         setTexto("Selecciona una calificación. 📌");
-
+        setId(idresena);
         if (respuestaSelec === null) {
             console.log("nul");
         }
@@ -78,12 +83,14 @@ export default function Stars({ limpieza, preguntas, resenaData }) {
             // Si no está activo, actívalo
             setBtnActive(inputRef.current);
         }
+
         setRespuestaSelec((respuestaSelec) => [...respuestaSelec, respuesta]);
     };
 
     //Funcion para al almanecenar las preguntas
     return (
         <div className="flex flex-col gap-y-2 text-center  h-screen items-center animate-fade-down animate-ease-in">
+            <h1>{id}</h1>
             <Titulo
                 arreglo={arreglo}
                 pregunta={pregunta} //indice del arreglo

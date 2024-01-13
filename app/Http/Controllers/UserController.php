@@ -19,14 +19,28 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
+ // Declarar la propiedad para la variable "global"
+ protected $miVariableGlobal;
 
-     public function showStars(Request $request){
+ public function __construct()
+ {
+     // Inicializar la variable en el constructor si es necesario
+     $this->miVariableGlobal;
+ }
+
+
+    public function showStars(Request $request){
+        $this->miVariableGlobal = $request->id_resena;
+
+
+        $id_resena =$this->miVariableGlobal;
 
       $preguntas = Preguntas::all()->pluck('titulo');
       $preguntas->prepend('');
 
 
-       return Inertia::render('Preguntas/Stars',['preguntas' => $preguntas]);
+
+       return Inertia::render('Preguntas/Stars',['preguntas' => $preguntas,'idresena' => $id_resena]);
 
       }
 
@@ -43,28 +57,30 @@ class UserController extends Controller
 
     }//
 
-    public function saveresena(int $id){
+    // public function saveresena(int $id){
 
-       $user =  User::where('id_usuario', $id)
-       ->first();
+    //    $user =  User::where('id_usuario', $id)
+    //    ->first();
 
-       // dd($user);
+    //    // dd($user);
 
-       $resenaData =['id_usuario' =>$user->id_usuario,
-        'comentario' => "sddfff", ];
-         //dd($resenaData);
-         // Resena::create($resenaData);
+    //    $resenaData =['id_usuario' =>$user->id_usuario,
+    //     'comentario' => "sddfff", ];
+    //      //dd($resenaData);
+    //      // Resena::create($resenaData);
 
-       //Aqui solo faltaria programae lo de generar el link
+    //    //Aqui solo faltaria programae lo de generar el link
 
-       return redirect()->route('review'); //
-     }//
+    //    return redirect()->route('review'); //
+    //  }//
 
      public function StorePreguntas(Request $request){
 
-        // dd($request);
 
-        $id_resena = 16;
+
+        $id_resena = $request[0]['id_Resenita'];
+
+
         $id_preguntas = $request[0]['id_preguntas'];
        $puntuacion = $request[0]['puntuacion'];
 
@@ -75,6 +91,7 @@ class UserController extends Controller
            'id_preguntas' => $id_preguntas,
            'puntuacion' => $puntuacion,
         ]);
+
 
 ///dd($imprimir);
 
@@ -88,12 +105,14 @@ class UserController extends Controller
                  $nombre_pre_repu = $data['titulo_respuesta'];
                  $puntuacion = $data['puntuacion'];
                  $pregunta =  $data['pregunta']['titulo'];
-
+                 $id_reseni2=$id_resena;
                 //dd($guardar, $pregunta,$id_posiblesRespuestas,$nombre_pre_repu,$puntuacion);
+
+            
                  PreguntasClientes::create([
                     'id_posiblesRespuestas' => $id_posiblesRespuestas,'id_preguntas' => $id_preguntas,
                     'NombrePregunta' => $nombre_pre_repu, 'puntuacion' => $puntuacion,
-                    'pregunta' => $pregunta]);
+                    'pregunta' => $pregunta, 'id_resena' => $id_reseni2]);
     }
       // PreguntasClientes::create($request);
 
@@ -102,6 +121,7 @@ class UserController extends Controller
      }
 
      public function storecomments(Request $request) {
+
 
         $id_resena = 16; // Reemplaza con el ID de la pregunta deseada
 
@@ -121,25 +141,59 @@ class UserController extends Controller
      {
         // dd($request->toArray());
 
-       // dd('Null');
+       //dd($request->toArray());
+
+       $respuesta=Prespuesta::where('id_preguntas', $request->pregunta)
+->where('puntuacion', $request->score)
+->with('pregunta') // Cargar la relación
+->get();
+
+$wx2=0;
+foreach ($respuesta as $WX) {
+
+    $id_posiblesRespuestas = $WX->id_posiblesRespuestas;
+    $nuevoElemento = [
+        "id_posiblesRespuestas" => $WX->id_posiblesRespuestas,
+        "id_preguntas" => $WX->id_preguntas,
+        "titulo_respuesta" => $WX->titulo_respuesta,
+        "puntuacion" => $WX->puntuacion,
+        "pregunta" => [
+            "id_preguntas" => $WX->pregunta['id_preguntas'],
+            "titulo" => $WX->pregunta['titulo'],
+            "puntuacion_maxima" => $WX->pregunta['titulo'],
+        ], // Tu contenido real aquí
+        "id_Resenita" =>  $id_resena = $request->idresena,
+    ];
+    $limpieza[$wx2] = $nuevoElemento;
+$wx2=$wx2+1;
+
+}
 
 
-        $limpieza = Prespuesta::where('id_preguntas', $request->pregunta)
+
+
+// Añadir el nuevo elemento al final del arreglo
+
+
+       /* $limpieza = Prespuesta::where('id_preguntas', $request->pregunta)
          ->where('puntuacion', $request->score)
          ->with('pregunta') // Cargar la relación
-         ->get();
+         ->get();*/
 
          $pregunta = $request->pregunta; //1
          $score = $request->score;//5
           //dd($pregunta, $score, $limpieza->toArray());
 
-       // dd($preguntas);
+
+
+      // $id_resena = $request->idresena;
+
 
         return Inertia::render('Preguntas/Stars',
         ['limpieza' => $limpieza,
         'id_pregunta'=>$pregunta,
         'score' => $score,
-        'titulos' => $limpieza->pluck('pregunta.titulo'),
+        'titulos' =>  $respuesta->pluck('pregunta.titulo'),
     ]);
 
 
