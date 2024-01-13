@@ -19,21 +19,9 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
- // Declarar la propiedad para la variable "global"
- protected $miVariableGlobal;
 
- public function __construct()
- {
-     // Inicializar la variable en el constructor si es necesario
-     $this->miVariableGlobal;
- }
-
-
-    public function showStars(Request $request){
-        $this->miVariableGlobal = $request->id_resena;
-
-
-        $id_resena =$this->miVariableGlobal;
+     public function showStars(Request $request){
+        $id_resena = $request->id_resena;
 
       $preguntas = Preguntas::all()->pluck('titulo');
       $preguntas->prepend('');
@@ -107,8 +95,6 @@ class UserController extends Controller
                  $pregunta =  $data['pregunta']['titulo'];
                  $id_reseni2=$id_resena;
                 //dd($guardar, $pregunta,$id_posiblesRespuestas,$nombre_pre_repu,$puntuacion);
-
-            
                  PreguntasClientes::create([
                     'id_posiblesRespuestas' => $id_posiblesRespuestas,'id_preguntas' => $id_preguntas,
                     'NombrePregunta' => $nombre_pre_repu, 'puntuacion' => $puntuacion,
@@ -139,7 +125,7 @@ class UserController extends Controller
 
      public function showpreguntas(Request $request)
      {
-        // dd($request->toArray());
+      //  dd($request->toArray());
 
        //dd($request->toArray());
 
@@ -166,12 +152,9 @@ foreach ($respuesta as $WX) {
     ];
     $limpieza[$wx2] = $nuevoElemento;
 $wx2=$wx2+1;
+//dd( $nuevoElemento,$wx2,$respuesta->toArray(), $WX->toArray());
 
 }
-
-
-
-
 // Añadir el nuevo elemento al final del arreglo
 
 
@@ -188,7 +171,7 @@ $wx2=$wx2+1;
 
       // $id_resena = $request->idresena;
 
-
+     
         return Inertia::render('Preguntas/Stars',
         ['limpieza' => $limpieza,
         'id_pregunta'=>$pregunta,

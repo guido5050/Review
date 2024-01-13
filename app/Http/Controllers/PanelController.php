@@ -36,7 +36,7 @@ class PanelController extends Controller
      $id_resena = Resena::where('id_usuario', $request->id_usuario)
     ->max('id_resena');
 
-     //dd($id_resena);
+    // dd($id_resena);
 
 
      // Redirigir a la ruta de UserController@showStars

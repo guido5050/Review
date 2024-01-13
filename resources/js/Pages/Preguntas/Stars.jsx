@@ -8,7 +8,7 @@ import Titulo from "../components/Titulo";
 export default function Stars({ limpieza, preguntas, id_resena2, idresena }) {
     //console.log("resena" + idresena);
     console.log(limpieza);
-    console.log(id_resena2);
+     
     const [id, setId] = useState(idresena);
     const [currentScore, setCurrentScore] = useState(0);
     const [pregunta, setPregunta] = useState(1); //Pregunta que incia 1 este estado es importante maneja varias consultas
