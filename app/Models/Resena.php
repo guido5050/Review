@@ -14,9 +14,12 @@ class Resena extends Model
     protected $table = "resenas"; //Nombre de la tabla en la Base de Dattos
     //Haciendo la relacion
    protected $fillable =  [
+    'id_reserva',
     'id_resena',
     'id_usuario',
     'comentario',
+    'estado',
+    'Puntuacion_global',
    ];
 /**
  * Para hacer las relaciones en laravel cuando se usa el metodo convencional(explicado en la documentacion) no

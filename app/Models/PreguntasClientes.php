@@ -10,6 +10,7 @@ class PreguntasClientes extends Model
     use HasFactory;
     protected $fillable = [
         'id_preguntas',
+        'puntuacion',
         'pregunta',
         'id_posiblesRespuestas',
         'NombrePregunta',

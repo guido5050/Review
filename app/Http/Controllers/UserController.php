@@ -10,7 +10,7 @@ use Inertia\Inertia;
 use App\Models\Prespuesta;
 use App\Models\Preguntas;
 use App\Models\PreguntasClientes;
-
+use App\Models\Calificaciones;
 
 
 
@@ -60,56 +60,87 @@ class UserController extends Controller
        return redirect()->route('review'); //
      }//
 
-     public function StorePreguntas(Request $request){ /* Revisar este metodo....  ejecutarlo cuando sea necesRIO */
+     public function StorePreguntas(Request $request){
 
-     // dd($request);
+        // dd($request);
 
-        $data = $request->validate([
-            "id_preguntas" => 'required',
-            "pregunta" => "required",
-            "id_posiblesRespuestas" => "",
-            "NombrePregunta" => "required",
+        $id_resena = 16;
+        $id_preguntas = $request[0]['id_preguntas'];
+       $puntuacion = $request[0]['puntuacion'];
+
+     //  dd($id_preguntas);
+
+     $imprimir=Calificaciones::create([
+           'id_resena' => $id_resena,
+           'id_preguntas' => $id_preguntas,
+           'puntuacion' => $puntuacion,
         ]);
 
+///dd($imprimir);
+
+        // dd($request[0]['id_preguntas'],$request[0]['puntuacion'],$id_resena);
+
+         foreach ($request->toArray() as $data) {
 
 
-       PreguntasClientes::create($data);
+                $id_posiblesRespuestas = $data['id_posiblesRespuestas'];
+                 $id_preguntas = $data['id_preguntas'];
+                 $nombre_pre_repu = $data['titulo_respuesta'];
+                 $puntuacion = $data['puntuacion'];
+                 $pregunta =  $data['pregunta']['titulo'];
+
+                //dd($guardar, $pregunta,$id_posiblesRespuestas,$nombre_pre_repu,$puntuacion);
+                 PreguntasClientes::create([
+                    'id_posiblesRespuestas' => $id_posiblesRespuestas,'id_preguntas' => $id_preguntas,
+                    'NombrePregunta' => $nombre_pre_repu, 'puntuacion' => $puntuacion,
+                    'pregunta' => $pregunta]);
+    }
+      // PreguntasClientes::create($request);
 
        return redirect()->route('showStars'); //
 
      }
 
-     public function storecomments(Request $request)
-     {
+     public function storecomments(Request $request) {
 
-    // dd($request);
+        $id_resena = 16; // Reemplaza con el ID de la pregunta deseada
 
-       $data =['comentario' =>$request->comentario];
+        $promedio = Calificaciones::where('id_resena', $id_resena)->avg('puntuacion'); //Sacmos promedio
+
+        //dd($promedio);
+        $data =['comentario'=>$request->comentario,
+          'Puntuacion_global' =>$promedio];
          //dd($resenaData);
        Resena::create($data);
 
        return inertia('components/Final');
-
-
     }
 
 
      public function showpreguntas(Request $request)
      {
+        // dd($request->toArray());
 
-        //dd($request);
+       // dd('Null');
+
+
         $limpieza = Prespuesta::where('id_preguntas', $request->pregunta)
          ->where('puntuacion', $request->score)
          ->with('pregunta') // Cargar la relación
          ->get();
-         //dd($limpieza->toArray());
 
+         $pregunta = $request->pregunta; //1
+         $score = $request->score;//5
+          //dd($pregunta, $score, $limpieza->toArray());
 
        // dd($preguntas);
 
         return Inertia::render('Preguntas/Stars',
         ['limpieza' => $limpieza,
-        'titulos' => $limpieza->pluck('pregunta.titulo'),]);
+        'id_pregunta'=>$pregunta,
+        'score' => $score,
+        'titulos' => $limpieza->pluck('pregunta.titulo'),
+    ]);
 
 
     }

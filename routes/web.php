@@ -5,6 +5,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PanelController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +20,15 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/',[UserController::class,'showStars'])->name('showStars');
+
+
+Route::get('formulario',[PanelController::class,'Index']);
+Route::get('generarResena',[PanelController::class,'generarResena'])->name('generarResena');
+
+
+
+
+
 
 
 Route::post('/show',[UserController::class,'showpreguntas'])->name('show');
