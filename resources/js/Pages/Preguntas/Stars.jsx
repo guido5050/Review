@@ -8,8 +8,8 @@ import Titulo from "../components/Titulo";
 export default function Stars({ limpieza, preguntas, id_resena2, idresena }) {
     //console.log("resena" + idresena);
     console.log(limpieza);
-     
-    const [id, setId] = useState(idresena);
+
+    const [id, setId] = useState(idresena); //id de la resena que viene del metodo panelcontroll
     const [currentScore, setCurrentScore] = useState(0);
     const [pregunta, setPregunta] = useState(1); //Pregunta que incia 1 este estado es importante maneja varias consultas
     const [message, setMessage] = useState("siguiente"); //Texto del boton
@@ -63,7 +63,7 @@ export default function Stars({ limpieza, preguntas, id_resena2, idresena }) {
         setBtn(false);
         setMalacalificacion(""); //reinicio
         setTexto("Selecciona una calificación. 📌");
-        setId(idresena);
+        //setId(idresena);
         if (respuestaSelec === null) {
             console.log("nul");
         }
@@ -138,7 +138,9 @@ export default function Stars({ limpieza, preguntas, id_resena2, idresena }) {
                 ) : null}
             </div>
 
-            {pregunta === 6 && <TextArea></TextArea>}
+            {pregunta === 6 && <TextArea
+            id={id}
+            ></TextArea>}
             {btn && <Btn text={message} onClick={onclick}></Btn>}
         </div>
     );

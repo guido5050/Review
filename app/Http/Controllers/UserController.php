@@ -21,7 +21,9 @@ class UserController extends Controller
      */
 
      public function showStars(Request $request){
-        $id_resena = $request->id_resena;
+
+
+      $id_resena = $request->id_resena;
 
       $preguntas = Preguntas::all()->pluck('titulo');
       $preguntas->prepend('');
@@ -84,7 +86,7 @@ class UserController extends Controller
 ///dd($imprimir);
 
         // dd($request[0]['id_preguntas'],$request[0]['puntuacion'],$id_resena);
-
+      // dd($request->toArray());
          foreach ($request->toArray() as $data) {
 
 
@@ -108,16 +110,27 @@ class UserController extends Controller
 
      public function storecomments(Request $request) {
 
+        //dd($request);
 
-        $id_resena = 16; // Reemplaza con el ID de la pregunta deseada
+        $id_resena = $request['id']; // Reemplaza con el ID de la pregunta deseada
 
         $promedio = Calificaciones::where('id_resena', $id_resena)->avg('puntuacion'); //Sacmos promedio
 
         //dd($promedio);
-        $data =['comentario'=>$request->comentario,
+        $resenas = Resena::where('id_resena',$id_resena)->first();
+
+        $resenas->comentario=$request['comentario'];
+
+        $resenas->Puntuacion_global= $promedio;
+
+        //dd($resenas);
+
+        $resenas->save();
+
+        /* $data =['comentario'=>$request->comentario,
           'Puntuacion_global' =>$promedio];
-         //dd($resenaData);
-       Resena::create($data);
+         //dd($resenaData); */
+       //Resena::update($data);
 
        return inertia('components/Final');
     }
@@ -130,9 +143,9 @@ class UserController extends Controller
        //dd($request->toArray());
 
        $respuesta=Prespuesta::where('id_preguntas', $request->pregunta)
-->where('puntuacion', $request->score)
-->with('pregunta') // Cargar la relación
-->get();
+      ->where('puntuacion', $request->score)
+      ->with('pregunta') // Cargar la relación
+      ->get();
 
 $wx2=0;
 foreach ($respuesta as $WX) {
@@ -151,8 +164,7 @@ foreach ($respuesta as $WX) {
         "id_Resenita" =>  $id_resena = $request->idresena,
     ];
     $limpieza[$wx2] = $nuevoElemento;
-$wx2=$wx2+1;
-//dd( $nuevoElemento,$wx2,$respuesta->toArray(), $WX->toArray());
+    $wx2=$wx2+1;
 
 }
 // Añadir el nuevo elemento al final del arreglo
@@ -171,7 +183,7 @@ $wx2=$wx2+1;
 
       // $id_resena = $request->idresena;
 
-     
+
         return Inertia::render('Preguntas/Stars',
         ['limpieza' => $limpieza,
         'id_pregunta'=>$pregunta,

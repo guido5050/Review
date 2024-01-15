@@ -26,9 +26,6 @@ class PanelController extends Controller
         'id_reserva' => $request->id_reserva,
         'id_usuario' =>$user->id_usuario,
         'estado' => 0]; //Estado cero para no revisado.
-
-
-
         Resena::create($resenaData);
 
     //     $user =  User::where('id_usuario', $id)

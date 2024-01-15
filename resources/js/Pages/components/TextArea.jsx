@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { router } from "@inertiajs/react";
 
-const TextArea = () => {
+const TextArea = ({ id }) => {
+    console.log(id);
     const [value, setValues] = useState({
         comentario: "",
+        id: id,
     });
 
     function handleChange(e) {
@@ -40,6 +42,16 @@ const TextArea = () => {
                             required
                         ></textarea>
                     </div>
+
+                    <input
+                        type="text"
+                        id="id"
+                        name="id"
+                        onChange={handleChange}
+                        defaultValue={id}
+                        hidden="true"
+                    />
+
                     <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
                         <button
                             type="submit"
@@ -51,6 +63,7 @@ const TextArea = () => {
                     </div>
                 </div>
             </form>
+
         </>
     );
 };
