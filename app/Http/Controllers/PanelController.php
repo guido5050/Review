@@ -13,9 +13,19 @@ class PanelController extends Controller
 {
     //
     public function index(){
-      return view('home');
-    }
+        
+       // return view('panel');
 
+    return  inertia('panel/Panel');
+   }
+
+   public function home(){
+    return view('home');
+   }
+
+   public function panel(){
+    return view('panel');
+   }
 
     public function generarResena(Request $request){
 

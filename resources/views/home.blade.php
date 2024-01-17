@@ -43,7 +43,7 @@
 
                         <input id="nombre" type="text" name="nombre"
                             class="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
-                            placeholder="Nombre Completo" />
+                        placeholder="Nombre Completo" />
 
                         <div class="mt-3">
                             @error('nombre')
@@ -74,32 +74,34 @@
     </div>
 </div> --}}
 
-
-<form class="form-inline" action="http://testreview.test/" method="GET">
-    <div class="row">
-        <div class="col-3">
-            <div class="form-group mx-sm-3 mb-2">
-                <label for="fecha_entrada">Fecha de entrada:</label>
-                <input type="date" class="form-control" id="fecha_entrada" name="fecha_entrada">
+@extends('panel');
+@section('cuerpo')
+    <form class="form-inline" action="http://testreview.test/" method="GET">
+        <div class="row">
+            <div class="col-3">
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="fecha_entrada">Fecha de entrada:</label>
+                    <input type="date" class="form-control" id="fecha_entrada" name="fecha_entrada">
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="fecha_salida">Fecha de salida:</label>
+                    <input type="date" class="form-control" id="fecha_salida" name="fecha_salida">
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group mx-sm-3 mb-2 mr-2">
+                    <label for="adultos">Número de adultos:</label>
+                    <input type="number" class="form-control" id="adultos" name="adultos" value="">
+                </div>
+            </div>
+            <div class="col-3">
+                <br>
+                <button type="submit" class="btn btn-success btn-large mb-2">
+                    <b>Ver Disponibilidad de Habitación</b>
+                </button>
             </div>
         </div>
-        <div class="col-3">
-            <div class="form-group mx-sm-3 mb-2">
-                <label for="fecha_salida">Fecha de salida:</label>
-                <input type="date" class="form-control" id="fecha_salida" name="fecha_salida">
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="form-group mx-sm-3 mb-2 mr-2">
-                <label for="adultos">Número de adultos:</label>
-                <input type="number" class="form-control" id="adultos" name="adultos" value="">
-            </div>
-        </div>
-        <div class="col-3">
-            <br>
-            <button type="submit" class="btn btn-success btn-large mb-2">
-                <b>Ver Disponibilidad de Habitación</b>
-            </button>
-        </div>
-    </div>
-</form>
+    </form>
+@endsection
