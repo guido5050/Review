@@ -24,16 +24,13 @@ Route::get('/',[PanelController::class,'index'])->name('index');
 
 Route::get('panelblade', [PanelController::class, 'panel']); //ruta test
 Route::get('home',[PanelController::class, 'home'])->name('home');//ruta test
-
-
-
-
-
-
-
-
-
+Route::post('/test2',[PanelController::class,'test1'])->name('test1');//ruta test
+Route::get('user',[PanelController::class,'User'])->name('User');
 Route::get('encuesta',[UserController::class    ,'showStars'])->name('showStars');//Test
+
+
+
+
 
 
 Route::get('formulario',[PanelController::class,'Index']);

@@ -13,10 +13,10 @@ class PanelController extends Controller
 {
     //
     public function index(){
-        
+
        // return view('panel');
 
-    return  inertia('panel/Panel');
+    return  inertia('panel/MainLayout'); //Vista principal del panel
    }
 
    public function home(){
@@ -26,6 +26,13 @@ class PanelController extends Controller
    public function panel(){
     return view('panel');
    }
+
+    public function User(){
+      $User = User::all();
+      return inertia('panel/Usuarios',['users' => $User]);
+    }
+
+
 
     public function generarResena(Request $request){
 
@@ -51,6 +58,16 @@ class PanelController extends Controller
 
         }
 
+
+        public function test1(Request $request){
+         $test2 = $request;
+         //dd($test2);
+
+        $data = User::all();
+
+         return  inertia('panel/Panel',['test2' =>  $test2]);
+
+        }
 
 
 }
