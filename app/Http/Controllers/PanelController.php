@@ -27,9 +27,9 @@ class PanelController extends Controller
     return view('panel');
    }
 
-    public function User(){
+    public function User(){ //Metodo muestra la lista de usuarios en el panel
       $User = User::all();
-      return inertia('panel/Usuarios',['users' => $User]);
+      return inertia::render('panel/MainLayout',['users' => $User]);
     }
 
 

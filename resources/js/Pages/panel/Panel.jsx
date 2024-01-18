@@ -1,8 +1,10 @@
+import { router } from "@inertiajs/react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
 import Modal from "./Modal";
 import Test42 from "./Test42";
+import { Link } from "@inertiajs/react";
 
 const navigation = [
     { name: "Resenas", href: "#", current: true },
@@ -28,7 +30,7 @@ export default function Panel({ setResena, setUsuario }) {
     };
     const handleusuariosClick = () => {
         //Usuarios
-        
+
         setResena(false);
         setUsuario(true);
     };
@@ -44,7 +46,7 @@ export default function Panel({ setResena, setUsuario }) {
                 break;
             case "usuarios":
                 handleusuariosClick();
-
+                //Aqui ejecuta la ruta
                 break;
             // Puedes agregar más casos según sea necesario
             default:

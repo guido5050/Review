@@ -99,7 +99,8 @@ class UserController extends Controller
                 //dd($guardar, $pregunta,$id_posiblesRespuestas,$nombre_pre_repu,$puntuacion);
                  PreguntasClientes::create([
                     'id_posiblesRespuestas' => $id_posiblesRespuestas,'id_preguntas' => $id_preguntas,
-                    'NombrePregunta' => $nombre_pre_repu, 'puntuacion' => $puntuacion,
+                    'NombreRespuesta' => $nombre_pre_repu,
+                    'puntuacion' => $puntuacion,
                     'pregunta' => $pregunta, 'id_resena' => $id_reseni2]);
     }
       // PreguntasClientes::create($request);
