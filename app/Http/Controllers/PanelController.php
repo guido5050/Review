@@ -4,21 +4,65 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Resena;
 use Inertia\Inertia;
-
+use App\Models\usuarios_empleado;
 
 class PanelController extends Controller
 {
     //
+
+
+
     public function index(){
+        $Auth_User = Auth::user();
+        //dd($Auth_User->toArray());
 
-       // return view('panel');
+        $User = usuarios_empleado::all();
 
-    return  inertia('panel/MainLayout'); //Vista principal del panel
+      return inertia::render('panel/MainLayout',
+      ['users' => $User,
+       'userAuth' =>$Auth_User]);//Vista principal del panelA
    }
 
+   public function update(Request $request){
+    //Metodo para actualizar usuarios
+   //dd($request->toArray());
+    $data = $request->toArray();
+    foreach ($data as $empleado) {
+        // Accede a cada propiedad del empleado
+        $idEmpleado = $empleado['id_empleados'];
+        $nombreCompleto = $empleado['nombre_completo'];
+        $email = $empleado['email'];
+
+        // Encuentra el modelo del empleado por su ID
+        $empleadoModel = usuarios_empleado::find($idEmpleado);
+
+        // Realiza la actualización masiva
+        $empleadoModel->update([
+            'nombre_completo' => $nombreCompleto,
+            'email' => $email,
+            // Agrega más campos según sea necesario
+        ]);
+    }
+
+
+   }
+
+   public function delete($id_usuario){
+    $id_usuario = (int)$id_usuario;
+    //dd($id);
+    $user = usuarios_empleado::find($id_usuario);
+    //dd($user);
+    $user->delete();
+
+    return back();
+   }
+
+
+   
    public function home(){
     return view('home');
    }
@@ -28,6 +72,7 @@ class PanelController extends Controller
    }
 
     public function User(){ //Metodo muestra la lista de usuarios en el panel
+    // dd('goku');
       $User = User::all();
       return inertia::render('panel/MainLayout',['users' => $User]);
     }
@@ -60,7 +105,9 @@ class PanelController extends Controller
 
 
         public function test1(Request $request){
-         $test2 = $request;
+
+            dd($request);
+            $test2 = $request;
          //dd($test2);
 
         $data = User::all();

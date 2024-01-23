@@ -2,24 +2,32 @@ import { router } from "@inertiajs/react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
+import { IoSettingsOutline } from "react-icons/io5";
+import { FcBusinessman } from "react-icons/fc";
+import BtnPanel from "./ui/BtnPanel";
 import Modal from "./Modal";
-import Test42 from "./Test42";
-import { Link } from "@inertiajs/react";
 
 const navigation = [
+    { name: "Usuarios", href: "", current: false },
     { name: "Resenas", href: "#", current: true },
-    { name: "configuracion", href: "#", current: false },
-    { name: "usuarios", href: "#", current: false },
 ];
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-export default function Panel({ setResena, setUsuario }) {
+export default function Panel({ setResena, setUsuario, userAuth }) {
     const [btnconfig, setBtnconfig] = useState(false); //Estado del modal
+    const [cargo, setCargo] = useState(userAuth.cargo); // para el usuario Walter este valor es 5
+    const [btnCrearUsuario, setBtnCrearUsuario] = useState(true); //Estado que se encargara de manejar si se muestra el boton
 
-    const handleConfiguracionClick = () => {
+    // if (cargo === 5 || cargo == 4) {
+    //     setBtnCrearUsuario(true);
+    // } else {
+    //     setBtnCrearUsuario(false);
+    // }
+
+    const handleCrearUsuarioClick = () => {
         //Abre modal
         setBtnconfig(true);
     };
@@ -37,14 +45,15 @@ export default function Panel({ setResena, setUsuario }) {
 
     const handleItemClick = (itemName) => {
         switch (itemName) {
-            case "configuracion":
-                handleConfiguracionClick();
+            case "Crear usuarios +":
+                handleCrearUsuarioClick();
+
                 break;
             case "Resenas":
                 handleResenasClick();
 
                 break;
-            case "usuarios":
+            case "Usuarios":
                 handleusuariosClick();
                 //Aqui ejecuta la ruta
                 break;
@@ -97,13 +106,13 @@ export default function Panel({ setResena, setUsuario }) {
                                                 key={item.name}
                                                 href={item.href}
                                                 className={classNames(
-                                                    item.current
+                                                    item.name
                                                         ? "bg-gray-900 text-white"
                                                         : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                                                    "rounded-md px-3 py-2 text-sm font-medium"
+                                                    "rounded-md px-3 py-2 text-sm font-medium "
                                                 )}
                                                 aria-current={
-                                                    item.current
+                                                    item.name
                                                         ? "page"
                                                         : undefined
                                                 }
@@ -114,25 +123,29 @@ export default function Panel({ setResena, setUsuario }) {
                                                 {item.name}
                                             </a>
                                         ))}
+                                        {btnCrearUsuario && (
+                                            <BtnPanel
+                                                span={"+"}
+                                                className={"animate-pulse"}
+                                                onClick={
+                                                    handleCrearUsuarioClick
+                                                }
+                                            >
+                                                Crear usuarios
+                                            </BtnPanel>
+                                        )}
                                     </div>
                                 </div>
                             </div>
                             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                                <button
-                                    type="button"
-                                    className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                                >
-                                    <span className="absolute -inset-1.5" />
-                                    <span className="sr-only">
-                                        View notifications
-                                    </span>
-                                    <BellIcon
-                                        className="h-6 w-6"
-                                        aria-hidden="true"
-                                    />
-                                </button>
-
                                 {/* Profile dropdown */}
+                                <div>
+                                    <h1 className="text-white">
+                                        {userAuth.nombre_completo}
+                                    </h1>
+                                </div>
+
+                                <FcBusinessman size={"20px"} />
                                 <Menu as="div" className="relative ml-3">
                                     <div>
                                         <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
@@ -140,10 +153,10 @@ export default function Panel({ setResena, setUsuario }) {
                                             <span className="sr-only">
                                                 Open user menu
                                             </span>
-                                            <img
-                                                className="h-8 w-8 rounded-full"
-                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                alt=""
+                                            <IoSettingsOutline
+                                                size={"30px"}
+                                                color={"white"}
+                                                className="animate-pulse"
                                             />
                                         </Menu.Button>
                                     </div>
@@ -168,14 +181,14 @@ export default function Panel({ setResena, setUsuario }) {
                                                             "block px-4 py-2 text-sm text-gray-700"
                                                         )}
                                                     >
-                                                        Your Profile
+                                                        Empresa
                                                     </a>
                                                 )}
                                             </Menu.Item>
                                             <Menu.Item>
                                                 {({ active }) => (
                                                     <a
-                                                        href="#"
+                                                        href="/logout"
                                                         className={classNames(
                                                             active
                                                                 ? "bg-gray-100"
@@ -183,22 +196,7 @@ export default function Panel({ setResena, setUsuario }) {
                                                             "block px-4 py-2 text-sm text-gray-700"
                                                         )}
                                                     >
-                                                        Settings
-                                                    </a>
-                                                )}
-                                            </Menu.Item>
-                                            <Menu.Item>
-                                                {({ active }) => (
-                                                    <a
-                                                        href="#"
-                                                        className={classNames(
-                                                            active
-                                                                ? "bg-gray-100"
-                                                                : "",
-                                                            "block px-4 py-2 text-sm text-gray-700"
-                                                        )}
-                                                    >
-                                                        Sign out
+                                                        Logout
                                                     </a>
                                                 )}
                                             </Menu.Item>

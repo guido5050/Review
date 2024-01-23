@@ -3,8 +3,14 @@ import { router } from "@inertiajs/react";
 
 const Formulario = () => {
     const [value, setValues] = useState({
-        nombre: "",
-        correo: "",
+        nombre_completo: "",
+        email: "",
+        usuario: "",
+        contrasena: "",
+        password_confirm: "",
+        num_identificacion: "",
+        num_telefono: "",
+        cargo: "",
         empresa: "",
     });
     function handleChange(e) {
@@ -19,7 +25,7 @@ const Formulario = () => {
     function handleSubmit(e) {
         e.preventDefault();
         console.log(value);
-        router.post("/test2", value);
+        router.post("/register.store", value);
     }
 
     console.log(value);
@@ -34,11 +40,11 @@ const Formulario = () => {
                         htmlFor="nombre"
                         className="block text-sm font-medium text-gray-600"
                     >
-                        Nombre:
+                        Nombre Completo:
                     </label>
                     <input
                         type="text"
-                        id="nombre"
+                        id="nombre_completo"
                         className="mt-1 p-2 w-full border border-gray-300 rounded-md"
                         onChange={handleChange}
                     />
@@ -48,11 +54,93 @@ const Formulario = () => {
                         htmlFor="correo"
                         className="block text-sm font-medium text-gray-600"
                     >
-                        Correo Electrónico:
+                        E-Mail Address:
                     </label>
                     <input
                         type="email"
-                        id="correo"
+                        id="email"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="mb-4">
+                    <label
+                        htmlFor="correo"
+                        className="block text-sm font-medium text-gray-600"
+                    >
+                        Usuario:
+                    </label>
+                    <input
+                        type="text"
+                        id="usuario"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="mb-4">
+                    <label
+                        htmlFor="correo"
+                        className="block text-sm font-medium text-gray-600"
+                    ></label>
+                    Contraseña:
+                    <input
+                        type="password"
+                        id="password"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="mb-4">
+                    <label
+                        htmlFor="correo"
+                        className="block text-sm font-medium text-gray-600"
+                    ></label>
+                    Confirm Password:
+                    <input
+                        type="password"
+                        id="password_confirm"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="mb-4">
+                    <label
+                        htmlFor="empresa"
+                        className="block text-sm font-medium text-gray-600"
+                    >
+                        No-identificacion:
+                    </label>
+                    <input
+                        type="text"
+                        id="num_identificacion"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="mb-4">
+                    <label
+                        htmlFor="empresa"
+                        className="block text-sm font-medium text-gray-600"
+                    >
+                        Numero Telefono:
+                    </label>
+                    <input
+                        type="text"
+                        id="num_telefono"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="mb-4">
+                    <label
+                        htmlFor="empresa"
+                        className="block text-sm font-medium text-gray-600"
+                    >
+                        Cargo:
+                    </label>
+                    <input
+                        type="number"
+                        id="cargo"
                         className="mt-1 p-2 w-full border border-gray-300 rounded-md"
                         onChange={handleChange}
                     />

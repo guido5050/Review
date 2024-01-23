@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PanelController;
+use App\Http\Controllers\logincontrollerumpleados;
 
 
 /*
@@ -20,13 +21,47 @@ use App\Http\Controllers\PanelController;
 */
 
 
-Route::get('/',[PanelController::class,'index'])->name('index');
+Route::get('panela',[PanelController::class,'index'])->name('index')->middleware('auth:empleados');
+//Route::get('/',[PanelController::class,'User'])->name('User');//Lista de Users
+Route::get('/',[PanelController::class,'index'])->middleware('auth');
 
-Route::get('panelblade', [PanelController::class, 'panel']); //ruta test
-Route::get('home',[PanelController::class, 'home'])->name('home');//ruta test
-Route::post('/test2',[PanelController::class,'test1'])->name('test1');//ruta test
-Route::get('/',[PanelController::class,'User'])->name('User');//
-Route::get('encuesta',[UserController::class    ,'showStars'])->name('showStars');//Test
+ Route::post('/test2',[PanelController::class,'test1'])->name('test1');//ruta test
+ Route::post('/panela/update',[PanelController::class,'update'])->name('update');
+ Route::delete('/panela/{id_usuario}',[PanelController::class,'delete'])->name('delete')->middleware('auth:empleados');//Elimina usuarios
+ Route::get('encuesta',[UserController::class,'showStars'])->name('showStars');//Test
+
+
+
+
+
+
+
+
+
+    Route::get('/login', [logincontrollerumpleados::class,'show'])->name('login');
+
+	Route::post('/logine',[logincontrollerumpleados::class,'aut_user'])->name('in_log');
+
+	Route::get('/logout',[logincontrollerumpleados::class,'logout'])->name('logout');
+
+	Route::get('/register',[logincontrollerumpleados::class,'_register'])->name('register_show')->middleware('auth:empleados');
+
+	Route::post('/register.store',[logincontrollerumpleados::class,'register'])->name('register');
+
+    Route::post('/register.update','logincontrollerumpleados@update')->name('update_register');
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -43,4 +78,4 @@ Route::post('/show',[UserController::class,'showpreguntas'])->name('show');
 Route::post('StorePreguntas',[UserController::class,'StorePreguntas'])->name('StorePreguntas');
 //Route::post('/',[UserController::class,'Preguntas'])->name('preguntas');
 Route::post('storecomments',[UserController::class,'storecomments'])->name('storecomments');
-require __DIR__.'/auth.php';
+//require __DIR__.'/auth.php';
