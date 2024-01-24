@@ -8,6 +8,7 @@ export default {
         "./storage/framework/views/*.php",
         "./resources/views/**/*.blade.php",
         "./resources/js/**/*.jsx",
+        "node_modules/flowbite-react/lib/esm/**/*.js",
     ],
     theme: {
         extend: {
@@ -17,5 +18,9 @@ export default {
         },
     },
 
-    plugins: [forms, require("tailwindcss-animated")],
+    plugins: [
+        forms,
+        require("tailwindcss-animated"),
+        require("flowbite/plugin"),
+    ],
 };

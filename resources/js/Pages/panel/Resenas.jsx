@@ -1,6 +1,7 @@
 import React from "react";
-
-const Resenas = () => {
+import Menu_Item from "./Menu_Item";
+const Resenas = ({ user }) => {
+    console.log(user);
     return (
         <>
             <div>

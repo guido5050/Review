@@ -29,40 +29,47 @@ class PanelController extends Controller
 
    public function update(Request $request){
     //Metodo para actualizar usuarios
-   //dd($request->toArray());
+    //dd($request->toArray());
     $data = $request->toArray();
+
+
     foreach ($data as $empleado) {
         // Accede a cada propiedad del empleado
         $idEmpleado = $empleado['id_empleados'];
         $nombreCompleto = $empleado['nombre_completo'];
         $email = $empleado['email'];
-
+         //pregunta si existe
         // Encuentra el modelo del empleado por su ID
+
         $empleadoModel = usuarios_empleado::find($idEmpleado);
 
-        // Realiza la actualización masiva
-        $empleadoModel->update([
-            'nombre_completo' => $nombreCompleto,
-            'email' => $email,
-            // Agrega más campos según sea necesario
-        ]);
+        if ($empleadoModel) {
+            $empleadoModel->update([
+                'nombre_completo' => $nombreCompleto,
+                'email' => $email,
+                // Agrega más campos según sea necesario
+            ]);
+        }
     }
 
+    return redirect()->route('index');
 
    }
 
    public function delete($id_usuario){
+
+   // dd($id_usuario);
     $id_usuario = (int)$id_usuario;
     //dd($id);
     $user = usuarios_empleado::find($id_usuario);
     //dd($user);
     $user->delete();
 
-    return back();
+    return redirect()->route('index');
    }
 
 
-   
+
    public function home(){
     return view('home');
    }
@@ -74,7 +81,7 @@ class PanelController extends Controller
     public function User(){ //Metodo muestra la lista de usuarios en el panel
     // dd('goku');
       $User = User::all();
-      return inertia::render('panel/MainLayout',['users' => $User]);
+      return inertia::render('panel/Resenas',['user' => $User]);
     }
 
 

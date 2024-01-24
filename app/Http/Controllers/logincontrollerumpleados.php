@@ -11,6 +11,8 @@ use Illuminate\Validation\Rule;
 use App\Events\NewMessageNotification;
 use App\Clases\auto_close_turn;
 use App\Models\usuarios_empleado;
+use Inertia\Inertia;
+
 
 
 class logincontrollerumpleados extends Controller
@@ -48,7 +50,10 @@ class logincontrollerumpleados extends Controller
     }
 
     public function register(request $data) {
+
+        //dd($data);
         //phone_number
+
         $rules = [
             'nombre_completo' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:usuarios_empleados,email'],
@@ -82,31 +87,15 @@ class logincontrollerumpleados extends Controller
         //$validatedData = $data->validate($rules, $customMessages);
 
         $data['usuario'] = $data['email'];
+        $data['activo'] = $data['activo'] === 'si' ? 1 : 0; // ternario en php
         $data['contrasena'] = $data['password'];
         $data['contrasena'] = bcrypt($data['contrasena']);
         $usuario = usuarios_empleado::create($data->all());
         //$usuario = usuarios_cliente::create($data->all());
-        auth::guard('empleados')->logout();
+       // auth::guard('empleados')->logout();
         $username = $data['usuario'];
 
-        return view('login');
-
-        //'password' => Hash::make($data['password']),
-        /* $data['activo'] = 1;
-        if (is_null($data['usuario']) || $data['usuario'] == '') {
-            dd("GOOOOKUUUU AAAAAh");
-            $data['usuario'] = $data['email'];
-            $data['contrasena'] = $data['password'];
-            $data['contrasena'] = bcrypt($data['contrasena']);
-            $usuario = usuarios_empleado::create($data->all());
-            auth::guard('empleados')->logout();
-            return redirect()->route('login')->with('username',$data['email']);
-
-        }
-        else {
-            dd('pedrito');
-        }
- */
+         return back();
 
     }
 

@@ -21,13 +21,19 @@ use App\Http\Controllers\logincontrollerumpleados;
 */
 
 
-Route::get('panela',[PanelController::class,'index'])->name('index')->middleware('auth:empleados');
-//Route::get('/',[PanelController::class,'User'])->name('User');//Lista de Users
-Route::get('/',[PanelController::class,'index'])->middleware('auth');
+Route::get('/panela',[PanelController::class,'index'])->name('index')->middleware('auth:empleados');
+Route::get('/panela/resenas',[PanelController::class,'User'])->name('User');//Lista de Usuarops
+Route::get('/',[PanelController::class,'index'])->middleware('auth'); //Este metodo trae los usuarios_empleados
+Route::post('/panela/update',[PanelController::class,'update'])->name('update');
+Route::delete('/panela/{id_usuario}',[PanelController::class,'delete'])->name('delete')->middleware('auth:empleados');//Elimina usuarios
 
- Route::post('/test2',[PanelController::class,'test1'])->name('test1');//ruta test
- Route::post('/panela/update',[PanelController::class,'update'])->name('update');
- Route::delete('/panela/{id_usuario}',[PanelController::class,'delete'])->name('delete')->middleware('auth:empleados');//Elimina usuarios
+
+
+
+
+
+
+// Route::post('/test2',[PanelController::class,'test1'])->name('test1');//ruta test
  Route::get('encuesta',[UserController::class,'showStars'])->name('showStars');//Test
 
 
@@ -46,9 +52,9 @@ Route::get('/',[PanelController::class,'index'])->middleware('auth');
 
 	Route::get('/register',[logincontrollerumpleados::class,'_register'])->name('register_show')->middleware('auth:empleados');
 
-	Route::post('/register.store',[logincontrollerumpleados::class,'register'])->name('register');
+	Route::post('/register.store',[logincontrollerumpleados::class,'register'])->name('register');//Crea usuarios
 
-    Route::post('/register.update','logincontrollerumpleados@update')->name('update_register');
+    //Route::post('/register.update','logincontrollerumpleados@update')->name('update_register');
 
 
 

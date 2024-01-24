@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import Panel from "./Panel";
+import Menu_Item from "./Menu_Item";
 import Usuarios from "./Usuarios";
 import Resenas from "./Resenas";
 
 const MainLayout = ({ users, userAuth }) => {
-    const [resena, setResena] = useState(false);
-    const [usuario, setUsuario] = useState(true);
+    const [resena, setResena] = useState(true);
+    const [usuario, setUsuario] = useState(false);
     return (
         <>
             <div className="">
-                <Panel
+                <Menu_Item
                     setResena={setResena}
                     setUsuario={setUsuario}
                     userAuth={userAuth}
-                ></Panel>
+                ></Menu_Item>
                 {resena && <Resenas></Resenas>}
                 {usuario && <Usuarios users={users}></Usuarios>}
             </div>
