@@ -9,9 +9,11 @@ import { RiDeleteBin6Fill } from "react-icons/ri";
 import BtnPanel from "./ui/BtnPanel";
 import BtnPrimary from "./ui/BtnPrimary";
 import ModalAlert from "./ui/ModalAlert";
-
+import ModalCrearUsuarios from "./ui/ModalCrearUsuarios";
 const Usuarios = ({ users }) => {
-    const [modal, setModal] = useState(false);
+    
+    const [modal, setModal] = useState(false); //Estado del Modal que maneja el eliminar
+    const [modal_crearusuarios, setModal_CrearUsuarios] = useState(false);
     const [iduser, setIduser] = useState(0); //id del usuario a eliminar
     const [values, setValues] = useState(
         users.map((user) => ({
@@ -41,15 +43,9 @@ const Usuarios = ({ users }) => {
         setModal(true);
 
         setIduser(id_empleados);
-        // router.delete(`/panela/${id_usuario}`, {
-        //     onBefore: () => confirm("Esta seguro de Eliminar este Usuario...."),
-        // });
     }
 
     const handleConfirm = () => {
-        // router.delete(`/panela/${id}`, {
-        //     onBefore: () => confirm("Esta seguro de Eliminar este Usuario...."),
-        // });
         console.log("Usuario confirmó la eliminación");
         setModal(false); // Cierra el modal después de confirmar
     };
@@ -57,6 +53,10 @@ const Usuarios = ({ users }) => {
     const handleCancel = () => {
         console.log("usuario no eliminado");
         setModal(false); // Cierra el modal si el usuario cancela
+    };
+
+    const handleCrearUsuarios = () => {
+        setModal_CrearUsuarios(true);
     };
 
     return (
@@ -70,6 +70,12 @@ const Usuarios = ({ users }) => {
                     onCancel={handleCancel}
                 ></ModalAlert>
             )}
+            {modal_crearusuarios && (
+                <ModalCrearUsuarios
+                    setModal_CrearUsuarios={setModal_CrearUsuarios}
+                    modal_crearusuarios={modal_crearusuarios}
+                ></ModalCrearUsuarios>
+            )}
             <form
                 className="relative  shadow-md sm:rounded-lg flex flex-col items-center p-10"
                 onSubmit={handleSubmit}
@@ -82,13 +88,13 @@ const Usuarios = ({ users }) => {
                         <PiUsersBold size={"30px"} />{" "}
                     </div>
                 </div>
-                <div className="w-full   mb-5">
+                <div className="w-full flex  gap-x-5 mb-5">
                     <BtnPanel
-                        type={"onSubmit"}
-                        className={"font-extrabold "}
-                        span={<FiEdit size={"15px"} />}
+                        span={"+"}
+                        className={""}
+                        onClick={handleCrearUsuarios}
                     >
-                        Actualizar Usuarios
+                        Crear usuarios
                     </BtnPanel>
                 </div>
 
@@ -153,7 +159,9 @@ const Usuarios = ({ users }) => {
                                         span={
                                             <RiDeleteBin6Fill size={"18px"} />
                                         }
-                                        className={"bg-red-800 hover:bg-red-600"}
+                                        className={
+                                            "bg-red-800 hover:bg-red-600"
+                                        }
                                         onClick={(e) =>
                                             handleDelete(e, user.id_empleados)
                                         }
@@ -165,6 +173,16 @@ const Usuarios = ({ users }) => {
                         ))}
                     </tbody>
                 </table>
+
+                <div className="w-full  mb-5 relative mt-5">
+                    <BtnPanel
+                        type={"onSubmit"}
+                        className={" bg-green-500 hover:bg-green-400 relative "}
+                        span={<FiEdit size={"15px"} />}
+                    >
+                        Actualizar Usuarios
+                    </BtnPanel>
+                </div>
             </form>
         </>
     );

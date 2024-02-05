@@ -1,7 +1,7 @@
-import { router } from "@inertiajs/react";
+import { router, Link } from "@inertiajs/react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FcBusinessman } from "react-icons/fc";
 import BtnPanel from "./ui/BtnPanel";
@@ -9,40 +9,47 @@ import ModalCrearUsuarios from "./ui/ModalCrearUsuarios";
 
 const navigation = [
     { name: "Resenas", href: "#", current: true },
-    { name: "Usuarios", href: "#", current: false },
+    {
+        name: "Clientes",
+        href: "/panela/clientes",
+        current: false,
+        method: "get",
+    },
 ];
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-export default function Menu_Item({ setResena, setUsuario, userAuth }) {
-    const [btnconfig, setBtnconfig] = useState(false); //Estado del modal
-    const [cargo, setCargo] = useState(userAuth.cargo); // para el usuario Walter este valor es 5
-    const [btnCrearUsuario, setBtnCrearUsuario] = useState(true); //Estado que se encargara de manejar si se muestra el boton
+export default function Menu_Item({
+    setResena,
+    setUsuario,
+    nameAuth,
+    setClientes,
+}) {
     const [modal, setModal] = useState(false);
-    // if (cargo === 5 || cargo == 4) {
-    //     setBtnCrearUsuario(true);
-    // } else {
-    //     setBtnCrearUsuario(false);
-    // }
 
-    const handleCrearUsuarioClick = () => {
-        //Abre modal
-        setBtnconfig(true);
-        setModal(true);
-    };
+    // useEffect(() => {
+    //     // Lógica que quieres ejecutar cuando el componente se monta
+    //     console.log("Componente montado");
+    // }, []);
+
     const handleResenasClick = () => {
         //Resena
         setUsuario(false);
         setResena(true);
-        router.get("/panela");
+        setClientes(false);
     };
     const handleusuariosClick = () => {
         //Usuarios
-
         setResena(false);
         setUsuario(true);
+        setClientes(false);
+    };
+    const handleClientesClick = () => {
+        setClientes(true);
+        setResena(false);
+        setUsuario(false);
     };
 
     const handleItemClick = (itemName) => {
@@ -55,10 +62,12 @@ export default function Menu_Item({ setResena, setUsuario, userAuth }) {
                 handleResenasClick();
 
                 break;
-            case "Usuarios":
-                handleusuariosClick();
-                //Aqui ejecuta la ruta
+
+            case "Clientes":
+                handleClientesClick();
+
                 break;
+
             // Puedes agregar más casos según sea necesario
             default:
                 // Acciones por defecto o en caso de que no haya coincidencia
@@ -110,9 +119,11 @@ export default function Menu_Item({ setResena, setUsuario, userAuth }) {
                                 <div className="hidden sm:ml-6 sm:block">
                                     <div className="flex space-x-4">
                                         {navigation.map((item) => (
-                                            <a
+                                            <Link
                                                 key={item.name}
                                                 href={item.href}
+                                                method={item.method}
+                                                preserveState
                                                 className={classNames(
                                                     item.name
                                                         ? "bg-gray-900 text-white"
@@ -129,28 +140,15 @@ export default function Menu_Item({ setResena, setUsuario, userAuth }) {
                                                 }
                                             >
                                                 {item.name}
-                                            </a>
+                                            </Link>
                                         ))}
-                                        {btnCrearUsuario && (
-                                            <BtnPanel
-                                                span={"+"}
-                                                className={"animate-pulse"}
-                                                onClick={
-                                                    handleCrearUsuarioClick
-                                                }
-                                            >
-                                                Crear usuarios
-                                            </BtnPanel>
-                                        )}
                                     </div>
                                 </div>
                             </div>
                             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                                 {/* Profile dropdown */}
                                 <div>
-                                    <h1 className="text-white">
-                                        {userAuth.nombre_completo}
-                                    </h1>
+                                    <h1 className="text-white">{nameAuth}</h1>
                                 </div>
 
                                 <FcBusinessman size={"20px"} />
@@ -197,6 +195,11 @@ export default function Menu_Item({ setResena, setUsuario, userAuth }) {
                                                 {({ active }) => (
                                                     <a
                                                         href="/logout"
+                                                        onClick={() => {
+                                                            localStorage.removeItem(
+                                                                "nameAuth"
+                                                            );
+                                                        }}
                                                         className={classNames(
                                                             active
                                                                 ? "bg-gray-100"
@@ -204,8 +207,25 @@ export default function Menu_Item({ setResena, setUsuario, userAuth }) {
                                                             "block px-4 py-2 text-sm text-gray-700"
                                                         )}
                                                     >
-                                                        Logout
+                                                        Cerrar sesion
                                                     </a>
+                                                )}
+                                            </Menu.Item>
+                                            <Menu.Item>
+                                                {({ active }) => (
+                                                    <button
+                                                        onClick={
+                                                            handleusuariosClick
+                                                        }
+                                                        className={classNames(
+                                                            active
+                                                                ? "bg-gray-100"
+                                                                : "",
+                                                            "block px-4 py-2 text-sm text-gray-700 w-full text-start"
+                                                        )}
+                                                    >
+                                                        Usuarios
+                                                    </button>
                                                 )}
                                             </Menu.Item>
                                         </Menu.Items>

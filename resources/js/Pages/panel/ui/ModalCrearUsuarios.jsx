@@ -3,12 +3,15 @@ import { useState } from "react";
 import BtnPrimary from "./BtnPrimary";
 import { router } from "@inertiajs/react";
 
-const ModalCrearUsuarios = ({ modal, setModal }) => {
-    const [openModal, setOpenModal] = useState(modal);
+const ModalCrearUsuarios = ({
+    modal_crearusuarios,
+    setModal_CrearUsuarios,
+}) => {
+    const [openModal, setOpenModal] = useState(modal_crearusuarios);
 
     function onCloseModal() {
         setOpenModal(false);
-        setModal(false);
+        setModal_CrearUsuarios(false);
         setEmail("");
     }
 
@@ -36,7 +39,7 @@ const ModalCrearUsuarios = ({ modal, setModal }) => {
     function handleSubmit(e) {
         e.preventDefault();
         console.log(value);
-        setModal(false);
+        setModal_CrearUsuarios(false);
         router.post("/register.store", value);
     }
 

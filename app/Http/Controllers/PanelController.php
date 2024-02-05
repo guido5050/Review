@@ -7,8 +7,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Resena;
-use Inertia\Inertia;
 use App\Models\usuarios_empleado;
+use App\Models\UsuariosClientes;
+use Inertia\Inertia;
+use App\Mail\OrisonContactMailable;
+use Illuminate\Support\Facades\Mail;
+
 
 class PanelController extends Controller
 {
@@ -18,7 +22,7 @@ class PanelController extends Controller
 
     public function index(){
         $Auth_User = Auth::user();
-        //dd($Auth_User->toArray());
+      //  dd($Auth_User->toArray());
 
         $User = usuarios_empleado::all();
 
@@ -26,6 +30,13 @@ class PanelController extends Controller
       ['users' => $User,
        'userAuth' =>$Auth_User]);//Vista principal del panelA
    }
+
+
+public function clientes(){
+    $clientes = UsuariosClientes::orderBy('id_cliente', 'desc')->paginate(10);
+    return inertia::render('panel/MainLayout',['client' => $clientes ]);
+}
+
 
    public function update(Request $request){
     //Metodo para actualizar usuarios
@@ -86,29 +97,46 @@ class PanelController extends Controller
 
 
 
-    public function generarResena(Request $request){
+    public function generarResena(Request $request)
+    {
+        $nombreDominio = $request->getHost();
+        dd($nombreCompleto);
+        // Obtener el usuario
+        $user = UsuariosClientes::where('id_cliente', $request->id_usuario)->first();
 
-        $user =User::where('id_usuario', $request->id_usuario)->first();
 
 
+        // Crear la reseña
         $resenaData = [
-        'id_reserva' => $request->id_reserva,
-        'id_usuario' =>$user->id_usuario,
-        'estado' => 0]; //Estado cero para no revisado.
+            'id_reserva' => $request->id_reserva,
+            'id_usuario' => $user->id_cliente,
+            'estado' => 0 // Estado cero para no revisado.
+        ];
         Resena::create($resenaData);
 
-    //     $user =  User::where('id_usuario', $id)
-    //    ->first();
-     $id_resena = Resena::where('id_usuario', $request->id_usuario)
-    ->max('id_resena');
+        // Obtener el ID de la reseña más reciente del usuario
+        $id_resena = Resena::where('id_usuario', $request->id_usuario)->max('id_resena');
 
-    // dd($id_resena);
+        // Redirigir a la ruta de UserController@showStars
+        return redirect()->route('showStars', ['id_resena' => $id_resena]);
+    }
 
 
-     // Redirigir a la ruta de UserController@showStars
-     return redirect()->route('showStars', ['id_resena' =>  $id_resena]);
+    /**
+     * TODO:Configuracion del Correo
+     * importante para que este metodo funcione
+     * use App\Mail\OrisonContactMailable;
+     * use Illuminate\Support\Facades\Mail;
+     */
+    public function mail($clienteId){
+        $cliente = UsuariosClientes::where('id_cliente', $clienteId)->first();
+        //dd($cliente->nombre_completo);
+        $url = "http://testreview.test/generarResena?id_reserva=122&id_usuario={$clienteId}";
 
-        }
+       Mail::to('waltdmda15@gmail.com')
+       ->send(new OrisonContactMailable($cliente->nombre_completo, $url));
+       //return 'Mensaje enviado';
+    }
 
 
         public function test1(Request $request){

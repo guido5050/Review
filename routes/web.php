@@ -19,29 +19,25 @@ use App\Http\Controllers\logincontrollerumpleados;
 | contains the "web" middleware group. Now create something great!
 |
 */
+//Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 
 Route::get('/panela',[PanelController::class,'index'])->name('index')->middleware('auth:empleados');
+Route::get('/panela/clientes',[PanelController::class,'clientes'])->name('clientes')->middleware('auth:empleados'); //Mostrar clientes
+
 Route::get('/panela/resenas',[PanelController::class,'User'])->name('User');//Lista de Usuarops
 Route::get('/',[PanelController::class,'index'])->middleware('auth'); //Este metodo trae los usuarios_empleados
 Route::post('/panela/update',[PanelController::class,'update'])->name('update');
 Route::delete('/panela/{id_usuario}',[PanelController::class,'delete'])->name('delete')->middleware('auth:empleados');//Elimina usuarios
 
 
-
-
+//Mail
+Route::get('/panela/mail/{clienteId}',[PanelController::class,'mail'])->name('mail')->middleware('auth:empleados');
 
 
 
 // Route::post('/test2',[PanelController::class,'test1'])->name('test1');//ruta test
  Route::get('encuesta',[UserController::class,'showStars'])->name('showStars');//Test
-
-
-
-
-
-
-
 
 
     Route::get('/login', [logincontrollerumpleados::class,'show'])->name('login');
