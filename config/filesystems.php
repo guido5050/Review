@@ -36,6 +36,13 @@ return [
             'throw' => false,
         ],
 
+        'images' => [
+            'driver' => 'local',
+            'root' => public_path('images/logos'),
+            'url' => env('APP_URL').'/images/logos',
+            'visibility' => 'public',
+        ],
+        
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

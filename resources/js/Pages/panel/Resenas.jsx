@@ -1,12 +1,14 @@
 import React from "react";
 import Menu_Item from "./Menu_Item";
-const Resenas = ({ user }) => {
-    console.log(user);
+const Resenas = ({ auth, resenas }) => {
+    console.log(resenas);
     return (
         <>
-            <div>
-                <h1>Resenas</h1>
-            </div>
+            <Menu_Item user={auth.user}>
+                <div className="">
+                    <h1>Reseñas</h1>
+                </div>
+            </Menu_Item>
         </>
     );
 };

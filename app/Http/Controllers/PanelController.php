@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Resena;
 use App\Models\usuarios_empleado;
 use App\Models\UsuariosClientes;
+use App\Models\Empresas;
+use App\Models\Roles;
 use Inertia\Inertia;
 use App\Mail\OrisonContactMailable;
 use Illuminate\Support\Facades\Mail;
@@ -18,54 +20,88 @@ class PanelController extends Controller
 {
     //
 
+    // public function roles(){
+    //     $roles =Roles::with('usuarios_empleado')->get();
+    //     return response()->json($roles);
+    // }
 
-
-    public function index(){
-        $Auth_User = Auth::user();
-      //  dd($Auth_User->toArray());
-
-        $User = usuarios_empleado::all();
-
-      return inertia::render('panel/MainLayout',
-      ['users' => $User,
-       'userAuth' =>$Auth_User]);//Vista principal del panelA
-   }
+//     public function index(){
+//         $id_empresa = session('empresa');
+//         $resenas = Resena::where('id_empresa', $id_empresa)->paginate(10);
+//         return inertia::render('panel/Resenas',['resenas' => $resenas]);//Vista principal del panelA
+//    }
 
 
 public function clientes(){
-    $clientes = UsuariosClientes::orderBy('id_cliente', 'desc')->paginate(10);
-    return inertia::render('panel/MainLayout',['client' => $clientes ]);
+    $empresa = session('empresa');
+    //dd($empresa);
+    $clientes = UsuariosClientes::where('id_empresa', $empresa)->orderBy('id_cliente', 'desc')->paginate(10);
+    return inertia::render('panel/Clientes',['client' => $clientes ]);
 }
 
 
-   public function update(Request $request){
+
+public function usuarios(){
+
+    $cargo =Roles::all();
+    ///dd($cargo->toArray());
+    $currentCargo = Auth::user()->cargo;
+    if($currentCargo < 3){
+        return inertia::render('panel/Resenas');
+        //return redirect()->route('resenas') alternativa
+    }else{
+        $users = usuarios_empleado::all();
+        return inertia::render('panel/Usuarios',
+            [
+            'users' => $users,
+            'cargo' => $cargo,
+            ]);
+    }
+
+
+    // $users = usuarios_empleado::all();
+
+    // return Inertia::render('panel/Usuarios', [
+    //     'users' => $users
+    // ]);
+}
+
+public function update(Request $request){
     //Metodo para actualizar usuarios
-    //dd($request->toArray());
-    $data = $request->toArray();
+    dd($request->toArray());
+    $data = $request->all();
 
+    foreach ($data as $empleadoData) {
+        // Comprueba si las claves existen antes de acceder a ellas
+        if (!isset($empleadoData['id_empleados'], $empleadoData['nombre_completo'], $empleadoData['email'])) {
+            continue;
+        }
 
-    foreach ($data as $empleado) {
-        // Accede a cada propiedad del empleado
-        $idEmpleado = $empleado['id_empleados'];
-        $nombreCompleto = $empleado['nombre_completo'];
-        $email = $empleado['email'];
-         //pregunta si existe
+        $idEmpleado = $empleadoData['id_empleados'];
+        $nombreCompleto = $empleadoData['nombre_completo'];
+        $email = $empleadoData['email'];
+        $telefono = $empleadoData['num_telefono'];
+        $activo = $empleadoData['activo'];
+
         // Encuentra el modelo del empleado por su ID
-
         $empleadoModel = usuarios_empleado::find($idEmpleado);
 
+        // Si el empleado existe, actualiza los datos
         if ($empleadoModel) {
             $empleadoModel->update([
                 'nombre_completo' => $nombreCompleto,
                 'email' => $email,
-                // Agrega más campos según sea necesario
+                'num_telefono' => $telefono,
+                'activo' => $activo,
+
             ]);
         }
     }
 
-    return redirect()->route('index');
+    // Redirige o devuelve una respuesta según sea necesario
+}
 
-   }
+
 
    public function delete($id_usuario){
 
@@ -76,7 +112,7 @@ public function clientes(){
     //dd($user);
     $user->delete();
 
-    return redirect()->route('index');
+    return redirect()->back();
    }
 
 
@@ -89,10 +125,15 @@ public function clientes(){
     return view('panel');
    }
 
-    public function User(){ //Metodo muestra la lista de usuarios en el panel
-    // dd('goku');
-      $User = User::all();
-      return inertia::render('panel/Resenas',['user' => $User]);
+    /**
+     * Retrieve and display the reviews for the current company.
+     *
+     * @return \Inertia\Response
+     */
+    public function resenas(){
+        $id_empresa = session('empresa'); // Current company
+        $resenas = Resena::where('id_empresa', $id_empresa)->paginate(10);
+        return inertia::render('panel/Resenas',['resenas' => $resenas]);
     }
 
 

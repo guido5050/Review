@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PanelController;
+use App\Http\Controllers\config_company;
 use App\Http\Controllers\logincontrollerumpleados;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -19,22 +19,27 @@ use App\Http\Controllers\logincontrollerumpleados;
 | contains the "web" middleware group. Now create something great!
 |
 */
-//Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+//Route::get('/datos_empresas',[config_company::class,'datos_empresas'])->middleware('auth:empleados');
 
+//Route::get('/roles',[PanelController::class,'roles'])->middleware('auth:empleados');
 
-Route::get('/panela',[PanelController::class,'index'])->name('index')->middleware('auth:empleados');
+//Route::get('/panela',[PanelController::class,'index'])->name('index')->middleware('auth:empleados');
+Route::get('/',[PanelController::class,'resenas'])->middleware('auth');
 Route::get('/panela/clientes',[PanelController::class,'clientes'])->name('clientes')->middleware('auth:empleados'); //Mostrar clientes
+Route::get('/panela/usuarios',[PanelController::class,'usuarios'])->name('usuarios')->middleware('auth:empleados');//Mostrar Usuarios
+Route::get('/panela/resenas',[PanelController::class,'resenas'])->name('resenas');//Lista de Usuarops
 
-Route::get('/panela/resenas',[PanelController::class,'User'])->name('User');//Lista de Usuarops
-Route::get('/',[PanelController::class,'index'])->middleware('auth'); //Este metodo trae los usuarios_empleados
-Route::post('/panela/update',[PanelController::class,'update'])->name('update');
-Route::delete('/panela/{id_usuario}',[PanelController::class,'delete'])->name('delete')->middleware('auth:empleados');//Elimina usuarios
+Route::post('/panela/usuarios/update',[PanelController::class,'update'])->name('update');
+Route::delete('/panela/usuarios/{id_usuario}',[PanelController::class,'delete'])->name('delete')->middleware('auth:empleados');//Elimina usuarios
 
 
 //Mail
 Route::get('/panela/mail/{clienteId}',[PanelController::class,'mail'])->name('mail')->middleware('auth:empleados');
 
-
+//empresa
+Route::get('/panela/empresa',[config_company::class,'show_main_view'])->name('empresa')->middleware('auth:empleados');
+Route::post('/panela/empresa_actualizar',[config_company::class,'store_data'])->name('store_data')->middleware('auth:empleados');
 
 // Route::post('/test2',[PanelController::class,'test1'])->name('test1');//ruta test
  Route::get('encuesta',[UserController::class,'showStars'])->name('showStars');//Test
@@ -51,22 +56,6 @@ Route::get('/panela/mail/{clienteId}',[PanelController::class,'mail'])->name('ma
 	Route::post('/register.store',[logincontrollerumpleados::class,'register'])->name('register');//Crea usuarios
 
     //Route::post('/register.update','logincontrollerumpleados@update')->name('update_register');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

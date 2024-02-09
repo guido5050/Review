@@ -5,6 +5,12 @@ import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { MdDelete } from "react-icons/md";
 import { router } from "@inertiajs/react";
 
+/**
+ * TODO : Crear un modal para eliminar usuarios
+ * este modal se encarga de eliminar usuarios
+ *
+ */
+
 const ModalAlert = ({ modal, setModal, onConfirm, onCancel, iduser }) => {
     const [openModal, setOpenModal] = useState(modal);
 
@@ -12,7 +18,7 @@ const ModalAlert = ({ modal, setModal, onConfirm, onCancel, iduser }) => {
         //Metodo para elimar al usuario en el Modal
         onConfirm(); // Llama a la función onConfirm desde el componente principal
         console.log(iduser);
-        router.delete(`/panela/${iduser}`);
+        router.delete(`/panela/usuarios/${iduser}`);
     };
 
     const handleCancelClick = () => {

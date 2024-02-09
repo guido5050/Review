@@ -8,30 +8,43 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use DB;
 use Auth;
 use Illuminate\Validation\Rule;
+use App\Models\Empresas;
 use App\Events\NewMessageNotification;
 use App\Clases\auto_close_turn;
 use App\Models\usuarios_empleado;
+use App\Models\parametro;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Session;
 
 
 
 class logincontrollerumpleados extends Controller
 {
-    public function show() {
 
-        //dd('entro');
-        if ( auth::guard('empleados')->guest() ) {
+        /**
+         * TODO: Metodo que muestra la vista de login
+         */
+        public function show() {
 
-            return view('auth.login');
-        }
-        else if ( auth()->guard('empleados')->user()->cambiar_contraseña == 1 ) {
-            return redirect()->route('cambiar_contrasena');
-        }
-        else {
+            //dd('entro');
+            if ( auth::guard('empleados')->guest() ) {
 
-            return redirect()->route('index');
+                $empresas = parametro::all(); // Obtén todas las empresas
+
+                return view('auth.login', ['empresas' => $empresas]); // Pasa las empresas a la vista
+            }
+            else if ( auth()->guard('empleados')->user()->cambiar_contraseña == 1 ) {
+                return redirect()->route('cambiar_contrasena');
+            }
+            else {
+                return redirect()->route('index');
+            }
         }
-    }
+
+
+
+
+
 
     public function show_register() {
         if ( auth::guard('empleados')->guest() ) {
@@ -99,12 +112,17 @@ class logincontrollerumpleados extends Controller
 
     }
 
+    /**
+     * TODO: Metodo que ejecuta la autenticación del usuario es decir... el boton de login
+     */
+
     public function aut_user(request $data) {
 
-        //dd();
+        //dd($data->toArray());
         $rules = [
             'username' => 'required',
             'password' => 'required',
+            'empresa' => 'required',
         ];
         $customMessages = [
             'username.required'    => 'Usuario Es Obligatorio',
@@ -115,10 +133,16 @@ class logincontrollerumpleados extends Controller
         $credentials = $data->only('username', 'password');
         //$usuario_estado_valid = usuarios_empleado::where('usuario','=',$data['username'])->pluck('activo')->first();
 		//dd($usuario_estado_valid);
-
+        //dd($data->toArray());
         $xyz = auth::guard('empleados')->attempt(['usuario' => $data->username, 'password' => $data->password],$data->remember);
 		//dd($xyz);
         if ($xyz) {
+              // Guarda el valor de 'empresa' en la sesión
+             Session::put('empresa', $data->empresa);
+
+             //dd(Session::get('empresa'));
+
+
             $usuario_estado_valid = usuarios_empleado::where('usuario','=',$data['username'])->pluck('activo')->first();
 
             if ($usuario_estado_valid == 0 || is_null($usuario_estado_valid) || $usuario_estado_valid == ' ' || $usuario_estado_valid != 1) {
@@ -134,7 +158,7 @@ class logincontrollerumpleados extends Controller
                 $usuario_empleado->save();
 
                 $c_c = auth()->guard('empleados')->user()->cambiar_contraseña;
-                $ruta='index';
+                $ruta='resenas';
                 if ( $c_c == 1) {
                     $ruta = 'cambiar_contrasena';
                 } //$review_turns =
@@ -148,12 +172,18 @@ class logincontrollerumpleados extends Controller
         }
     }
 
+    /**
+     * TODO: cerrar la sesión del usuario
+     */
     public function logout() {
         auth::guard('empleados')->logout();
-
-        return redirect()->route('login');
+        Session::forget('empresa');
+       return redirect()->route('login');
     }
 
+     /**
+     * TODO: uodate usuario
+     */
     public function update(request $data) {
         $empleado = usuarios_empleado::where('id_empleados','=',$data->get('id_empleados'))->first();
         $rules = [
