@@ -40,10 +40,13 @@ class OrisonContactMailable extends Mailable
      */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            from: New Address('orison@examaple.com','Orison'), // Email de Orison
-            subject: 'Dejanos tu Evaluacion ⭐⭐⭐⭐⭐ 📑',
-        );
+
+       $email = session('email_empresa'); // Asegúrate de que 'email_empresa' es la clave correcta para el correo electrónico de la empresa en tu sesión
+
+    return new Envelope(
+        from: New Address($email, session('razon_social')), // Utiliza el correo electrónico de la empresa
+        subject: 'Dejanos tu Evaluacion ⭐⭐⭐⭐⭐ 📑',
+    );
     }
 
     /**
@@ -56,7 +59,15 @@ class OrisonContactMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('Mail.Plantilla_orison')
+        $empresa = session('empresa');
+
+        if ($empresa == 1) {
+            $view = 'Mail.Plantilla_Orison';
+        } else if ($empresa == 2) {
+            $view = 'Mail.Plantilla_Creating';
+        }
+
+        return $this->view($view)
                     ->with([
                         'nombre' => $this->nombre,
                         'url' => $this->url

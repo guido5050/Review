@@ -32,9 +32,14 @@ public function datos_empresas(){
     /**
      * TODO: Metodo que actualiza la información de la empresa
      */
+/**
+ * Store the company data in the database and handle the logo upload.
+ *
+ * @param  \Illuminate\Http\Request  $data
+ * @return \Illuminate\Http\RedirectResponse
+ */
 public function store_data(Request $data)
 {
-
     if ($data->has('logo')) {
         $logoData = $data->input('logo');
 
@@ -59,23 +64,29 @@ public function store_data(Request $data)
         $data['ruta_logo'] = '/images/logos/' . $nombrearchivo;
     }
 
-    // ...
-     else {
-            // El archivo de logo no es válido
-            // Realiza las acciones necesarias en caso de archivo inválido
-            return redirect()->back()->withErrors(['logo' => 'El archivo de logo no es válido.']);
-        }
-      // Actualiza los datos en la base de datos
-     // dd(session('empresa'));
-      $id = session('empresa');
-    //  dd($data);
+    // Convert the request to an array
     $data = $data->toArray();
-    //dd($data);
-     parametro::find($id)->update($data);
 
+    // Get the company id from the session
+    $id = session('empresa');
+
+    // Update the company data
+    if (array_key_exists('ruta_logo', $data)) {
+        session(['logo_ruta' => $data['ruta_logo']]);
+    }
+    session(['razon_social' => $data['razon_social']]);
+
+    parametro::find($id)->update($data);
+
+
+    // If the logo was not valid, add an error message to the session
+    if (!array_key_exists('logo', $data)) {
+        return redirect()->back()->withErrors(['logo' => 'El archivo de logo no es válido.']);
+    }
+
+    // Redirect back with a success message
     return redirect()->back()->withSuccess('Se Actualizó la Información De La Compañia Exitosamente');
-}//final del metodo
-
+}
 
 
 

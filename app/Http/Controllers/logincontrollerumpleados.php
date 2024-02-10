@@ -31,6 +31,7 @@ class logincontrollerumpleados extends Controller
 
                 $empresas = parametro::all(); // Obtén todas las empresas
 
+
                 return view('auth.login', ['empresas' => $empresas]); // Pasa las empresas a la vista
             }
             else if ( auth()->guard('empleados')->user()->cambiar_contraseña == 1 ) {
@@ -118,7 +119,7 @@ class logincontrollerumpleados extends Controller
 
     public function aut_user(request $data) {
 
-        //dd($data->toArray());
+       // dd($data->toArray());
         $rules = [
             'username' => 'required',
             'password' => 'required',
@@ -137,10 +138,21 @@ class logincontrollerumpleados extends Controller
         $xyz = auth::guard('empleados')->attempt(['usuario' => $data->username, 'password' => $data->password],$data->remember);
 		//dd($xyz);
         if ($xyz) {
-              // Guarda el valor de 'empresa' en la sesión
-             Session::put('empresa', $data->empresa);
+            // Guarda el valor de 'empresa' en la sesión
+            Session::put('empresa', $data->empresa);
 
-             //dd(Session::get('empresa'));
+            // Obtén el valor del campo 'logo_ruta' del modelo 'parametro'
+            $parametros = parametro::where('id', Session::get('empresa'))->select('ruta_logo', 'razon_social','correo')->first();
+
+            Session::put('logo_ruta', $parametros->ruta_logo);
+            Session::put('razon_social', $parametros->razon_social);
+            Session::put('email_empresa', $parametros->correo);
+
+
+            $logo = Session::get('logo_ruta');
+            $razon_social = Session::get('razon_social');
+           // dd($logo, $razon_social);
+            // dd($logo_ruta);
 
 
             $usuario_estado_valid = usuarios_empleado::where('usuario','=',$data['username'])->pluck('activo')->first();
@@ -161,9 +173,7 @@ class logincontrollerumpleados extends Controller
                 $ruta='resenas';
                 if ( $c_c == 1) {
                     $ruta = 'cambiar_contrasena';
-                } //$review_turns =
-                //$review_turns = new auto_close_turn(); $review_turns = $review_turns->invoke();
-                //return $review_turns;
+                }
                 return redirect()->route($ruta)->withSuccess('Ha Iniciado Sessión !');
             }
 		}

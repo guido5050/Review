@@ -11,7 +11,7 @@ import BtnPrimary from "./ui/BtnPrimary";
 import ModalAlert from "./ui/ModalAlert";
 import ModalCrearUsuarios from "./ui/ModalCrearUsuarios";
 
-const Usuarios = ({ users, auth, cargo }) => {
+const Usuarios = ({ users, auth, cargo,logo,razon_social }) => {
     const [modal, setModal] = useState(false); //Estado del Modal que maneja el eliminar
     const [modal_crearusuarios, setModal_CrearUsuarios] = useState(false);
     const [iduser, setIduser] = useState(0); //id del usuario a eliminar
@@ -64,7 +64,7 @@ const Usuarios = ({ users, auth, cargo }) => {
 
     return (
         <>
-            <Menu_Item user={auth.user}>
+            <Menu_Item user={auth.user} logo={logo} razon_social={razon_social}>
                 {modal && (
                     <ModalAlert
                         modal={modal}

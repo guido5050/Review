@@ -141,17 +141,19 @@ public function update(Request $request){
     public function generarResena(Request $request)
     {
         $nombreDominio = $request->getHost();
-        dd($nombreCompleto);
+        //dd($nombreCompleto);
         // Obtener el usuario
         $user = UsuariosClientes::where('id_cliente', $request->id_usuario)->first();
 
-
-
+        $id_empresa = intval(session('empresa'));
+        //dd($id_empresa);
         // Crear la reseña
         $resenaData = [
+            'id_empresa' => $id_empresa,
             'id_reserva' => $request->id_reserva,
             'id_usuario' => $user->id_cliente,
-            'estado' => 0 // Estado cero para no revisado.
+            'estado' => 0
+            // Estado cero para no revisado.
         ];
         Resena::create($resenaData);
 
@@ -174,7 +176,7 @@ public function update(Request $request){
         //dd($cliente->nombre_completo);
         $url = "http://testreview.test/generarResena?id_reserva=122&id_usuario={$clienteId}";
 
-       Mail::to('waltdmda15@gmail.com')
+       Mail::to('fel123rodriguez@gmail.com')
        ->send(new OrisonContactMailable($cliente->nombre_completo, $url));
        //return 'Mensaje enviado';
     }

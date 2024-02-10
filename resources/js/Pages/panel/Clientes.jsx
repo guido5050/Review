@@ -11,7 +11,7 @@ import Menu_Item from "./Menu_Item";
 import BtnPrimary from "./ui/BtnPrimary";
 import ModalResenas from "./ui/ModalResenas";
 
-const Clientes = ({ client, auth }) => {
+const Clientes = ({ client, auth,logo,razon_social }) => {
     /**
      * TODO: Client es la respuesta paginada del controlador PanelController ´clientes()´
      */
@@ -23,7 +23,7 @@ const Clientes = ({ client, auth }) => {
 
     return (
         <>
-            <Menu_Item user={auth.user}>
+            <Menu_Item user={auth.user} logo={logo} razon_social={razon_social}>
                 <div className="flex font-extrabold gap-x-3 flex-col p-10">
                     {modalOpen && (
                         <ModalResenas

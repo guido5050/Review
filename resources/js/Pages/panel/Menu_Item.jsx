@@ -6,6 +6,9 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { FcBusinessman } from "react-icons/fc";
 import BtnPanel from "./ui/BtnPanel";
 import ModalCrearUsuarios from "./ui/ModalCrearUsuarios";
+import { FcDepartment } from "react-icons/fc";
+import { FiLogOut } from "react-icons/fi";
+import { Head } from "@inertiajs/react";
 
 const navigation = [
     { name: "Resenas", href: "/panela/resenas", current: true, method: "get" },
@@ -21,7 +24,8 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-export default function Menu_Item({ user, children }) {
+export default function Menu_Item({ user, children, logo, razon_social }) {
+    console.log(razon_social);
     const [modal, setModal] = useState(false);
     const [activeItem, setActiveItem] = useState(
         localStorage.getItem("activeItem") || null
@@ -33,6 +37,10 @@ export default function Menu_Item({ user, children }) {
     return (
         <div>
             <>
+                <Head>
+                    <title>{razon_social}</title>
+                </Head>
+                
                 <Disclosure as="nav" className="bg-gray-800 py-2 ">
                     {({ open }) => (
                         <>
@@ -66,9 +74,9 @@ export default function Menu_Item({ user, children }) {
                                         </Disclosure.Button>
                                     </div>
                                     <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                                        <div className="flex flex-shrink-0 items-center">
+                                        <div className="flex flex-shrink-0 items-center text-white flex gap-x-2">
                                             <img
-                                                src={"/images/orison.png"}
+                                                src={logo}
                                                 alt="Mi Imagen"
                                                 className="w-12 h-auto px-0.1"
                                             />
@@ -108,13 +116,24 @@ export default function Menu_Item({ user, children }) {
                                     </div>
                                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                                         {/* Profile dropdown */}
-                                        <div>
-                                            <h1 className="text-white">
-                                                {user.nombre_completo}
+                                        <div className="flex gap-x-3 p-2">
+                                            <h1 className="text-white   py-1 bg-slate-700 font-extrabold flex items-center justify-center rounded-lg px-4 gap-1">
+                                                {razon_social}{" "}
+                                                <FcDepartment size={"20px"} />
                                             </h1>
+                                            <h1 className="text-white bg-slate-700 font-extrabold flex items-center justify-center px-4 rounded-lg gap-1">
+                                                {user.nombre_completo}
+                                                <FcBusinessman size={"20px"} />
+                                            </h1>
+                                            <a
+                                                href="/logout"
+                                                className="text-white bg-slate-700 font-extrabold flex gap-1 items-center justify-center rounded-lg px-4"
+                                            >
+                                                cerar sesion
+                                                <FiLogOut />
+                                            </a>
                                         </div>
 
-                                        <FcBusinessman size={"20px"} />
                                         <Menu
                                             as="div"
                                             className="relative ml-3"

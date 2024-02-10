@@ -15,6 +15,7 @@ class Resena extends Model
     protected $primaryKey = 'id_resena';  //Nombre de la tabla en la Base de Dattos
     //Haciendo la relacion
    protected $fillable =  [
+    'id_empresa',
     'id_resena',
     'id_reserva',
     'id_usuario',
