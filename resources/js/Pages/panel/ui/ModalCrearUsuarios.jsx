@@ -6,9 +6,10 @@ import { router } from "@inertiajs/react";
 const ModalCrearUsuarios = ({
     modal_crearusuarios,
     setModal_CrearUsuarios,
+    cargo,
 }) => {
     const [openModal, setOpenModal] = useState(modal_crearusuarios);
-
+    console.log(cargo);
     function onCloseModal() {
         setOpenModal(false);
         setModal_CrearUsuarios(false);
@@ -48,7 +49,7 @@ const ModalCrearUsuarios = ({
             {/* <Button onClick={() => setOpenModal(true)}>Toggle modal</Button> */}
             <Modal show={openModal} size="2xl" onClose={onCloseModal} popup>
                 <Modal.Header />
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="overflow-y-auto p-5">
                     <Modal.Body>
                         <div className="space-y-6">
                             <h3 className="text-xl font-medium text-gray-900 dark:text-white">
@@ -147,13 +148,17 @@ const ModalCrearUsuarios = ({
                                     <div className="mb-2 block">
                                         <Label htmlFor="Cargo" value="Cargo" />
                                     </div>
-                                    <TextInput
+                                    <Select
                                         id="cargo"
-                                        placeholder="Cargo"
                                         onChange={handleChange}
-                                        type="number"
                                         required
-                                    />
+                                    >
+                                        {cargo.map((item) => (
+                                            <option key={item.id} value={item.id}>
+                                                {item.nombre}
+                                            </option>
+                                        ))}
+                                    </Select>
                                 </div>
                                 <div className="w-1/2">
                                     <div className="mb-2 block">
@@ -176,7 +181,7 @@ const ModalCrearUsuarios = ({
                             <div className="flex justify-between"></div>
                             <div className="w-full">
                                 <BtnPrimary
-                                    onClick={handleSubmit}
+                                    type="submit"
                                     className={" hover:bg-blue-500 bg-blue-600"}
                                 >
                                     Crear Usuario

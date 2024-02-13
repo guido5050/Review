@@ -89,7 +89,7 @@
     <h1>Cuenta tu experencia 😆</h1>
     <h1 class="estrella">&#9733;&#9733;&#9733;&#9734;&#9734;</h1>
 
-    <h2>Estimado(a) Pedrito</h2>
+    <h2>Estimado(a) {{ $nombre }}</h2>
 
     <p>Gracias por hospedarse en nuestro hotel, esperamos que su estadia haya sido de su agrado.</p>
 

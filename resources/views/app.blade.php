@@ -9,7 +9,9 @@
     <title inertia>
         @php
             $empresa = session('razon_social');
-            echo $empresa;
+
+            echo $empresa , config('app.name');
+
         @endphp
     </title>
 

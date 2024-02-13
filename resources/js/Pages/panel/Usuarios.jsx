@@ -11,7 +11,8 @@ import BtnPrimary from "./ui/BtnPrimary";
 import ModalAlert from "./ui/ModalAlert";
 import ModalCrearUsuarios from "./ui/ModalCrearUsuarios";
 
-const Usuarios = ({ users, auth, cargo,logo,razon_social }) => {
+const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
+
     const [modal, setModal] = useState(false); //Estado del Modal que maneja el eliminar
     const [modal_crearusuarios, setModal_CrearUsuarios] = useState(false);
     const [iduser, setIduser] = useState(0); //id del usuario a eliminar
@@ -64,7 +65,12 @@ const Usuarios = ({ users, auth, cargo,logo,razon_social }) => {
 
     return (
         <>
-            <Menu_Item user={auth.user} logo={logo} razon_social={razon_social}>
+            <Menu_Item
+                user={auth.user}
+                logo={logo}
+                razon_social={razon_social}
+                AppName={AppName}
+            >
                 {modal && (
                     <ModalAlert
                         modal={modal}
@@ -76,6 +82,7 @@ const Usuarios = ({ users, auth, cargo,logo,razon_social }) => {
                 )}
                 {modal_crearusuarios && (
                     <ModalCrearUsuarios
+                        cargo={cargo}
                         setModal_CrearUsuarios={setModal_CrearUsuarios}
                         modal_crearusuarios={modal_crearusuarios}
                     ></ModalCrearUsuarios>
@@ -94,12 +101,14 @@ const Usuarios = ({ users, auth, cargo,logo,razon_social }) => {
                     </div>
                     <div className="w-full flex  gap-x-5 mb-5">
                         <BtnPanel
+                            type={"button"}
                             span={"+"}
                             className={""}
                             onClick={handleCrearUsuarios}
                         >
                             Crear usuarios
                         </BtnPanel>
+                        <BtnPrimary>Crear usuarios</BtnPrimary>
                     </div>
 
                     <table className="w-full animate-fade-down animate-ease-in text-xl text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -166,7 +175,7 @@ const Usuarios = ({ users, auth, cargo,logo,razon_social }) => {
                                             onChange={(e) =>
                                                 handleChange(
                                                     e,
-                                                    user.email,
+                                                    user.id_empleados,
                                                     "email"
                                                 )
                                             }

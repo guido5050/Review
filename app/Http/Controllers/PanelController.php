@@ -41,7 +41,7 @@ public function clientes(){
 
 
 
-public function usuarios(){
+public function usuarios(){ //TODO: Vista principal del panelA/Usuarios
 
     $cargo =Roles::all();
     ///dd($cargo->toArray());
@@ -68,14 +68,14 @@ public function usuarios(){
 
 public function update(Request $request){
     //Metodo para actualizar usuarios
-    dd($request->toArray());
+   // dd($request->toArray());
     $data = $request->all();
 
     foreach ($data as $empleadoData) {
         // Comprueba si las claves existen antes de acceder a ellas
-        if (!isset($empleadoData['id_empleados'], $empleadoData['nombre_completo'], $empleadoData['email'])) {
-            continue;
-        }
+        // if (!isset($empleadoData['id_empleados'], $empleadoData['nombre_completo'], $empleadoData['email'])) {
+        //     continue;
+        // }
 
         $idEmpleado = $empleadoData['id_empleados'];
         $nombreCompleto = $empleadoData['nombre_completo'];
@@ -176,8 +176,9 @@ public function update(Request $request){
         //dd($cliente->nombre_completo);
         $url = "http://testreview.test/generarResena?id_reserva=122&id_usuario={$clienteId}";
 
-       Mail::to('fel123rodriguez@gmail.com')
-       ->send(new OrisonContactMailable($cliente->nombre_completo, $url));
+       Mail::to($cliente->email) //TODO: a quien lo enviamos
+       ->send(new OrisonContactMailable($cliente->nombre_completo, $url)); //TODO: que enviamos
+
        //return 'Mensaje enviado';
     }
 

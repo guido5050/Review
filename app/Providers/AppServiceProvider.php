@@ -27,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
     'razon_social' => function () {
         return session('razon_social');
     },
+    'AppName' => function () {
+        return config('app.name');
+    },
 ]);
     }
 }

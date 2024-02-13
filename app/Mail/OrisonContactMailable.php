@@ -61,12 +61,12 @@ class OrisonContactMailable extends Mailable
     {
         $empresa = session('empresa');
 
-        if ($empresa == 1) {
-            $view = 'Mail.Plantilla_Orison';
-        } else if ($empresa == 2) {
-            $view = 'Mail.Plantilla_Creating';
-        }
-
+        // if ($empresa == 1) {
+        //     $view = 'Mail.Plantilla_Orison';
+        // } else if ($empresa == 2) {
+        //     $view = 'Mail.Plantilla_Creating';
+        // }
+        $view = 'Mail.Plantilla_Orison';
         return $this->view($view)
                     ->with([
                         'nombre' => $this->nombre,

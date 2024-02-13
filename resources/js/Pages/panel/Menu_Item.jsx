@@ -9,7 +9,7 @@ import ModalCrearUsuarios from "./ui/ModalCrearUsuarios";
 import { FcDepartment } from "react-icons/fc";
 import { FiLogOut } from "react-icons/fi";
 import { Head } from "@inertiajs/react";
-
+import ModalEmail from "./ui/ModalEmail";
 const navigation = [
     { name: "Resenas", href: "/panela/resenas", current: true, method: "get" },
     {
@@ -24,12 +24,14 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-export default function Menu_Item({ user, children, logo, razon_social }) {
+export default function Menu_Item({ user, children, logo, razon_social , AppName}) {
     console.log(razon_social);
+    //const [ModalEmail, setModalEmail] = useState(false);
     const [modal, setModal] = useState(false);
     const [activeItem, setActiveItem] = useState(
         localStorage.getItem("activeItem") || null
     );
+
     useEffect(() => {
         localStorage.setItem("activeItem", activeItem);
     }, [activeItem]);
@@ -38,9 +40,9 @@ export default function Menu_Item({ user, children, logo, razon_social }) {
         <div>
             <>
                 <Head>
-                    <title>{razon_social}</title>
+                    <title>{` ${razon_social}. ${AppName}`}</title>
                 </Head>
-                
+
                 <Disclosure as="nav" className="bg-gray-800 py-2 ">
                     {({ open }) => (
                         <>
@@ -176,19 +178,20 @@ export default function Menu_Item({ user, children, logo, razon_social }) {
                                                             </a>
                                                         )}
                                                     </Menu.Item>
+
                                                     <Menu.Item>
                                                         {({ active }) => (
-                                                            <a
-                                                                href="/logout"
+                                                            <Link
+                                                                href="/panela/usuarios"
                                                                 className={classNames(
                                                                     active
                                                                         ? "bg-gray-100"
                                                                         : "",
-                                                                    "block px-4 py-2 text-sm text-gray-700"
+                                                                    "block px-4 py-2 text-sm text-gray-700 w-full text-start"
                                                                 )}
                                                             >
-                                                                Cerrar sesion
-                                                            </a>
+                                                                Usuarios
+                                                            </Link>
                                                         )}
                                                     </Menu.Item>
                                                     <Menu.Item>
@@ -202,7 +205,7 @@ export default function Menu_Item({ user, children, logo, razon_social }) {
                                                                     "block px-4 py-2 text-sm text-gray-700 w-full text-start"
                                                                 )}
                                                             >
-                                                                Usuarios
+                                                                Config Plantilla Email
                                                             </Link>
                                                         )}
                                                     </Menu.Item>
@@ -241,6 +244,7 @@ export default function Menu_Item({ user, children, logo, razon_social }) {
                     )}
                 </Disclosure>
             </>
+            <ModalEmail />
             <main>{children}</main>
         </div>
     );

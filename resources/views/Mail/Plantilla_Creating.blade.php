@@ -49,7 +49,7 @@
                                                 <tr>
                                                     <td class="esd-structure es-p20" align="left">
                                                         <!--[if mso]><table width="560" cellpadding="0"
-                            cellspacing="0"><tr><td width="180" valign="top"><![endif]-->
+                                                          cellspacing="0"><tr><td width="180" valign="top"><![endif]-->
                                                         <table cellpadding="0" cellspacing="0" class="es-left"
                                                             align="left">
                                                             <tbody>

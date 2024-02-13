@@ -38,7 +38,7 @@ class logincontrollerumpleados extends Controller
                 return redirect()->route('cambiar_contrasena');
             }
             else {
-                return redirect()->route('index');
+                return redirect()->route('resenas');
             }
         }
 
@@ -65,7 +65,7 @@ class logincontrollerumpleados extends Controller
 
     public function register(request $data) {
 
-        //dd($data);
+        //dd($data->toArray());
         //phone_number
 
         $rules = [
@@ -75,27 +75,7 @@ class logincontrollerumpleados extends Controller
             'usuario' => ['unique:usuarios_empleados,usuario'],
             'num_identificacion' => ['required','max:50'],
             'num_telefono' => ['required'],
-            'cargo' => ['required','max:2'],
-        ];
-        $customMessages = [
-            'nombre_completo.required'    => 'Por Favor Ingrese Llene El Campo "Nombre Completo" ',
-            'nombre_completo.string'    => 'Formato Inválido En El Campo "Nombre Completo" ',
-            'nombre_completo.max'    => 'Formato Inválido En El Campo "Nombre Completo" ',
-            'email.required'    => 'Por Favor Ingrese Llene El Campo "Email" ',
-            'email.string'    => 'Formato Inválido En El Campo "Email" ',
-            'email.email'    => 'Formato Inválido En El Campo "Email" ',
-            'email.max'    => 'Formato Inválido En El Campo "Email" ',
-            'email.unique'    => 'Este Email Ya Pertenece a Una Cuenta',
-            'usuario.unique'    => 'Este Usuario Ya Pertenece a Una Cuenta',
-            'num_identificacion.required'    => 'Por Favor Ingrese Llene El Campo "No-Identificación" ',
-            'num_identificacion.max'    => 'Formato Inválido En El Campo "No-Identificación" ',
-            'num_telefono.required'    => 'Por Favor Ingrese Llene El Campo "Número Teléfono" ',
-            'cargo.required'    => 'Por Favor Ingrese Llene El Campo "Cargo" ',
-            'cargo.max'    => 'Formato Inválido En El Campo "Cargo" ',
-            'password.required'    => 'Por Favor Ingrese Llene El Campo "Contraseña" ',
-            'password.string'    => 'Formato Inválido En El Campo "Contraseña" ',
-            'password.min'    => 'Campo "Contraseña" Tiene Que Ser Mayor de 8 Dígitos',
-            'password.confirmed'    => 'Las Contraseñas No Coinciden',
+            'cargo' => ['required','max:200'],
         ];
 
         //$validatedData = $data->validate($rules, $customMessages);
@@ -103,6 +83,7 @@ class logincontrollerumpleados extends Controller
         $data['usuario'] = $data['email'];
         $data['activo'] = $data['activo'] === 'si' ? 1 : 0; // ternario en php
         $data['contrasena'] = $data['password'];
+        $data['cargo'] =$data['cargo'];
         $data['contrasena'] = bcrypt($data['contrasena']);
         $usuario = usuarios_empleado::create($data->all());
         //$usuario = usuarios_cliente::create($data->all());
