@@ -63,9 +63,10 @@ class logincontrollerumpleados extends Controller
         }
     }
 
-    public function register(request $data) {
+    public function register(request $data) { //TODO: Metodo que registra un nuevo usuario(EMPLEAOD)
+        //
 
-        //dd($data->toArray());
+    dd($data->toArray());
         //phone_number
 
         $rules = [

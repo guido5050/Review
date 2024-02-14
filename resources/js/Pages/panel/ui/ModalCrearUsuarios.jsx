@@ -154,7 +154,10 @@ const ModalCrearUsuarios = ({
                                         required
                                     >
                                         {cargo.map((item) => (
-                                            <option key={item.id} value={item.id}>
+                                            <option
+                                                key={item.id}
+                                                value={item.id}
+                                            >
                                                 {item.nombre}
                                             </option>
                                         ))}

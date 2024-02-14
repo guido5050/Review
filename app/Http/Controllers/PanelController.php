@@ -10,6 +10,7 @@ use App\Models\Resena;
 use App\Models\usuarios_empleado;
 use App\Models\UsuariosClientes;
 use App\Models\Empresas;
+use App\Models\parametro;
 use App\Models\Roles;
 use Inertia\Inertia;
 use App\Mail\OrisonContactMailable;
@@ -45,7 +46,7 @@ public function usuarios(){ //TODO: Vista principal del panelA/Usuarios
 
     $cargo =Roles::all();
     ///dd($cargo->toArray());
-    $currentCargo = Auth::user()->cargo;
+    $currentCargo = Auth::user()->cargo; //Numero de cargo
     if($currentCargo < 3){
         return inertia::render('panel/Resenas');
         //return redirect()->route('resenas') alternativa
@@ -66,23 +67,19 @@ public function usuarios(){ //TODO: Vista principal del panelA/Usuarios
     // ]);
 }
 
-public function update(Request $request){
+public function update(Request $request){  //TODO: update usuarios
     //Metodo para actualizar usuarios
-   // dd($request->toArray());
+    //dd($request->toArray());
     $data = $request->all();
 
     foreach ($data as $empleadoData) {
-        // Comprueba si las claves existen antes de acceder a ellas
-        // if (!isset($empleadoData['id_empleados'], $empleadoData['nombre_completo'], $empleadoData['email'])) {
-        //     continue;
-        // }
-
         $idEmpleado = $empleadoData['id_empleados'];
         $nombreCompleto = $empleadoData['nombre_completo'];
         $email = $empleadoData['email'];
         $telefono = $empleadoData['num_telefono'];
         $activo = $empleadoData['activo'];
-
+        $cargo = $empleadoData['cargo'];
+        $identificacion = $empleadoData['num_identificacion'];
         // Encuentra el modelo del empleado por su ID
         $empleadoModel = usuarios_empleado::find($idEmpleado);
 
@@ -93,12 +90,84 @@ public function update(Request $request){
                 'email' => $email,
                 'num_telefono' => $telefono,
                 'activo' => $activo,
+                'cargo' => $cargo,
+                'num_identificacion' => $identificacion,
 
             ]);
         }
     }
 
     // Redirige o devuelve una respuesta según sea necesario
+}
+
+public function create_roles(Request $request)
+{
+    // Validar los datos del formulario
+    $validatedData = $request->validate([
+        'nombre' => 'required|string',
+        'descripcion' => 'required|string',
+        // Agregar más validaciones según tus necesidades
+    ]);
+
+    // Crear un nuevo registro con el modelo Parametro
+    $parametro = Roles::create([
+        'nombre' => $request->nombre,
+        'descripcion' => $request->descripcion,
+        // Asignar más valores según tus necesidades
+    ]);
+
+    // Redirigir o devolver una respuesta según sea necesario
+    return back();
+}
+
+public function update_roles(Request $request)
+{
+   //dd($request->toArray());
+    // Validar los datos del formulario
+    $data = $request->all();
+
+
+    foreach ($data as $rolesData) {
+        $idRoles = $rolesData['id'];
+        $nombre = $rolesData['nombre'];
+        $descripcion = $rolesData['descripcion'];
+    // Encuentra el modelo del empleado por su ID
+        $rolesModel = Roles::find($idRoles);
+
+        // Si el empleado existe, actualiza los datos
+        if ($rolesModel) {
+            $rolesModel->update([
+                'nombre' => $nombre,
+                'descripcion' => $descripcion,
+            ]);
+        }
+    }
+  // Redirigir o devolver una respuesta según sea necesario
+    return back();
+}
+
+
+public function create(Request $request)//TODO:
+{
+    // Validar los datos del formulario
+    $validatedData = $request->validate([
+        'nombre' => 'required|string',
+        'email' => 'required|email',
+        'telefono' => 'required|string',
+        // Agregar más validaciones según tus necesidades
+    ]);
+
+    // Crear un nuevo registro con el modelo Parámetro
+    $parametro = new Parametro;
+    $parametro->nombre = $request->nombre;
+    $parametro->email = $request->email;
+    $parametro->telefono = $request->telefono;
+    // Asignar más valores según tus necesidades
+
+    // Guardar el nuevo registro en la base de datos
+    $parametro->save();
+
+    // Redirigir o devolver una respuesta según sea necesario
 }
 
 
