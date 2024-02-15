@@ -59,6 +59,7 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
     function handleSubmit(e) {
         e.preventDefault();
         router.post("/panela/usuarios/update", values);
+        
     }
 
     function handleSubmitRoles(e) {

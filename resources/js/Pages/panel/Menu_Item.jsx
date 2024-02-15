@@ -26,6 +26,8 @@ function classNames(...classes) {
 
 export default function Menu_Item({ user, children, logo, razon_social , AppName}) {
     console.log(razon_social);
+   // console.log(logo);
+
     //const [ModalEmail, setModalEmail] = useState(false);
     const [modal, setModal] = useState(false);
     const [activeItem, setActiveItem] = useState(
@@ -53,6 +55,9 @@ export default function Menu_Item({ user, children, logo, razon_social , AppName
                                     modal={modal}
                                 ></ModalCrearUsuarios>
                             )}
+                            <ModalEmail logo={logo} />
+
+
                             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                                 <div className="relative flex h-16 items-center justify-between">
                                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -244,7 +249,6 @@ export default function Menu_Item({ user, children, logo, razon_social , AppName
                     )}
                 </Disclosure>
             </>
-            <ModalEmail />
             <main>{children}</main>
         </div>
     );

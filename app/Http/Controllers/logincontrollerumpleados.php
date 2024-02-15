@@ -66,7 +66,7 @@ class logincontrollerumpleados extends Controller
     public function register(request $data) { //TODO: Metodo que registra un nuevo usuario(EMPLEAOD)
         //
 
-    dd($data->toArray());
+    //dd($data->toArray());
         //phone_number
 
         $rules = [
@@ -91,7 +91,7 @@ class logincontrollerumpleados extends Controller
        // auth::guard('empleados')->logout();
         $username = $data['usuario'];
 
-         return back();
+        //return redirect()->route('usuarios');
 
     }
 

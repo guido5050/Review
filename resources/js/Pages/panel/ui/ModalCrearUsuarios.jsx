@@ -39,9 +39,9 @@ const ModalCrearUsuarios = ({
 
     function handleSubmit(e) {
         e.preventDefault();
-        console.log(value);
         setModal_CrearUsuarios(false);
-        router.post("/register.store", value);
+        router.post("/register.store", value, { preserveState: true });
+        router.visit("/panela/usuarios");
     }
 
     return (

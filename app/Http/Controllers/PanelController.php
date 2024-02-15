@@ -97,6 +97,7 @@ public function update(Request $request){  //TODO: update usuarios
         }
     }
 
+    return redirect()->route('usuarios');
     // Redirige o devuelve una respuesta según sea necesario
 }
 

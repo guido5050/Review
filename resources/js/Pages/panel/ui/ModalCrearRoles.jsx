@@ -28,6 +28,8 @@ const ModalCrearRoles = ({ setModal_CrearRoles, modal_crearroles }) => {
         e.preventDefault();
         setModal_CrearRoles(false);
         router.post("/panela/usuarios/roles/create", values);
+        router.visit("/panela/usuarios");
+
     }
 
     return (
