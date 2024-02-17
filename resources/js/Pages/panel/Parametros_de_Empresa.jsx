@@ -1,7 +1,22 @@
 import { router } from "@inertiajs/react";
 import React, { useState, useEffect } from "react";
 import Meni_Item from "./Menu_Item";
-const Parametros_de_Empresa = ({ auth, config }) => {
+
+import { IoLocationOutline } from "react-icons/io5";
+import { MdOutlineMailOutline } from "react-icons/md";
+import { MdOutlineMapsHomeWork } from "react-icons/md";
+import { MdOutlineLocalPhone } from "react-icons/md";
+import { RiImageAddFill } from "react-icons/ri";
+import { MdFileOpen } from "react-icons/md";
+
+const Parametros_de_Empresa = ({ auth, config, logo, razon_social }) => {
+    const [image, setImage] = useState(null);
+
+    const handleChangeImage = (e) => {
+        if (e.target.files[0]) {
+            setImage(URL.createObjectURL(e.target.files[0]));
+        }
+    };
     const [value, setValues] = useState({
         logo: config.logo,
         correo: config.correo,
@@ -45,80 +60,110 @@ const Parametros_de_Empresa = ({ auth, config }) => {
 
     return (
         <>
-            <Meni_Item user={auth.user}>
-                <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+            <Meni_Item user={auth.user} logo={logo} razon_social={razon_social}>
+                <form
+                    onSubmit={handleSubmit}
+                    className="max-w-md mx-auto animate-fade-left animate-ease-in-out flex flex-col justify-center  h-screen gap-y-2  "
+                >
                     <div className="flex flex-col">
-                        <img
-                            src={config.ruta_logo}
-                            alt="Imagen De La Empresa"
-                            className="img-thumbnail"
-                            width={"48px"}
-                        />
-                        <label htmlFor="logo" className="font-bold mb-1">
-                            Logo:
+                        <div className="p-1 bg-gray-100 rounded-lg shadow-xl"></div>
+                        <div>
+                            <img
+                                className="img-thumbnail"
+                                src={config.ruta_logo}
+                                alt="Imagen De La Empresa"
+                                width={"48px"}
+                            />
+                        </div>
+
+                        <label
+                            htmlFor="logo"
+                            className="font-bold mb-1 flex items-center"
+                        >
+                            Logo: <RiImageAddFill />
                         </label>
-                        <input
-                            type="file"
-                            id="logo"
-                            name="logo"
-                            className="form-control-file"
-                            style={{ color: "transparent" }}
-                            accept="image/*"
-                            onChange={handleChange}
-                        />
+                        <div>
+                            <input
+                                type="file"
+                                id="logo"
+                                name="logo"
+                                className="form-control-file"
+                                style={{ color: "transparent" }}
+                                accept="image/*"
+                                onChange={handleChangeImage}
+                            />
+                            {image && (
+                                <div className="w-full bg-slate-100 mt-2 flex p-7 items-center justify-center">
+                                    <img
+                                        src={image}
+                                        alt="preview"
+                                        width={"40px"}
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
                     <div className="flex flex-col">
-                        <label className="font-bold mb-1">Correo:</label>
+                        <label className="font-bold mb-1 flex items-center">
+                            Correo: <MdOutlineMailOutline />
+                        </label>
                         <input
                             id="correo"
                             type="email"
                             onChange={handleChange}
                             required
                             defaultValue={config.correo}
-                            className="border p-2 rounded"
+                            className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                     </div>
                     <div className="flex flex-col">
-                        <label className="font-bold mb-1">Razón Social:</label>
+                        <label className="font-bold mb-1 flex items-center">
+                            Razón Social: <MdOutlineMapsHomeWork />
+                        </label>
                         <input
                             id="razon_social"
                             type="text"
                             defaultValue={config.razon_social}
                             onChange={handleChange}
-                            className="border p-2 rounded"
+                            className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                     </div>
                     <div className="flex flex-col">
-                        <label className="font-bold mb-1">Teléfono:</label>
+                        <label className="font-bold mb-1 flex items-center">
+                            Teléfono: <MdOutlineLocalPhone />
+                        </label>
                         <input
                             id="telefono"
                             type="tel"
                             defaultValue={config.telefono}
                             onChange={handleChange}
-                            className="border p-2 rounded"
+                            className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                     </div>
                     <div className="flex flex-col">
-                        <label className="font-bold mb-1">ID:</label>
                         <input
                             id="id"
                             hidden
                             type="text"
                             defaultValue={config.id}
                             onChange={(e) => setId(e.target.value)}
-                            className="border p-2 rounded"
+                            className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                     </div>
                     <div className="flex flex-col">
-                        <label className="font-bold mb-1">
-                            Dirección Local:
-                        </label>
-                        <input
+                        <div className="flex">
+                            <label className="font-bold mb-1 flex items-center">
+                                Dirección Local:
+                                <IoLocationOutline />
+                            </label>
+                        </div>
+
+                        <textarea
                             id="direccion_local"
                             type="text"
                             defaultValue={config.direccion_local}
                             onChange={handleChange}
-                            className="border p-2 rounded"
+                            className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                     </div>
                     <button

@@ -59,7 +59,7 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
     function handleSubmit(e) {
         e.preventDefault();
         router.post("/panela/usuarios/update", values);
-        
+
     }
 
     function handleSubmitRoles(e) {
@@ -358,14 +358,14 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
                         </div>
                     </div>
                     <div className="w-full flex  gap-x-5 mb-5">
-                        <BtnPanel
+                        {/* <BtnPanel
                             type={"button"}
                             span={"+"}
                             className={""}
                             onClick={handleCrearRoles}
                         >
                             Crear Roles
-                        </BtnPanel>
+                        </BtnPanel> */}
                     </div>
                     <table className="w-full animate-fade-down animate-ease-in text-xl text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

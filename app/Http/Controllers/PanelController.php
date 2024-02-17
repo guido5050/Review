@@ -15,6 +15,7 @@ use App\Models\Roles;
 use Inertia\Inertia;
 use App\Mail\OrisonContactMailable;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Correo;
 
 
 class PanelController extends Controller
@@ -242,14 +243,64 @@ public function create(Request $request)//TODO:
      * use Illuminate\Support\Facades\Mail;
      */
     public function mail($clienteId){
-        $cliente = UsuariosClientes::where('id_cliente', $clienteId)->first();
-        //dd($cliente->nombre_completo);
-        $url = "http://testreview.test/generarResena?id_reserva=122&id_usuario={$clienteId}";
+        try {
+            $cliente = UsuariosClientes::where('id_cliente', $clienteId)->select('nombre_completo','email')->first();
 
-       Mail::to($cliente->email) //TODO: a quien lo enviamos
-       ->send(new OrisonContactMailable($cliente->nombre_completo, $url)); //TODO: que enviamos
+            $correo_current = Correo::where('id_empresa', session('empresa'))->select('titulo', 'cuerpo')->first();
 
-       //return 'Mensaje enviado';
+            $url = "generarResena?id_reserva=122&id_usuario={$clienteId}";
+            $logo = session('logo_ruta');
+            $titulo = $correo_current->titulo;
+            $cuerpo = $correo_current->cuerpo;
+
+            Mail::to('fel123rodriguez@gmail.com')
+                ->send(new OrisonContactMailable($cliente->nombre_completo, $url,$titulo,$cuerpo,$logo));
+
+            //return 'Mensaje enviado';
+        } catch (\Exception $e) {
+            // Aquí puedes manejar la excepción, por ejemplo, registrándola en los logs
+            \Log::error('Error al enviar correo: ' . $e->getMessage());
+        }
+    }
+
+    public function previewEmail_jsx($clienteId)
+    {
+        //dd($clienteId);
+
+        $cliente = UsuariosClientes::where('id_cliente', $clienteId)->select('nombre_completo','email')->first();
+
+        $correo_current = Correo::where('id_empresa', session('empresa'))->select('titulo', 'cuerpo')->first();
+
+        //dd($cliente, $correo_current);
+
+        $titulo = $correo_current->titulo;
+        $cuerpo = $correo_current->cuerpo;
+        $logo = session('logo_ruta');
+        $nombre = $cliente->nombre_completo;
+        $url = '#';
+        $data = [
+            'titulo' => $titulo,
+            'cuerpo' => $cuerpo,
+            'logo' => $logo,
+            'nombre' => $nombre,
+            "url" => $url,
+        ];
+
+        $html = view('Mail.Plantilla_orison', $data)->render();
+
+        return inertia::render('panel/Preview_Mail', ['html' => $html]);
+    }
+
+
+    // public function previewEmail_jsx()
+    // {
+    //     return inertia::render('panel/Preview_Mail');
+    // }
+
+    public function mail_get()
+   {
+        $correo = Correo::all();
+        return response()->json($correo);
     }
 
 

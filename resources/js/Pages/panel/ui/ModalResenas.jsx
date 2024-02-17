@@ -44,9 +44,10 @@ const ModalResenas = ({ email, modalOpen, onClose, clienteId }) => {
                             <Alert color="warning" withBorderAccent>
                                 <span>
                                     <span className="font-medium">
-                                    Usuario sin correo electrónico
+                                        Usuario sin correo electrónico
                                     </span>{" "}
-                                        puedes generar un link para mandar la evaluación por otro medio
+                                    puedes generar un link para mandar la
+                                    evaluación por otro medio
                                 </span>
                             </Alert>
                         )}
@@ -62,6 +63,14 @@ const ModalResenas = ({ email, modalOpen, onClose, clienteId }) => {
                             Enviar correo
                         </Link>
                     )}
+                    <Link
+                        href={`/preview.email/mail/${clienteId}`}
+                        method="get"
+                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                        preserveState
+                    >
+                        Ver-Preview correo
+                    </Link>
 
                     <BtnPrimary
                         className={" bg-blue-600 hover:bg-blue-800"}
@@ -69,6 +78,7 @@ const ModalResenas = ({ email, modalOpen, onClose, clienteId }) => {
                     >
                         Generar link
                     </BtnPrimary>
+
                     <div className="flex items-center">
                         <TextInput
                             ref={inputRef}

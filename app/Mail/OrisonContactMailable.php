@@ -21,12 +21,18 @@ class OrisonContactMailable extends Mailable
 
     public $nombre;
     public $url;
-
-    public function __construct($nombre, $url)
+    public $titulo;
+    public $cuerpo;
+    public $logo;
+    public function __construct($nombre, $url, $titulo, $cuerpo, $logo)
     {
+        //dd($nombre, $url, $titulo, $cuerpo, $logo);
+
         $this->nombre = $nombre;
         $this->url = $url;
-
+        $this->titulo = $titulo;
+        $this->cuerpo = $cuerpo;
+        $this->logo = $logo;
     }
 
     /**
@@ -59,18 +65,18 @@ class OrisonContactMailable extends Mailable
      */
     public function build()
     {
+       // dd($this->nombre, $this->url, $this->titulo, $this->cuerpo, $this->logo);
+
         $empresa = session('empresa');
 
-        // if ($empresa == 1) {
-        //     $view = 'Mail.Plantilla_Orison';
-        // } else if ($empresa == 2) {
-        //     $view = 'Mail.Plantilla_Creating';
-        // }
         $view = 'Mail.Plantilla_Orison';
         return $this->view($view)
                     ->with([
                         'nombre' => $this->nombre,
-                        'url' => $this->url
+                        'url' => $this->url,
+                        'titulo' => $this->titulo,
+                        'cuerpo' => $this->cuerpo,
+                        'logo' => $this->logo
                     ]);
     }
     /**

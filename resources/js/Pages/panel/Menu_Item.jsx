@@ -9,7 +9,8 @@ import ModalCrearUsuarios from "./ui/ModalCrearUsuarios";
 import { FcDepartment } from "react-icons/fc";
 import { FiLogOut } from "react-icons/fi";
 import { Head } from "@inertiajs/react";
-import ModalEmail from "./ui/ModalEmail";
+
+
 const navigation = [
     { name: "Resenas", href: "/panela/resenas", current: true, method: "get" },
     {
@@ -24,9 +25,15 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-export default function Menu_Item({ user, children, logo, razon_social , AppName}) {
+export default function Menu_Item({
+    user,
+    children,
+    logo,
+    razon_social,
+    AppName,
+}) {
     console.log(razon_social);
-   // console.log(logo);
+    // console.log(logo);
 
     //const [ModalEmail, setModalEmail] = useState(false);
     const [modal, setModal] = useState(false);
@@ -55,8 +62,6 @@ export default function Menu_Item({ user, children, logo, razon_social , AppName
                                     modal={modal}
                                 ></ModalCrearUsuarios>
                             )}
-                            <ModalEmail logo={logo} />
-
 
                             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                                 <div className="relative flex h-16 items-center justify-between">
@@ -170,8 +175,12 @@ export default function Menu_Item({ user, children, logo, razon_social , AppName
                                                 <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                                     <Menu.Item>
                                                         {({ active }) => (
-                                                            <a
+                                                            <Link
                                                                 href="/panela/empresa"
+                                                                preserveState
+                                                                only={[
+                                                                    "config",
+                                                                ]}
                                                                 className={classNames(
                                                                     active
                                                                         ? "bg-gray-100"
@@ -180,7 +189,7 @@ export default function Menu_Item({ user, children, logo, razon_social , AppName
                                                                 )}
                                                             >
                                                                 Empresa
-                                                            </a>
+                                                            </Link>
                                                         )}
                                                     </Menu.Item>
 
@@ -210,7 +219,8 @@ export default function Menu_Item({ user, children, logo, razon_social , AppName
                                                                     "block px-4 py-2 text-sm text-gray-700 w-full text-start"
                                                                 )}
                                                             >
-                                                                Config Plantilla Email
+                                                                Config Plantilla
+                                                                Email
                                                             </Link>
                                                         )}
                                                     </Menu.Item>

@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PanelController;
 use App\Http\Controllers\config_company;
 use App\Http\Controllers\logincontrollerumpleados;
+use App\Http\Controllers\MailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,8 +37,16 @@ Route::post('/panela/usuarios/roles/update',[PanelController::class,'update_role
 Route::delete('/panela/usuarios/{id_usuario}',[PanelController::class,'delete'])->name('delete')->middleware('auth:empleados');//Elimina usuarios
 
 
+
+
 //Mail
-Route::get('/panela/mail/{clienteId}',[PanelController::class,'mail'])->name('mail')->middleware('auth:empleados');
+Route::middleware('auth')->group(function () {
+    Route::get('/panela/mail/{clienteId}', [PanelController::class, 'mail'])->name('mail');
+    //Route::get('/panela/mail', [PanelController::class, 'mail_get'])->name('mail');
+    Route::get('/preview.email/mail/{clienteId}', [PanelController::class, 'previewEmail_jsx'])->name('preview-email');
+    //Route::get('/preview.email',[PanelController::class,'previewEmail_jsx'])->name('preview-email-jsx');
+});
+
 
 //empresa
 Route::get('/panela/empresa',[config_company::class,'show_main_view'])->name('empresa')->middleware('auth:empleados');
