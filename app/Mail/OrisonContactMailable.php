@@ -24,7 +24,9 @@ class OrisonContactMailable extends Mailable
     public $titulo;
     public $cuerpo;
     public $logo;
-    public function __construct($nombre, $url, $titulo, $cuerpo, $logo)
+    public $data;
+
+    public function __construct($nombre, $url, $titulo, $cuerpo, $logo, array $data)
     {
         //dd($nombre, $url, $titulo, $cuerpo, $logo);
 
@@ -33,6 +35,7 @@ class OrisonContactMailable extends Mailable
         $this->titulo = $titulo;
         $this->cuerpo = $cuerpo;
         $this->logo = $logo;
+        $this->data = $data;
     }
 
     /**
@@ -76,7 +79,8 @@ class OrisonContactMailable extends Mailable
                         'url' => $this->url,
                         'titulo' => $this->titulo,
                         'cuerpo' => $this->cuerpo,
-                        'logo' => $this->logo
+                        'logo' => $this->logo,
+                        'redesSociales' => $this->data, // Cambia 'data' a 'redesSociales'
                     ]);
     }
     /**

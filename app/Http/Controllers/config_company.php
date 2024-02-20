@@ -8,8 +8,6 @@ use Inertia\Inertia;
 use App\Models\parametro;
 use Illuminate\Support\Facades\Storage;
 
-
-
 class config_company extends Controller {
 
 public function datos_empresas(){
@@ -40,7 +38,14 @@ public function datos_empresas(){
  */
 public function store_data(Request $data)
 {
-    if ($data->has('logo')) {
+    dd("entro------");
+    // Get the company id from the session
+    $id = session('empresa');
+
+    // Get the company
+    $company = parametro::find($id);
+
+    if ($data->has('logo') && $data->input('logo') !== "undefined") {
         $logoData = $data->input('logo');
 
         // Separa el "data:image/png;base64," de los datos de la imagen
@@ -53,6 +58,11 @@ public function store_data(Request $data)
         // Obtiene la extensión de la imagen a partir del tipo
         list(, $extension) = explode('/', $type);
         $extension = $extension == 'jpeg' ? 'jpg' : $extension;
+
+        // Si la compañía ya tiene un logo, lo elimina
+        if ($company->ruta_logo) {
+            Storage::disk('images')->delete(ltrim($company->ruta_logo, '/images/logos/'));
+        }
 
         // Genera un nombre de archivo único
         $nombrearchivo = uniqid() . '.' . $extension;
@@ -67,17 +77,13 @@ public function store_data(Request $data)
     // Convert the request to an array
     $data = $data->toArray();
 
-    // Get the company id from the session
-    $id = session('empresa');
-
     // Update the company data
     if (array_key_exists('ruta_logo', $data)) {
         session(['logo_ruta' => $data['ruta_logo']]);
     }
     session(['razon_social' => $data['razon_social']]);
 
-    parametro::find($id)->update($data);
-
+    $company->update($data);
 
     // If the logo was not valid, add an error message to the session
     if (!array_key_exists('logo', $data)) {
@@ -88,22 +94,12 @@ public function store_data(Request $data)
     return redirect()->back()->withSuccess('Se Actualizó la Información De La Compañia Exitosamente');
 }
 
+    public function create_empresa(Request $request)
+    {
+        dd($request->toArray());
 
-
-
-	public function actualizar_machote_cierre_turno(request $data)
-	{
-
-        $config_new = \App\parametro::find(1);
-
-		$config_new->titulo_machote = $data['titulo_machote'];
-
-		$config_new->cuerpo_machote = $data['cuerpo_machote'];
-
-		$config_new->save();
-
-		return redirect()->back()->withSuccess('Se Actualizaron los Datos!');
-	}
+        return redirect()->back()->withSuccess('Se Creó la Empresa Exitosamente');
+    }
 
 
 

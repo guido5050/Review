@@ -9,7 +9,7 @@ import ModalCrearUsuarios from "./ui/ModalCrearUsuarios";
 import { FcDepartment } from "react-icons/fc";
 import { FiLogOut } from "react-icons/fi";
 import { Head } from "@inertiajs/react";
-
+import ModalCrearEmpresa from "./ui/ModalCrearEmpresa";
 
 const navigation = [
     { name: "Resenas", href: "/panela/resenas", current: true, method: "get" },
@@ -188,10 +188,30 @@ export default function Menu_Item({
                                                                     "block px-4 py-2 text-sm text-gray-700"
                                                                 )}
                                                             >
-                                                                Empresa
+                                                               Config Empresa
                                                             </Link>
                                                         )}
                                                     </Menu.Item>
+                                                    <Menu.Item>
+                                                    {({ active }) => (
+                                                            <Link
+                                                                href="/panela/empresa"
+                                                                preserveState
+                                                                only={[
+                                                                    "config",
+                                                                ]}
+                                                                className={classNames(
+                                                                    active
+                                                                        ? "bg-gray-100"
+                                                                        : "",
+                                                                    "block px-4 py-2 text-sm text-gray-700"
+                                                                )}
+                                                            >
+                                                               Crear Empresa
+                                                            </Link>
+                                                        )}
+                                                    </Menu.Item>
+
 
                                                     <Menu.Item>
                                                         {({ active }) => (
@@ -204,7 +224,7 @@ export default function Menu_Item({
                                                                     "block px-4 py-2 text-sm text-gray-700 w-full text-start"
                                                                 )}
                                                             >
-                                                                Usuarios
+                                                               Config Usuarios
                                                             </Link>
                                                         )}
                                                     </Menu.Item>

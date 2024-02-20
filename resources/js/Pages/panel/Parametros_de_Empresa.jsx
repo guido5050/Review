@@ -1,36 +1,36 @@
 import { router } from "@inertiajs/react";
 import React, { useState, useEffect } from "react";
 import Meni_Item from "./Menu_Item";
-
 import { IoLocationOutline } from "react-icons/io5";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { MdOutlineMapsHomeWork } from "react-icons/md";
 import { MdOutlineLocalPhone } from "react-icons/md";
 import { RiImageAddFill } from "react-icons/ri";
-import { MdFileOpen } from "react-icons/md";
+import { IoDocumentAttachOutline } from "react-icons/io5";
+import ModalCrearEmpresa from "./ui/ModalCrearEmpresa";
+import { FileInput, Label, Badge } from "flowbite-react";
+import { IoIosAlert } from "react-icons/io";
 
 const Parametros_de_Empresa = ({ auth, config, logo, razon_social }) => {
     const [image, setImage] = useState(null);
 
-    const handleChangeImage = (e) => {
-        if (e.target.files[0]) {
-            setImage(URL.createObjectURL(e.target.files[0]));
-        }
-    };
     const [value, setValues] = useState({
         logo: config.logo,
         correo: config.correo,
         razon_social: config.razon_social,
+        ruc: config.ruc,
         telefono: config.telefono,
         id: config.id,
         direccion_local: config.direccion_local,
     });
+
     function handleChange(e) {
         if (e.target.id === "logo") {
             // Manejar el archivo de imagen
             let file = e.target.files[0];
             let reader = new FileReader();
             reader.onloadend = () => {
+                setImage(URL.createObjectURL(file));
                 setValues((values) => ({
                     ...values,
                     [e.target.id]: reader.result,
@@ -55,21 +55,37 @@ const Parametros_de_Empresa = ({ auth, config, logo, razon_social }) => {
             formData.append(key, value[key]);
         }
         // Aquí puedes hacer la llamada al servidor para actualizar los datos
-        router.post("/panela/empresa_actualizar", value);
+        router.post("/panela/empresa_actualizar", formData, {
+            onSuccess: () => {
+                setImage(null);
+            },
+        });
+
+        //setImage(null);
     };
 
+    // Resto del código...
     return (
         <>
             <Meni_Item user={auth.user} logo={logo} razon_social={razon_social}>
+                <div className="flex items-center justify-center mt-3">
+                    <ModalCrearEmpresa />
+                </div>
+
                 <form
                     onSubmit={handleSubmit}
-                    className="max-w-md mx-auto animate-fade-left animate-ease-in-out flex flex-col justify-center  h-screen gap-y-2  "
+                    className="max-w-md mx-auto animate-fade-left animate-ease-in-out flex flex-col justify-center mt-4 overflow-y-auto  gap-y-2 flex-grow mb-7"
                 >
+                    <Badge color="info" size={"xl"}>
+                        {" "}
+                        <IoIosAlert /> Configuraciones de empresa puedes
+                        actualizar los datos o crear una nueva
+                    </Badge>
                     <div className="flex flex-col">
-                        <div className="p-1 bg-gray-100 rounded-lg shadow-xl"></div>
-                        <div>
+                        <div className="flex items-center justify-center "></div>
+                        <div className="">
                             <img
-                                className="img-thumbnail"
+                                className="img-thumbnail border-2  border-gray-300 rounded-md"
                                 src={config.ruta_logo}
                                 alt="Imagen De La Empresa"
                                 width={"48px"}
@@ -83,14 +99,18 @@ const Parametros_de_Empresa = ({ auth, config, logo, razon_social }) => {
                             Logo: <RiImageAddFill />
                         </label>
                         <div>
-                            <input
-                                type="file"
+                            <div className="mb-2 block">
+                                <Label
+                                    htmlFor="file-upload"
+                                    value="Upload file"
+                                />
+                            </div>
+                            <FileInput
                                 id="logo"
+                                type="file"
                                 name="logo"
                                 className="form-control-file"
-                                style={{ color: "transparent" }}
-                                accept="image/*"
-                                onChange={handleChangeImage}
+                                onChange={handleChange}
                             />
                             {image && (
                                 <div className="w-full bg-slate-100 mt-2 flex p-7 items-center justify-center">
@@ -102,6 +122,18 @@ const Parametros_de_Empresa = ({ auth, config, logo, razon_social }) => {
                                 </div>
                             )}
                         </div>
+                        {/* <div className="flex ">
+                            <input
+                                type="file"
+                                id="logo"
+                                name="logo"
+                                className="form-control-file hidden"
+                                style={{ color: "transparent" }}
+                                accept="image/*"
+                                onChange={handleChange}
+                            />
+
+                        </div> */}
                     </div>
                     <div className="flex flex-col">
                         <label className="font-bold mb-1 flex items-center">
@@ -136,6 +168,18 @@ const Parametros_de_Empresa = ({ auth, config, logo, razon_social }) => {
                             id="telefono"
                             type="tel"
                             defaultValue={config.telefono}
+                            onChange={handleChange}
+                            className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="font-bold mb-1 flex items-center">
+                            Numero Ruc: <IoDocumentAttachOutline />
+                        </label>
+                        <input
+                            id="ruc"
+                            type="text"
+                            defaultValue={config.ruc}
                             onChange={handleChange}
                             className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                         />

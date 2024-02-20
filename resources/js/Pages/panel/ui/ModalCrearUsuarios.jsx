@@ -49,9 +49,12 @@ const ModalCrearUsuarios = ({
             {/* <Button onClick={() => setOpenModal(true)}>Toggle modal</Button> */}
             <Modal show={openModal} size="2xl" onClose={onCloseModal} popup>
                 <Modal.Header />
-                <form onSubmit={handleSubmit} className="overflow-y-auto p-5">
+                <form
+                    onSubmit={handleSubmit}
+                    className="  overflow-y-auto p-5"
+                >
                     <Modal.Body>
-                        <div className="space-y-6">
+                        <div className="space-y-6 animate-fade-left animate-ease-in-out">
                             <h3 className="text-xl font-medium text-gray-900 dark:text-white">
                                 Creacion De Usuario
                             </h3>

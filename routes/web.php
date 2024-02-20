@@ -39,18 +39,22 @@ Route::delete('/panela/usuarios/{id_usuario}',[PanelController::class,'delete'])
 
 
 
-//Mail
+//TODO:Mail(Rutas de Email)
 Route::middleware('auth')->group(function () {
     Route::get('/panela/mail/{clienteId}', [PanelController::class, 'mail'])->name('mail');
     //Route::get('/panela/mail', [PanelController::class, 'mail_get'])->name('mail');
-    Route::get('/preview.email/mail/{clienteId}', [PanelController::class, 'previewEmail_jsx'])->name('preview-email');
+    Route::get('/preview.email/mail/{clienteId}/{plantilla}', [PanelController::class, 'previewEmail_jsx'])->name('preview-email');
     //Route::get('/preview.email',[PanelController::class,'previewEmail_jsx'])->name('preview-email-jsx');
+    Route::get('/panela/datos',[PanelController::class,'datos'])->name('datos');
 });
 
 
-//empresa
-Route::get('/panela/empresa',[config_company::class,'show_main_view'])->name('empresa')->middleware('auth:empleados');
-Route::post('/panela/empresa_actualizar',[config_company::class,'store_data'])->name('store_data')->middleware('auth:empleados');
+// TODO:empresa____
+Route::middleware('auth:empleados')->group(function () {
+    Route::get('/panela/empresa', [config_company::class, 'show_main_view'])->name('empresa'); //Mostrar empresa(view)
+    Route::post('/panela/empresa_actualizar', [config_company::class, 'store_data'])->name('store_data'); //Actualizar empresa
+    Route::post('/panela/empresa/crear',[config_company::class, 'create_empresa'])->name('create_empresa'); //Crear empresa
+});
 
 // Route::post('/test2',[PanelController::class,'test1'])->name('test1');//ruta test
  Route::get('encuesta',[UserController::class,'showStars'])->name('showStars');//Test

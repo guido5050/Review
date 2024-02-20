@@ -10,8 +10,10 @@ import { HiMiniDocumentArrowUp } from "react-icons/hi2";
 import Menu_Item from "./Menu_Item";
 import BtnPrimary from "./ui/BtnPrimary";
 import ModalResenas from "./ui/ModalResenas";
+import { TbMailUp } from "react-icons/tb";
 
-const Clientes = ({ client, auth,logo,razon_social }) => {
+
+const Clientes = ({ client, auth,logo,razon_social, plantillas }) => {
     /**
      * TODO: Client es la respuesta paginada del controlador PanelController ´clientes()´
      */
@@ -34,6 +36,7 @@ const Clientes = ({ client, auth,logo,razon_social }) => {
                             }}
                             modalOpen={modalOpen}
                             clienteId={clienteId}
+                            plantillas={plantillas}
                         />
                     )}
 
@@ -72,11 +75,12 @@ const Clientes = ({ client, auth,logo,razon_social }) => {
                             <p>Total de clientes: {client.total}</p>
                         </Badge>
                     </div>
-                    <div className="overflow-x-auto ">
-                        <Table>
+                    <div className="overflow-x-auto animate-shake">
+                        <Table >
                             <Table.Head>
                                 <Table.HeadCell>Nombre completo</Table.HeadCell>
                                 <Table.HeadCell>Email</Table.HeadCell>
+                                <Table.HeadCell>Nacionalidad</Table.HeadCell>
                                 <Table.HeadCell>Acciones</Table.HeadCell>
                             </Table.Head>
                             <Table.Body className="divide-y">
@@ -89,25 +93,22 @@ const Clientes = ({ client, auth,logo,razon_social }) => {
                                             {cliente.nombre_completo}
                                         </Table.Cell>
                                         <Table.Cell>
-                                            {cliente.email
-                                                ? cliente.email
-                                                : "No email"}
+                                            {cliente.email ? cliente.email : "No email"}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {cliente.nacionalidad ? cliente.nacionalidad : "No nacionalidad"}
                                         </Table.Cell>
                                         <Table.Cell>
                                             <BtnPrimary
                                                 className="bg-blue-600 hover:bg-blue-500 flex items-center"
                                                 onClick={() => {
                                                     setModalOpen(true);
-                                                    setClienteId(
-                                                        cliente.id_cliente
-                                                    );
+                                                    setClienteId(cliente.id_cliente);
                                                     setEmail(cliente.email);
                                                 }}
-                                                span={
-                                                    <HiMiniDocumentArrowUp size="20px" />
-                                                }
+                                                span={<TbMailUp size={"20px"}/>}
                                             >
-                                                Generar reseña
+                                                Enviar reseña
                                             </BtnPrimary>
                                         </Table.Cell>
                                     </Table.Row>
