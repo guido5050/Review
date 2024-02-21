@@ -14,6 +14,7 @@ import { TbMailUp } from "react-icons/tb";
 
 
 const Clientes = ({ client, auth,logo,razon_social, plantillas }) => {
+    console.log(razon_social);
     /**
      * TODO: Client es la respuesta paginada del controlador PanelController ´clientes()´
      */

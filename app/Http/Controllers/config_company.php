@@ -38,7 +38,7 @@ public function datos_empresas(){
  */
 public function store_data(Request $data)
 {
-    dd("entro------");
+  ///  dd("entro------");
     // Get the company id from the session
     $id = session('empresa');
 

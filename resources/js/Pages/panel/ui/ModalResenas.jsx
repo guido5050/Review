@@ -8,11 +8,12 @@ import { MdOutlineMarkEmailUnread } from "react-icons/md";
 import BtnPrimary from "./BtnPrimary";
 
 const ModalResenas = ({ email, modalOpen, onClose, clienteId, plantillas }) => {
-    console.log("plantillas", plantillas);
     const [openModal, setOpenModal] = useState(modalOpen);
     const [text, setText] = useState("");
     const inputRef = useRef();
-    const [selectPlantilla, setSelectPlantilla] = useState(plantillas[0].id_correo); //Este estado maneja el valor del select de las plantillas de correo
+    const [selectPlantilla, setSelectPlantilla] = useState(
+        plantillas[0].id_correo
+    ); //Este estado maneja el valor del select de las plantillas de correo
     // const [plantilla, setPlantilla] = useState(plantillas[0].id_correo); tiene el valor por defecto de la primer plantilla
     const onCloseModal = () => {
         setOpenModal(false);
@@ -32,7 +33,7 @@ const ModalResenas = ({ email, modalOpen, onClose, clienteId, plantillas }) => {
     };
 
     return (
-        <Modal show={openModal} size="xl" onClose={onCloseModal} popup>
+        <Modal show={openModal} size="2xl" onClose={onCloseModal} popup>
             <Modal.Header />
             <Modal.Body>
                 <div className="space-y-6 ">
@@ -59,27 +60,20 @@ const ModalResenas = ({ email, modalOpen, onClose, clienteId, plantillas }) => {
 
                     {email && (
                         <>
-                            <Link
-                                href={`/panela/mail/${clienteId}`}
-                                method="get"
-                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                                preserveState
-                            >
-                                Enviar correo
-                            </Link>
-                            <Link
-                                href={`/preview.email/mail/${clienteId}/${selectPlantilla}`}
-                                method="get"
-                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                                preserveState
-                            >
-                                Ver-Preview correo
-                            </Link>
+                        <div className="flex flex-col gap-y-5">
+                        <div className="mb-2 block">
+                                <Label
+                                    htmlFor="countries"
+                                    value="Selecciona una plantilla de correo:"
+                                />
+                            </div>
                             <Select
-                            id="countries"
-                            required
-                            value={selectPlantilla}
-                            onChange={(event) => setSelectPlantilla(event.target.value)}
+                                id="countries"
+                                required
+                                value={selectPlantilla}
+                                onChange={(event) =>
+                                    setSelectPlantilla(event.target.value)
+                                }
                             >
                                 {plantillas.map((plantilla, index) => (
                                     <option
@@ -90,6 +84,24 @@ const ModalResenas = ({ email, modalOpen, onClose, clienteId, plantillas }) => {
                                     </option>
                                 ))}
                             </Select>{" "}
+
+                        </div>
+                        <Link
+                                href={`/panela/mail/${clienteId}/${selectPlantilla}`}
+                                method="get"
+                                className="text-white inline-block  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                preserveState
+                            >
+                                Enviar correo
+                            </Link>
+                            <Link
+                                href={`/preview.email/mail/${clienteId}/${selectPlantilla}`}
+                                method="get"
+                                className="text-white inline-block bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                preserveState
+                            >
+                                Ver-Preview correo
+                            </Link>
                         </>
                     )}
 

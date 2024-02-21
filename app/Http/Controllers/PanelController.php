@@ -24,6 +24,7 @@ class PanelController extends Controller
     {
         $empresa = session('empresa');
         $data = RedesSociales::where('id_empresa', $empresa)->get();
+
         dd($data->toArray());
     }
 
@@ -32,6 +33,7 @@ class PanelController extends Controller
         $empresa = session('empresa');
         $clientes = UsuariosClientes::where('id_empresa', $empresa)->orderBy('id_cliente', 'desc')->paginate(10);
         $plantillas=Correo::where('id_empresa', $empresa)->get();
+        //dd($plantillas->toArray());
         return inertia::render('panel/Clientes', ['client' => $clientes , 'plantillas'=>$plantillas]);
     }
 
@@ -162,11 +164,12 @@ class PanelController extends Controller
         return redirect()->route('showStars', ['id_resena' => $id_resena]);
     }
 
-    public function mail($clienteId)
+    public function mail($clienteId,$plantilla) // TODO: metodo que envia el correo
     {
+            //dd($clienteId, $plantilla);
         try {
             $cliente = UsuariosClientes::where('id_cliente', $clienteId)->select('nombre_completo', 'email')->first();
-            $correo_current = Correo::where('id_empresa', session('empresa'))->select('titulo', 'cuerpo')->first();
+            $correo_current = Correo::where('id_correo', $plantilla)->select('titulo', 'cuerpo')->first();
             $url = "generarResena?id_reserva=122&id_usuario={$clienteId}";
             $logo = session('logo_ruta');
             $titulo = $correo_current->titulo;
@@ -178,22 +181,29 @@ class PanelController extends Controller
         }
     }
 
-    public function previewEmail_jsx($clienteId ,$plantilla)// TODO: muestra un preview del correo que se enviará
+    public function previewEmail_jsx($clienteId ,$plantilla)// TODO: muestra un preview del correo que se enviará(NO ENVIA)
     {
-        dd($clienteId, $plantilla);
-        $cliente = UsuariosClientes::where('id_cliente', $clienteId)->select('nombre_completo', 'email')->first();
-        $correo_current = Correo::where('id_empresa', session('empresa'))->select('titulo', 'cuerpo')->first();
+       // dd($clienteId, $plantilla);
+        $cliente = UsuariosClientes::where('id_cliente', $clienteId)->select('nombre_completo', 'email')->first(); //TODo:Obtiene el cliente actual
+
+        $correo_current = Correo::where('id_correo', $plantilla)->select('titulo', 'cuerpo')->first();//TODO:Obtiene la plantilla de correo actual
+
+        //dd($correo_current->toArray());
+
         $titulo = $correo_current->titulo;
         $cuerpo = $correo_current->cuerpo;
         $logo = session('logo_ruta');
         $nombre = $cliente->nombre_completo;
         $url = '#';
+        $redesSociales = RedesSociales::where('id_empresa', session('empresa'))->get()->toArray();
+
         $data = [
             'titulo' => $titulo,
             'cuerpo' => $cuerpo,
             'logo' => $logo,
             'nombre' => $nombre,
             "url" => $url,
+            'redesSociales' => $redesSociales,
         ];
         $html = view('Mail.Plantilla_orison', $data)->render();
         return inertia::render('panel/Preview_Mail', ['html' => $html]);

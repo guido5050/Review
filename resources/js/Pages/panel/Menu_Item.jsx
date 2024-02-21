@@ -32,7 +32,6 @@ export default function Menu_Item({
     razon_social,
     AppName,
 }) {
-    console.log(razon_social);
     // console.log(logo);
 
     //const [ModalEmail, setModalEmail] = useState(false);
@@ -50,6 +49,7 @@ export default function Menu_Item({
             <>
                 <Head>
                     <title>{` ${razon_social}. ${AppName}`}</title>
+                    <link rel="icon" href={`${logo}`} />
                 </Head>
 
                 <Disclosure as="nav" className="bg-gray-800 py-2 ">
