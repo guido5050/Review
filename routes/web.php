@@ -40,10 +40,14 @@ Route::delete('/panela/usuarios/{id_usuario}',[PanelController::class,'delete'])
 
 
 //TODO:Mail(Rutas de Email)
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:empleados')->group(function () {
     Route::get('/panela/mail/{clienteId}/{plantilla}', [PanelController::class, 'mail'])->name('mail');
     Route::get('/preview.email/mail/{clienteId}/{plantilla}', [PanelController::class, 'previewEmail_jsx'])->name('preview-email');
     Route::get('/panela/datos',[PanelController::class,'datos'])->name('datos');
+    Route::get('/panela/config.mail',[PanelController::class,'configmail'])->name('config.mail');
+    Route::post('/panela/config.mail/update',[PanelController::class,'update_mail'])->name('update_mail');
+    Route::post('/panela/config.mail/create',[PanelController::class,'create_mail'])->name('create_mail');
+
 });
 
 

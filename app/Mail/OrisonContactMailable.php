@@ -25,8 +25,9 @@ class OrisonContactMailable extends Mailable
     public $cuerpo;
     public $logo;
     public $data;
+    public $asunto;
 
-    public function __construct($nombre, $url, $titulo, $cuerpo, $logo, array $data)
+    public function __construct($nombre, $url, $titulo, $cuerpo, $logo, array $data, $asunto)
     {
         //dd($nombre, $url, $titulo, $cuerpo, $logo);
 
@@ -36,6 +37,7 @@ class OrisonContactMailable extends Mailable
         $this->cuerpo = $cuerpo;
         $this->logo = $logo;
         $this->data = $data;
+        $this->asunto = $asunto;
     }
 
     /**
@@ -49,12 +51,13 @@ class OrisonContactMailable extends Mailable
      */
     public function envelope(): Envelope
     {
+        //var_dump($this->asunto); // Agrega esta línea
 
        $email = session('email_empresa'); // Asegúrate de que 'email_empresa' es la clave correcta para el correo electrónico de la empresa en tu sesión
 
     return new Envelope(
         from: New Address($email, session('razon_social')), // Utiliza el correo electrónico de la empresa
-        subject: 'Dejanos tu Evaluacion ⭐⭐⭐⭐⭐ 📑',
+        subject: $this->asunto, //Asunto dinamico
     );
     }
 

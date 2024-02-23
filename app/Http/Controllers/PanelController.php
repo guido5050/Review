@@ -131,16 +131,6 @@ class PanelController extends Controller
         return redirect()->back();
     }
 
-    // public function home()
-    // {
-    //     return view('home');
-    // }
-
-    // public function panel()
-    // {
-    //     return view('panel');
-    // }
-
     public function resenas()
     {
         $id_empresa = session('empresa');
@@ -166,29 +156,31 @@ class PanelController extends Controller
 
     public function mail($clienteId,$plantilla) // TODO: metodo que envia el correo
     {
-            //dd($clienteId, $plantilla);
+           // dd($clienteId, $plantilla);
         try {
             $cliente = UsuariosClientes::where('id_cliente', $clienteId)->select('nombre_completo', 'email')->first();
-            $correo_current = Correo::where('id_correo', $plantilla)->select('titulo', 'cuerpo')->first();
+            $correo_current = Correo::where('id_correo', $plantilla)->select('titulo', 'cuerpo', 'asunto')->first();
+           $asunto = $correo_current->asunto;
             $url = "generarResena?id_reserva=122&id_usuario={$clienteId}";
             $logo = session('logo_ruta');
             $titulo = $correo_current->titulo;
             $cuerpo = $correo_current->cuerpo;
             $data = RedesSociales::where('id_empresa', session('empresa'))->get()->toArray();
-            Mail::to('fel123rodriguez@gmail.com')->send(new OrisonContactMailable($cliente->nombre_completo, $url, $titulo, $cuerpo, $logo, $data));
+            Mail::to('fel123rodriguez@gmail.com')->send(new OrisonContactMailable($cliente->nombre_completo, $url, $titulo, $cuerpo, $logo, $data,$asunto));
         } catch (\Exception $e) {
             \Log::error('Error al enviar correo: ' . $e->getMessage());
         }
+        return to_route('clientes'); //para retornar usando inertia
     }
 
     public function previewEmail_jsx($clienteId ,$plantilla)// TODO: muestra un preview del correo que se enviará(NO ENVIA)
     {
-       // dd($clienteId, $plantilla);
+         //dd($clienteId, $plantilla);
         $cliente = UsuariosClientes::where('id_cliente', $clienteId)->select('nombre_completo', 'email')->first(); //TODo:Obtiene el cliente actual
 
         $correo_current = Correo::where('id_correo', $plantilla)->select('titulo', 'cuerpo')->first();//TODO:Obtiene la plantilla de correo actual
 
-        //dd($correo_current->toArray());
+        //dd($correo_current, $cliente->toArray());
 
         $titulo = $correo_current->titulo;
         $cuerpo = $correo_current->cuerpo;
@@ -206,7 +198,56 @@ class PanelController extends Controller
             'redesSociales' => $redesSociales,
         ];
         $html = view('Mail.Plantilla_orison', $data)->render();
-        return inertia::render('panel/Preview_Mail', ['html' => $html]);
+        return inertia::render('panel/Preview_Mail', ['html' => $html , 'clienteId' => $clienteId, 'plantilla'=> $plantilla]);
+    }
+    //TODO: Configuracion de Plantillas de correo
+    public function configmail(){
+        $empresa = session('empresa');
+      //  dd($empresa);
+        $plantillas=Correo::where('id_empresa', $empresa)->get();
+
+        return inertia::render('panel/ConfigPlantilla', ['plantillas' => $plantillas]);
     }
 
+    public function create_mail(Request $request) //TODO: Crear plantilla de correo
+    {
+       //dd("SOY UN MAE  TUANI");
+        $data = $request->all();
+       //  dd($data);
+        $id_empresa = session('empresa');
+        $nombre_plantilla = $data['nombre_plantilla'];
+        $titulo = $data['titulo'];
+        $cuerpo = $data['cuerpo'];
+        $asunto = $data['asunto'];
+        $plantillaModel = Correo::create([
+            'id_empresa' => $id_empresa,
+            'nombre_plantilla' => $nombre_plantilla,
+            'titulo' => $titulo,
+            'cuerpo' => $cuerpo,
+            'asunto' => $asunto,
+        ]);
+
+        return to_route('config.mail');
+    }
+
+    public function update_mail(Request $request) //TODO: Actualizar plantilla de correo
+    {
+        $data = $request->all();
+        //dd($data);
+        $idPlantilla = $data['id_correo'];
+        $nombre_plantilla = $data['nombre_plantilla'];
+        $titulo = $data['titulo'];
+        $cuerpo = $data['cuerpo'];
+        $asunto = $data['asunto'];
+        $plantillaModel = Correo::find($idPlantilla);
+        if ($plantillaModel) {
+            $plantillaModel->update([
+                'titulo' => $titulo,
+                'cuerpo' => $cuerpo,
+                'asunto' => $asunto,
+                'nombre_plantilla' => $nombre_plantilla,
+            ]);
+        }
+        return redirect()->route('config.mail');
+    }
 }

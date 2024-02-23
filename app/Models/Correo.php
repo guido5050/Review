@@ -10,10 +10,6 @@ class Correo extends Model
     use HasFactory;
     protected $table = 'correo';
     protected $primaryKey = 'id_correo';
-    protected $fillable = [
-        'id_empresa',
-        'nombre_plantilla',
-        'titulo',
-        'cuerpo'
-    ];
+    protected $fillable = ['titulo', 'cuerpo', 'asunto', 'nombre_plantilla', 'id_empresa'];
+
 }

@@ -188,12 +188,12 @@ export default function Menu_Item({
                                                                     "block px-4 py-2 text-sm text-gray-700"
                                                                 )}
                                                             >
-                                                               Config Empresa
+                                                                Config Empresa
                                                             </Link>
                                                         )}
                                                     </Menu.Item>
                                                     <Menu.Item>
-                                                    {({ active }) => (
+                                                        {({ active }) => (
                                                             <Link
                                                                 href="/panela/empresa"
                                                                 preserveState
@@ -207,11 +207,10 @@ export default function Menu_Item({
                                                                     "block px-4 py-2 text-sm text-gray-700"
                                                                 )}
                                                             >
-                                                               Crear Empresa
+                                                                Crear Empresa
                                                             </Link>
                                                         )}
                                                     </Menu.Item>
-
 
                                                     <Menu.Item>
                                                         {({ active }) => (
@@ -224,14 +223,14 @@ export default function Menu_Item({
                                                                     "block px-4 py-2 text-sm text-gray-700 w-full text-start"
                                                                 )}
                                                             >
-                                                               Config Usuarios
+                                                                Config Usuarios
                                                             </Link>
                                                         )}
                                                     </Menu.Item>
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <Link
-                                                                href="/panela/usuarios"
+                                                                href="/panela/config.mail"
                                                                 className={classNames(
                                                                     active
                                                                         ? "bg-gray-100"
