@@ -1,16 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Resena;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Prespuesta;
 use App\Models\Preguntas;
 use App\Models\PreguntasClientes;
 use App\Models\Calificaciones;
+use Illuminate\Support\Facades\Session; // Asegúrate de tener esta línea
+
 
 
 
@@ -22,11 +25,16 @@ class UserController extends Controller
 
      public function showStars(Request $request){
 
+      //dd($request->toArray());
 
       $id_resena = $request->id_resena;
 
-      $preguntas = Preguntas::all()->pluck('titulo');
-      $preguntas->prepend('');
+      $preguntas = Preguntas::Where('id_empresa', $request->empresa)->pluck('titulo'); //Aqui se obtienen las preguntas
+    //  $preguntas->prepend('');
+      //dd($preguntas);
+      $resena = Resena::where('id_resena',$id_resena)->first();
+
+     // dd($resena);
 
 
 
@@ -63,52 +71,56 @@ class UserController extends Controller
 
     //    return redirect()->route('review'); //
     //  }//
+    public function StorePreguntas(Request $request){ //TODO: Guardar las posibles respuestas por el cliente
+        // Verifica si el array es multidimensional
+        if (isset($request[0])) {
+            // Maneja el caso multidimensional
+           //dd("arreglo multi dimensional");
 
-     public function StorePreguntas(Request $request){
+            $id_resena = $request[0]['id_Resenita'];
+            $id_preguntas = $request[0]['id_preguntas'];
+            $puntuacion = $request[0]['puntuacion'];
 
+            $imprimir=Calificaciones::create([
+                'id_resena' => $id_resena,
+                'id_preguntas' => $id_preguntas,
+                'puntuacion' => $puntuacion,
+            ]);
 
-
-        $id_resena = $request[0]['id_Resenita'];
-
-
-        $id_preguntas = $request[0]['id_preguntas'];
-       $puntuacion = $request[0]['puntuacion'];
-
-     //  dd($id_preguntas);
-
-     $imprimir=Calificaciones::create([
-           'id_resena' => $id_resena,
-           'id_preguntas' => $id_preguntas,
-           'puntuacion' => $puntuacion,
-        ]);
-
-
-///dd($imprimir);
-
-        // dd($request[0]['id_preguntas'],$request[0]['puntuacion'],$id_resena);
-      // dd($request->toArray());
-         foreach ($request->toArray() as $data) {
-
-
+            foreach ($request->toArray() as $data) {
                 $id_posiblesRespuestas = $data['id_posiblesRespuestas'];
-                 $id_preguntas = $data['id_preguntas'];
-                 $nombre_pre_repu = $data['titulo_respuesta'];
-                 $puntuacion = $data['puntuacion'];
-                 $pregunta =  $data['pregunta']['titulo'];
-                 $id_reseni2=$id_resena;
-                //dd($guardar, $pregunta,$id_posiblesRespuestas,$nombre_pre_repu,$puntuacion);
-                 PreguntasClientes::create([
-                    'id_posiblesRespuestas' => $id_posiblesRespuestas,'id_preguntas' => $id_preguntas,
+                $id_preguntas = $data['id_preguntas'];
+                $nombre_pre_repu = $data['titulo_respuesta'];
+                $puntuacion = $data['puntuacion'];
+                $pregunta =  $data['pregunta']['titulo'];
+                $id_reseni2=$id_resena;
+
+                PreguntasClientes::create([
+                    'id_posiblesRespuestas' => $id_posiblesRespuestas,
+                    'id_preguntas' => $id_preguntas,
                     'NombreRespuesta' => $nombre_pre_repu,
                     'puntuacion' => $puntuacion,
-                    'pregunta' => $pregunta, 'id_resena' => $id_reseni2]);
+                    'pregunta' => $pregunta,
+                    'id_resena' => $id_reseni2,
+                    'id_empresa' => Session::get('empresa')
+                ]);
+            }
+        } else {
+            // Maneja el caso unidimensional
+           // dd('arreglo unidimensional');
+            $id_resena = $request['id_Resenita'];
+            $id_preguntas = $request['id_preguntas'];
+            $puntuacion = $request['puntuacion'];
+
+            $imprimir=Calificaciones::create([
+                'id_resena' => $id_resena,
+                'id_preguntas' => $id_preguntas,
+                'puntuacion' => $puntuacion,
+            ]);
+        }
+
+        return redirect()->route('showStars');
     }
-      // PreguntasClientes::create($request);
-
-       return redirect()->route('showStars'); //
-
-     }
-
      public function storecomments(Request $request) {
 
         //dd($request);
@@ -137,11 +149,36 @@ class UserController extends Controller
     }
 
 
-     public function showpreguntas(Request $request)
+     public function showpreguntas(Request $request) //TODO: Mostrar las posible respuestas este metodo entra aqui cuando doy click en las estrella
      {
-      //  dd($request->toArray());
+     // dd($request->toArray());
 
-       //dd($request->toArray());
+    $id_empresa = Resena::where('id_resena', $request->idresena)->first()->id_empresa;
+// dd($id_empresa);
+    Session::put('empresa', $id_empresa);
+
+$respuesta = Prespuesta::where('id_preguntas', $request->pregunta)
+    ->where('puntuacion', $request->score)
+    ->with('pregunta') // Cargar la relación
+    ->get();
+
+$wx2 = 0;
+foreach ($respuesta as $WX) {
+    $id_posiblesRespuestas = $WX->id_posiblesRespuestas;
+    $nuevoElemento = [
+        "id_posiblesRespuestas" => $WX->id_posiblesRespuestas,
+        "id_preguntas" => $WX->id_preguntas,
+        "titulo_respuesta" => $WX->titulo_respuesta,
+        "puntuacion" => $WX->puntuacion,
+        "pregunta" => [
+            "id_preguntas" => $WX->pregunta['id_preguntas'],
+            "titulo" => $WX->pregunta['titulo'],
+            "puntuacion_maxima" => $WX->pregunta['titulo'],
+        ], // Tu contenido real aquí
+        "id_Resenita" => $id_resena = $request->idresena,
+    ];
+    $limpieza[$wx2] = $nuevoElemento;
+   // dd($id_empresa);
 
        $respuesta=Prespuesta::where('id_preguntas', $request->pregunta)
       ->where('puntuacion', $request->score)
@@ -198,18 +235,6 @@ foreach ($respuesta as $WX) {
      /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
-
-    //mostrando datos de resena
-    public function showresena(){ //Metodo de prueba para debuguear cualquier cosa..
-       //$data = Resena::all();
-
-       //$data =Resena::with('User')->get();
-       //dd($data);
-
 
 
        return redirect()->route('resena');

@@ -21,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
     Inertia::share([
+     'empresa_global' => function () {
+        return session('empresa');
+     },
     'logo' => function () {
         return session('logo_ruta');
     },

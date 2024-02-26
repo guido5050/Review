@@ -7,8 +7,8 @@ import { MdOutlinePriceChange } from "react-icons/md";
 import { LuUsers } from "react-icons/lu";
 import { HiIdentification } from "react-icons/hi2";
 
-const Titulo = ({  arreglo, pregunta, titulo, setTitulo }) => {
-    //console.log(preguntas);
+const Titulo = ({ arreglo, pregunta, titulo, setTitulo }) => {
+    console.log(pregunta);
     useEffect(() => {
         setTitulo(arreglo[pregunta]);
         //console.log(titulo);
@@ -18,7 +18,9 @@ const Titulo = ({  arreglo, pregunta, titulo, setTitulo }) => {
     return (
         <>
             <div className="flex items-center justify-center gap-x-3">
-                <h1 className="mt-6 font-bold text-[45px] pb-6">{titulo}</h1>
+                <h1 className="mt-6 font-bold text-[45px] pb-6">
+                    {arreglo[pregunta]}
+                </h1>
                 <div>
                     {pregunta === 1 && (
                         <MdOutlineCleaningServices size={"45px"} />

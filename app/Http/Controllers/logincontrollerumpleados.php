@@ -122,20 +122,20 @@ class logincontrollerumpleados extends Controller
         if ($xyz) {
             // Guarda el valor de 'empresa' en la sesión
             Session::put('empresa', $data->empresa);
-
-            // Obtén el valor del campo 'logo_ruta' del modelo 'parametro'
+            $empresa = Session::get('empresa');
             $parametros = parametro::where('id', Session::get('empresa'))->select('ruta_logo', 'razon_social','correo')->first();
-
             Session::put('logo_ruta', $parametros->ruta_logo);
             Session::put('razon_social', $parametros->razon_social);
             Session::put('email_empresa', $parametros->correo);
+            Session::save();
+
+           // dd($empresa);
 
 
             $logo = Session::get('logo_ruta');
             $razon_social = Session::get('razon_social');
            // dd($logo, $razon_social);
             // dd($logo_ruta);
-
 
             $usuario_estado_valid = usuarios_empleado::where('usuario','=',$data['username'])->pluck('activo')->first();
 

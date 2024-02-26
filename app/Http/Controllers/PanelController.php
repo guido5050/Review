@@ -140,9 +140,10 @@ class PanelController extends Controller
 
     public function generarResena(Request $request)
     {
+
         $nombreDominio = $request->getHost();
         $user = UsuariosClientes::where('id_cliente', $request->id_usuario)->first();
-        $id_empresa = intval(session('empresa'));
+        $id_empresa = $request->id_empresa;
         $resenaData = [
             'id_empresa' => $id_empresa,
             'id_reserva' => $request->id_reserva,
@@ -151,27 +152,29 @@ class PanelController extends Controller
         ];
         Resena::create($resenaData);
         $id_resena = Resena::where('id_usuario', $request->id_usuario)->max('id_resena');
-        return redirect()->route('showStars', ['id_resena' => $id_resena]);
+       // dd($id_resena);
+        return to_route('showStars',['id_resena' => $id_resena, 'empresa' => $id_empresa]); //['id_resena' => $id_resena, 'empresa' => $id_empresa]
     }
 
     public function mail($clienteId,$plantilla) // TODO: metodo que envia el correo
     {
-           // dd($clienteId, $plantilla);
+       // dd($clienteId, $plantilla);
         try {
             $cliente = UsuariosClientes::where('id_cliente', $clienteId)->select('nombre_completo', 'email')->first();
             $correo_current = Correo::where('id_correo', $plantilla)->select('titulo', 'cuerpo', 'asunto')->first();
-           $asunto = $correo_current->asunto;
-            $url = "generarResena?id_reserva=122&id_usuario={$clienteId}";
+             $asunto = $correo_current->asunto;
+            $url = "generarResena?id_reserva=122&id_usuario={$clienteId}&id_empresa=".session('empresa');
             $logo = session('logo_ruta');
             $titulo = $correo_current->titulo;
             $cuerpo = $correo_current->cuerpo;
             $data = RedesSociales::where('id_empresa', session('empresa'))->get()->toArray();
-            Mail::to('fel123rodriguez@gmail.com')->send(new OrisonContactMailable($cliente->nombre_completo, $url, $titulo, $cuerpo, $logo, $data,$asunto));
+           Mail::to('fel123rodriguez@gmail.com')->send(new OrisonContactMailable($cliente->nombre_completo, $url, $titulo, $cuerpo, $logo, $data,$asunto));
         } catch (\Exception $e) {
             \Log::error('Error al enviar correo: ' . $e->getMessage());
         }
         return to_route('clientes'); //para retornar usando inertia
     }
+
 
     public function previewEmail_jsx($clienteId ,$plantilla)// TODO: muestra un preview del correo que se enviará(NO ENVIA)
     {
@@ -188,7 +191,7 @@ class PanelController extends Controller
         $nombre = $cliente->nombre_completo;
         $url = '#';
         $redesSociales = RedesSociales::where('id_empresa', session('empresa'))->get()->toArray();
-
+        
         $data = [
             'titulo' => $titulo,
             'cuerpo' => $cuerpo,
