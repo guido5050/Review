@@ -81,7 +81,7 @@ class UserController extends Controller
             $id_preguntas = $request[0]['id_preguntas'];
             $puntuacion = $request[0]['puntuacion'];
 
-            $imprimir=Calificaciones::create([
+            $imprimir=Calificaciones::updateOrCreate([
                 'id_resena' => $id_resena,
                 'id_preguntas' => $id_preguntas,
                 'puntuacion' => $puntuacion,
@@ -95,7 +95,7 @@ class UserController extends Controller
                 $pregunta =  $data['pregunta']['titulo'];
                 $id_reseni2=$id_resena;
 
-                PreguntasClientes::create([
+                PreguntasClientes::firstOrCreate([
                     'id_posiblesRespuestas' => $id_posiblesRespuestas,
                     'id_preguntas' => $id_preguntas,
                     'NombreRespuesta' => $nombre_pre_repu,
@@ -112,7 +112,7 @@ class UserController extends Controller
             $id_preguntas = $request['id_preguntas'];
             $puntuacion = $request['puntuacion'];
 
-            $imprimir=Calificaciones::create([
+            $imprimir=Calificaciones::firstOrCreate([
                 'id_resena' => $id_resena,
                 'id_preguntas' => $id_preguntas,
                 'puntuacion' => $puntuacion,

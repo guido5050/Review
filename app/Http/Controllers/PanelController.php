@@ -140,7 +140,6 @@ class PanelController extends Controller
 
     public function generarResena(Request $request)
     {
-
         $nombreDominio = $request->getHost();
         $user = UsuariosClientes::where('id_cliente', $request->id_usuario)->first();
         $id_empresa = $request->id_empresa;
@@ -150,10 +149,14 @@ class PanelController extends Controller
             'id_usuario' => $user->id_cliente,
             'estado' => 0
         ];
-        Resena::create($resenaData);
-        $id_resena = Resena::where('id_usuario', $request->id_usuario)->max('id_resena');
-       // dd($id_resena);
-        return to_route('showStars',['id_resena' => $id_resena, 'empresa' => $id_empresa]); //['id_resena' => $id_resena, 'empresa' => $id_empresa]
+
+        // Intenta encontrar una Resena existente con el id_usuario dado, si no existe, crea una nueva
+        $resena = Resena::firstOrCreate(
+            ['id_usuario' => $request->id_usuario],
+            $resenaData
+        );
+
+        return to_route('showStars',['id_resena' => $resena->id_resena, 'empresa' => $id_empresa]);
     }
 
     public function mail($clienteId,$plantilla) // TODO: metodo que envia el correo
@@ -191,7 +194,7 @@ class PanelController extends Controller
         $nombre = $cliente->nombre_completo;
         $url = '#';
         $redesSociales = RedesSociales::where('id_empresa', session('empresa'))->get()->toArray();
-        
+
         $data = [
             'titulo' => $titulo,
             'cuerpo' => $cuerpo,
