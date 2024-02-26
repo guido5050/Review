@@ -6,7 +6,7 @@ import Strellas from "../components/Strellas";
 import Titulo from "../components/Titulo";
 
 export default function Stars({ limpieza, preguntas, idresena }) {
-    console.log(limpieza); //TODO: limpieza es el objeto que lista las posibles respuestas
+  // console.log(limpieza); //TODO: limpieza es el objeto que lista las posibles respuestas
 
     const [id, setId] = useState(idresena); //id de la resena que viene del metodo panelcontroll
     const [currentScore, setCurrentScore] = useState(0);
@@ -86,6 +86,12 @@ export default function Stars({ limpieza, preguntas, idresena }) {
 
     console.log(respuestaSelec);
 
+    /**
+     * Maneja el evento de clic en una respuesta.
+     * Si la respuesta ya está activa, la desactiva.
+     * Si la respuesta no está activa, la activa.
+     * @param {Object} respuesta - La respuesta seleccionada.
+     */
     const manejarClick = (respuesta) => {
         if (btnActive.includes(respuesta.id_posiblesRespuestas)) {
             // Si ya está activo, desactívalo
