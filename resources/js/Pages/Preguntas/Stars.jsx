@@ -6,7 +6,9 @@ import Strellas from "../components/Strellas";
 import Titulo from "../components/Titulo";
 
 export default function Stars({ limpieza, preguntas, idresena }) {
-  // console.log(limpieza); //TODO: limpieza es el objeto que lista las posibles respuestas
+  //console.log(limpieza); //TODO: limpieza es el objeto que lista las posibles respuestas
+    //console.log(preguntas)
+
 
     const [id, setId] = useState(idresena); //id de la resena que viene del metodo panelcontroll
     const [currentScore, setCurrentScore] = useState(0);
@@ -93,6 +95,8 @@ export default function Stars({ limpieza, preguntas, idresena }) {
      * @param {Object} respuesta - La respuesta seleccionada.
      */
     const manejarClick = (respuesta) => {
+
+        console.log(respuesta);
         if (btnActive.includes(respuesta.id_posiblesRespuestas)) {
             // Si ya está activo, desactívalo
             setBtnActive(
@@ -120,7 +124,7 @@ export default function Stars({ limpieza, preguntas, idresena }) {
     return (
         <div className="flex flex-col gap-y-2 text-center  h-screen items-center animate-fade-down animate-ease-in">
             <h1>{id}</h1>
-
+            {/* <h1>{preguntas}</h1> */}
             <Titulo
                 arreglo={arreglo}
                 pregunta={pregunta} //indice del arreglo

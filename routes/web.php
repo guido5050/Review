@@ -32,7 +32,7 @@ Route::get('/panela/usuarios',[PanelController::class,'usuarios'])->name('usuari
 Route::get('/panela/resenas',[PanelController::class,'resenas'])->name('resenas');//Lista de Usuarops
 
 Route::post('/panela/usuarios/update',[PanelController::class,'update'])->name('update');
-Route::post('/panela/usuarios/roles/create',[PanelController::class,'create_roles'])->name('update_roles')->middleware('auth:empleados');
+Route::post('/panela/usuarios/roles/create',[PanelController::class,'create_roles'])->name('create_role')->middleware('auth:empleados');
 Route::post('/panela/usuarios/roles/update',[PanelController::class,'update_roles'])->name('update_roles')->middleware('auth:empleados');
 Route::delete('/panela/usuarios/{id_usuario}',[PanelController::class,'delete'])->name('delete')->middleware('auth:empleados');//Elimina usuarios
 

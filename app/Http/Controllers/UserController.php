@@ -25,23 +25,24 @@ class UserController extends Controller
 
      public function showStars(Request $request){
 
-      //dd($request->toArray());
+    //dd($request->toArray());
 
       $id_resena = $request->id_resena;
 
-      $preguntas = Preguntas::Where('id_empresa', $request->empresa)->pluck('titulo'); //Aqui se obtienen las preguntas
+      $preguntas = Preguntas::Where('id_empresa', $request->empresa)->get();//Aqui se obtienen las preguntas
     //  $preguntas->prepend('');
-      //dd($preguntas);
+   //dd($preguntas->toArray());
       $resena = Resena::where('id_resena',$id_resena)->first();
-
-     // dd($resena);
-
-
-
-       return Inertia::render('Preguntas/Stars',['preguntas' => $preguntas,'idresena' => $id_resena]);
+   // dd($resena);
+     return Inertia::render('Preguntas/Stars',['preguntas' => $preguntas,'idresena' => $id_resena]);
 
       }
 
+
+
+
+
+      
      public function index()
     {
         //Mostrar vista de review
@@ -151,16 +152,18 @@ class UserController extends Controller
 
      public function showpreguntas(Request $request) //TODO: Mostrar las posible respuestas este metodo entra aqui cuando doy click en las estrella
      {
-     // dd($request->toArray());
+   //dd($request->toArray());
 
-    $id_empresa = Resena::where('id_resena', $request->idresena)->first()->id_empresa;
-// dd($id_empresa);
-    Session::put('empresa', $id_empresa);
-
+   // $id_empresa = Resena::where('id_resena', $request->idresena)->first()->id_empresa;
+   // dd($id_empresa);
+    //Session::put('empresa', $id_empresa);
+    //dd($request->pregunta);
 $respuesta = Prespuesta::where('id_preguntas', $request->pregunta)
     ->where('puntuacion', $request->score)
     ->with('pregunta') // Cargar la relación
     ->get();
+
+    //dd($respuesta->toArray());
 
 $wx2 = 0;
 foreach ($respuesta as $WX) {
