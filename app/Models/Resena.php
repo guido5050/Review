@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\User;
+use App\Models\UsuariosClientes;
 
 class Resena extends Model
 {
@@ -36,8 +36,8 @@ class Resena extends Model
 
  //Aqui hacemos el motodo de user usando el tipado decimos que devuelve BelongTo
  //Estamos en el modelo Resena hacemos la relacion que tiene la tabla resenas con usuarios es decir una resena pertenece a un usuario
-   public function User(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'id_usuario', 'id_usuario');
-    }
+ public function UsuariosClientes(): BelongsTo
+ {
+     return $this->belongsTo(UsuariosClientes::class, 'id_usuario', 'id_cliente');
+ }
 }

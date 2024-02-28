@@ -13,14 +13,15 @@ import ModalResenas from "./ui/ModalResenas";
 import { TbMailUp } from "react-icons/tb";
 
 
-const Clientes = ({ client, auth,logo,razon_social, plantillas }) => {
-    console.log(razon_social);
+const Clientes = ({ client, auth,logo,razon_social, plantillas, empresaId }) => {
+    console.log(empresaId);
     /**
      * TODO: Client es la respuesta paginada del controlador PanelController ´clientes()´
      */
     const [modalOpen, setModalOpen] = useState(false);
     const [clienteId, setClienteId] = useState(null);
     const [email, setEmail] = useState(null);
+    const [empresa, setEmpresa]= useState(empresaId);
 
     if (!client) return "Cargando...";
 
@@ -38,6 +39,7 @@ const Clientes = ({ client, auth,logo,razon_social, plantillas }) => {
                             modalOpen={modalOpen}
                             clienteId={clienteId}
                             plantillas={plantillas}
+                            empresa={empresa}
                         />
                     )}
 

@@ -24,10 +24,10 @@ class User extends Authenticatable
      * Aqui hacemos igual el metodo de relacion es decir 'estamos en el modelo User' y decimos que el usuario puede tener uno o muchas resenas
      */
     //Metodo de relacion
-     public function Resena(): HasMany
-    {
-        return $this->hasMany(Resena::class, 'id_usuario', 'id_resena');
-    }
+    //  public function Resena(): HasMany
+    // {
+    //     return $this->hasMany(Resena::class, 'id_usuario', 'id_resena');
+    // }
 
 
 

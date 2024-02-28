@@ -8,7 +8,7 @@ import { LuUsers } from "react-icons/lu";
 import { HiIdentification } from "react-icons/hi2";
 
 const Titulo = ({ arreglo, pregunta, titulo, setTitulo }) => {
-   // console.log(pregunta);
+   console.log(pregunta);
     useEffect(() => {
         setTitulo(arreglo[pregunta]);
         //console.log(titulo);

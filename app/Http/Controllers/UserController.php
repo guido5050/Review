@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +32,7 @@ class UserController extends Controller
 
       $preguntas = Preguntas::Where('id_empresa', $request->empresa)->get();//Aqui se obtienen las preguntas
     //  $preguntas->prepend('');
-   //dd($preguntas->toArray());
+     //dd($preguntas->toArray());
       $resena = Resena::where('id_resena',$id_resena)->first();
    // dd($resena);
      return Inertia::render('Preguntas/Stars',['preguntas' => $preguntas,'idresena' => $id_resena]);
@@ -42,7 +43,7 @@ class UserController extends Controller
 
 
 
-      
+
      public function index()
     {
         //Mostrar vista de review
@@ -74,6 +75,8 @@ class UserController extends Controller
     //  }//
     public function StorePreguntas(Request $request){ //TODO: Guardar las posibles respuestas por el cliente
         // Verifica si el array es multidimensional
+       // dd($request->toArray());
+
         if (isset($request[0])) {
             // Maneja el caso multidimensional
            //dd("arreglo multi dimensional");
@@ -152,7 +155,7 @@ class UserController extends Controller
 
      public function showpreguntas(Request $request) //TODO: Mostrar las posible respuestas este metodo entra aqui cuando doy click en las estrella
      {
-   //dd($request->toArray());
+    //dd($request->toArray());
 
    // $id_empresa = Resena::where('id_resena', $request->idresena)->first()->id_empresa;
    // dd($id_empresa);
@@ -163,7 +166,7 @@ $respuesta = Prespuesta::where('id_preguntas', $request->pregunta)
     ->with('pregunta') // Cargar la relación
     ->get();
 
-    //dd($respuesta->toArray());
+   // dd($respuesta->toArray());
 
 $wx2 = 0;
 foreach ($respuesta as $WX) {

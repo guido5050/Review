@@ -28,13 +28,18 @@ class PanelController extends Controller
         dd($data->toArray());
     }
 
+    /**
+     * Retorna la vista de clientes con los datos necesarios.
+     *
+     * @return \Inertia\Response
+     */
     public function clientes()
     {
         $empresa = session('empresa');
         $clientes = UsuariosClientes::where('id_empresa', $empresa)->orderBy('id_cliente', 'desc')->paginate(10);
         $plantillas=Correo::where('id_empresa', $empresa)->get();
-        //dd($plantillas->toArray());
-        return inertia::render('panel/Clientes', ['client' => $clientes , 'plantillas'=>$plantillas]);
+       // dd($empresa);
+        return inertia::render('panel/Clientes', ['client' => $clientes , 'plantillas'=>$plantillas, 'empresaId' => $empresa]);
     }
 
     public function usuarios()
@@ -134,7 +139,8 @@ class PanelController extends Controller
     public function resenas()
     {
         $id_empresa = session('empresa');
-        $resenas = Resena::where('id_empresa', $id_empresa)->paginate(10);
+        $resenas = Resena::with('UsuariosClientes')->where('id_empresa', $id_empresa)->paginate(10);
+       // dd($resenas->toArray());
         return inertia::render('panel/Resenas', ['resenas' => $resenas]);
     }
 
