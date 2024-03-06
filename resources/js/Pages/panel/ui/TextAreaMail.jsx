@@ -5,7 +5,8 @@ import { useState } from "react";
 import { HiInformationCircle } from "react-icons/hi";
 import { Alert } from "flowbite-react";
 
-const TextAreaMail = ({
+const
+TextAreaMail = ({
     plantillaCurrent = {},
     selectedId,
     setAlertcreate,
@@ -47,7 +48,7 @@ const TextAreaMail = ({
                         setAlertupdate(false);
                     }, 2500);
                 },
-            
+
             });
         }
     }

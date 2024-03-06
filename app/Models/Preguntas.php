@@ -5,16 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\PreguntasClientes;
 class Preguntas extends Model
 {
     use HasFactory;
-        //Creamos la configuracion del modelo
-        protected $table = 'preguntas';
-        //protected $primarykey= 'id_preguntas';
-        protected $primaryKey = 'id_preguntas';
 
+    protected $table = 'preguntas';
+    protected $primaryKey = 'id_preguntas';
 
-
-
-
+    // Aquí está la relación
+    public function preguntasClientes()
+    {
+        return $this->hasMany(PreguntasClientes::class, 'id_preguntas');
+    }
 }

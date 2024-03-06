@@ -21,4 +21,10 @@ class PreguntasClientes extends Model
         //protected $primarykey= 'id_preguntas';
         protected $primaryKey = 'id_pregunta_clientes';
 
+          // Aquí está la relación
+    public function pregunta()
+    {
+        return $this->belongsTo(Preguntas::class, 'id_preguntas');
+    }
+
 }

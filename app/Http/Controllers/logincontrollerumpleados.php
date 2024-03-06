@@ -93,6 +93,9 @@ class logincontrollerumpleados extends Controller
 
         //return redirect()->route('usuarios');
 
+        return to_route('usuarios');
+
+
     }
 
     /**

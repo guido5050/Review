@@ -121,6 +121,19 @@ class UserController extends Controller
                 'id_preguntas' => $id_preguntas,
                 'puntuacion' => $puntuacion,
             ]);
+            //En el arreglo unidimencional 
+           $data= PreguntasClientes::firstOrCreate([
+                'id_posiblesRespuestas' => null,
+                'id_preguntas' => $id_preguntas,
+                'NombreRespuesta' => null,
+                'puntuacion' => $puntuacion,
+                'pregunta' => null,
+                'id_resena' => $id_resena,
+                'id_empresa' => Session::get('empresa') //Esta viene en null siempre igual no se necesita
+            ]);
+
+           // dd($data->toArray());
+
         }
 
         return redirect()->route('showStars');
@@ -131,8 +144,7 @@ class UserController extends Controller
 
         $id_resena = $request['id']; // Reemplaza con el ID de la pregunta deseada
 
-        $promedio = Calificaciones::where('id_resena', $id_resena)->avg('puntuacion'); //Sacmos promedio
-
+        $promedio = round(Calificaciones::where('id_resena', $id_resena)->avg('puntuacion'), 1); // Sacamos promedio
         //dd($promedio);
         $resenas = Resena::where('id_resena',$id_resena)->first();
 

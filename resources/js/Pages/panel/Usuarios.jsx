@@ -9,9 +9,12 @@ import BtnPanel from "./ui/BtnPanel";
 import ModalAlert from "./ui/ModalAlert";
 import ModalCrearUsuarios from "./ui/ModalCrearUsuarios";
 import ModalCrearRoles from "./ui/ModalCrearRoles";
+import { Alert } from "flowbite-react";
 
 const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
-    console.log(cargo);
+    const [alertupdate, setAlertupdate] = useState(false);
+    const [alertcreate, setAlertcreate] = useState(false);
+    const [alertupdaterol, setAlertupdaterol] = useState(false);
     const [modal, setModal] = useState(false); //Estado del Modal que maneja el eliminar
     const [modal_crearusuarios, setModal_CrearUsuarios] = useState(false);
     const [modal_crearroles, setModal_CrearRoles] = useState(false);
@@ -58,13 +61,26 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
 
     function handleSubmit(e) {
         e.preventDefault();
-        router.post("/panela/usuarios/update", values);
-
+        router.post("/panela/usuarios/update", values, {
+            onSuccess: () => {
+                setAlertupdate(true);
+                setTimeout(() => {
+                    setAlertupdate(false);
+                }, 2500);
+            },
+        });
     }
 
     function handleSubmitRoles(e) {
         e.preventDefault();
-        router.post("/panela/usuarios/roles/update", valuesRoles);
+        router.post("/panela/usuarios/roles/update", valuesRoles, {
+            onSuccess: () => {
+                setAlertupdaterol(true);
+                setTimeout(() => {
+                    setAlertupdaterol(false);
+                }, 2500);
+            },
+        });
     }
 
     function handleDelete(e, id_empleados) {
@@ -103,6 +119,34 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
                 razon_social={razon_social}
                 AppName={AppName}
             >
+                {alertupdate && (
+                    <Alert
+                        color="success"
+                        className="animate-fade-left animate-ease-in-out "
+                    >
+                        <span className="font-medium">Informacion!</span>{" "}
+                        Usuarios Actualizados Correctamente.
+                    </Alert>
+                )}
+                {alertupdaterol && (
+                    <Alert
+                        color="success"
+                        className="animate-fade-left animate-ease-in-out "
+                    >
+                        <span className="font-medium">Informacion!</span>{" "}
+                        Roles actualizados.
+                    </Alert>
+                )}
+                {alertcreate && (
+                    <Alert
+                        color="success"
+                        className="animate-fade-left animate-ease-in-out "
+                    >
+                        <span className="font-medium">Informacion!</span>{" "}
+                        Usuario Creado Correctamente.
+                    </Alert>
+                )}
+
                 {modal && (
                     <ModalAlert
                         modal={modal}
@@ -117,6 +161,7 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
                         cargo={cargo}
                         setModal_CrearUsuarios={setModal_CrearUsuarios}
                         modal_crearusuarios={modal_crearusuarios}
+                        setAlertcreate={setAlertcreate}
                     ></ModalCrearUsuarios>
                 )}
                 {modal_crearroles && (

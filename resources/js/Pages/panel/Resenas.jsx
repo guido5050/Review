@@ -64,7 +64,9 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName }) => {
                                     </Table.Cell>
 
                                     <Table.Cell className="font-extrabold text-white text-center">
-                                        <Link className=" flex  items-center justify-center gap-x-1 bg-blue-700 hover:bg-blue-800 rounded-lg py-1 px-2  ">
+                                        <Link
+                                            href={`/panela/resenas/${resena.id_usuario}`}
+                                        className=" flex  items-center justify-center gap-x-1 bg-blue-700 hover:bg-blue-800 rounded-lg py-1 px-2  ">
                                             GESTIONAR
                                             <TbEyeStar size={"20"} className="animate-pulse animate-ease-linear"/>
                                         </Link>

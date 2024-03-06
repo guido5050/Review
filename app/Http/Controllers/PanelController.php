@@ -17,6 +17,8 @@ use App\Mail\OrisonContactMailable;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Correo;
 use App\Models\RedesSociales;
+use App\Models\PreguntasClientes;
+use App\Models\Comentarios;
 
 class PanelController extends Controller
 {
@@ -144,6 +146,42 @@ class PanelController extends Controller
         return inertia::render('panel/Resenas', ['resenas' => $resenas]);
     }
 
+    public function gestionar($userClienteId) //TODO Metodo de la vista de resena por id de usuario
+    {
+        // Obtén la reseña para este userClienteId
+        $resena = Resena::with('UsuariosClientes')->where('id_usuario', $userClienteId)->first();
+        $Comentarios =Comentarios::all();
+        dd($Comentarios->toArray());
+         $nombre=$resena->UsuariosClientes->nombre_completo;
+         $comentario = $resena->comentario;
+        $puntuacion= $resena->Puntuacion_global;
+        $id_resena = $resena->id_resena;
+        //dd($id_resena);
+        // Si no se encontró ninguna reseña, redirige de vuelta con un mensaje de error
+        if (!$resena) {
+            return redirect()->back()->with('error', 'No se encontró ninguna reseña para este usuario');
+        }
+
+        // Obtén todas las PreguntasClientes para este id_resena
+        $preguntasClientes = PreguntasClientes::with('pregunta')
+                            ->where('id_resena', $resena->id_resena)
+                            ->get()
+                            ->groupBy('id_preguntas');
+
+
+        //dd($nombre, $comentario,$puntuacion, $preguntasClientes->toArray());
+
+        // Ahora puedes pasar estas preguntas y la reseña a tu vista
+        return Inertia::render('panel/GestionarResenas',
+        [
+        'nombre'     =>  $nombre,
+        'comentario' =>  $comentario,
+        'puntuacion' =>  $puntuacion,
+        'respuestas'  =>  $preguntasClientes,
+        'idresena' =>   $id_resena,
+    ]);
+    }
+
     public function generarResena(Request $request)
     {
         $nombreDominio = $request->getHost();
@@ -156,7 +194,7 @@ class PanelController extends Controller
             'estado' => 0
         ];
 
-        // Intenta encontrar una Resena existente con el id_usuario dado, si no existe, crea una nueva
+        // Intenta encontrar una Resena existente con el id_usuario dado, si no existe, crea una nueva$
         $resena = Resena::firstOrCreate(
             ['id_usuario' => $request->id_usuario],
             $resenaData
@@ -261,5 +299,24 @@ class PanelController extends Controller
             ]);
         }
         return redirect()->route('config.mail');
+    }
+
+    public function comentarios_admin(Request $request) //TODO: Metodo que guarda los comentarios de los administradores
+    {
+        //dd($request->toArray());
+            $Idpregunta= $request->id_preguntas;
+            $Idresena= $request->id_resena;
+            //dd($nombreadmin, $request->comentario, $idUserAdmin, $Idpregunta, $Idresena);
+        Comentarios::create([
+                'id_resena' => $Idresena,
+                'id_empleados' => $request->id_empleados,
+                'id_preguntas' => $Idpregunta,
+                'Nombre_Admin' =>$request->Nombre_Admin,
+                'comentario' => $request->comentario,
+                'fecha' => date('Y-m-d'),
+            ]);
+
+
+            return back();
     }
 }

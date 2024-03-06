@@ -7,6 +7,7 @@ const ModalCrearUsuarios = ({
     modal_crearusuarios,
     setModal_CrearUsuarios,
     cargo,
+    setAlertcreate,
 }) => {
     const [openModal, setOpenModal] = useState(modal_crearusuarios);
     console.log(cargo);
@@ -40,8 +41,15 @@ const ModalCrearUsuarios = ({
     function handleSubmit(e) {
         e.preventDefault();
         setModal_CrearUsuarios(false);
-        router.post("/register.store", value, { preserveState: true });
-        router.visit("/panela/usuarios");
+        router.post("/register.store", value, {
+            onSuccess: () => {
+                setAlertcreate(true);
+                setTimeout(() => {
+                    setAlertcreate(false);
+                },2500);
+            },
+        });
+        //router.visit("/panela/usuarios");
     }
 
     return (
@@ -49,10 +57,7 @@ const ModalCrearUsuarios = ({
             {/* <Button onClick={() => setOpenModal(true)}>Toggle modal</Button> */}
             <Modal show={openModal} size="2xl" onClose={onCloseModal} popup>
                 <Modal.Header />
-                <form
-                    onSubmit={handleSubmit}
-                    className="  overflow-y-auto p-5"
-                >
+                <form onSubmit={handleSubmit} className="  overflow-y-auto p-5">
                     <Modal.Body>
                         <div className="space-y-6 animate-fade-left animate-ease-in-out">
                             <h3 className="text-xl font-medium text-gray-900 dark:text-white">

@@ -82,7 +82,8 @@ const ConfigPlantilla = ({ auth, logo, razon_social, plantillas }) => {
                         key={
                             plantillaCurrent
                                 ? plantillaCurrent.id_correo
-                                : "new"
+                                :
+                                 "new"
                         }
                         plantillaCurrent={plantillaCurrent}
                         selectedId={selectedId}

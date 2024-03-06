@@ -31,6 +31,10 @@ Route::get('/panela/clientes',[PanelController::class,'clientes'])->name('client
 Route::get('/panela/usuarios',[PanelController::class,'usuarios'])->name('usuarios')->middleware('auth:empleados');//Mostrar Usuarios
 Route::get('/panela/resenas',[PanelController::class,'resenas'])->name('resenas');//Lista de Usuarops
 
+Route::get('/panela/resenas/{userClienteId}',[PanelController::class,'gestionar']);
+Route::post('/panela/resenas/comentario',[PanelController::class,'comentarios_admin']); //ComentariosGuardados por el admin de resenas 
+
+
 Route::post('/panela/usuarios/update',[PanelController::class,'update'])->name('update');
 Route::post('/panela/usuarios/roles/create',[PanelController::class,'create_roles'])->name('create_role')->middleware('auth:empleados');
 Route::post('/panela/usuarios/roles/update',[PanelController::class,'update_roles'])->name('update_roles')->middleware('auth:empleados');
