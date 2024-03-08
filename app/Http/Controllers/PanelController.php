@@ -19,8 +19,10 @@ use App\Models\Correo;
 use App\Models\RedesSociales;
 use App\Models\PreguntasClientes;
 use App\Models\Comentarios;
+use App\Models\Estados;
 
 class PanelController extends Controller
+
 {
     public function datos()//Test
     {
@@ -42,6 +44,16 @@ class PanelController extends Controller
         $plantillas=Correo::where('id_empresa', $empresa)->get();
        // dd($empresa);
         return inertia::render('panel/Clientes', ['client' => $clientes , 'plantillas'=>$plantillas, 'empresaId' => $empresa]);
+    }
+
+    public function resenas()
+    {
+        $id_empresa = session('empresa');
+        $resenas = Resena::with('UsuariosClientes')->where('id_empresa', $id_empresa)->paginate(10);
+
+        $estados=Estados::all()->groupBy('id_estado');
+
+        return inertia::render('panel/Resenas', ['resenas' => $resenas, 'estados' => $estados]);
     }
 
     public function usuarios()
@@ -138,24 +150,22 @@ class PanelController extends Controller
         return redirect()->back();
     }
 
-    public function resenas()
-    {
-        $id_empresa = session('empresa');
-        $resenas = Resena::with('UsuariosClientes')->where('id_empresa', $id_empresa)->paginate(10);
-       // dd($resenas->toArray());
-        return inertia::render('panel/Resenas', ['resenas' => $resenas]);
-    }
 
-    public function gestionar($userClienteId) //TODO Metodo de la vista de resena por id de usuario
+
+    public function gestionar($userClienteId,$Idresena) //TODO Metodo de la vista de resena por id de usuario
     {
+       // dd($userClienteId, $Idresena);
         // Obtén la reseña para este userClienteId
         $resena = Resena::with('UsuariosClientes')->where('id_usuario', $userClienteId)->first();
-        $Comentarios =Comentarios::all();
-        dd($Comentarios->toArray());
+
+        $Comentarios = Comentarios::where('id_resena', $Idresena) ->get()->groupBy('id_preguntas');
+
+        // dd($Comentarios->toArray());
          $nombre=$resena->UsuariosClientes->nombre_completo;
          $comentario = $resena->comentario;
         $puntuacion= $resena->Puntuacion_global;
         $id_resena = $resena->id_resena;
+        $reserva = $resena->id_reserva;
         //dd($id_resena);
         // Si no se encontró ninguna reseña, redirige de vuelta con un mensaje de error
         if (!$resena) {
@@ -179,7 +189,9 @@ class PanelController extends Controller
         'puntuacion' =>  $puntuacion,
         'respuestas'  =>  $preguntasClientes,
         'idresena' =>   $id_resena,
-    ]);
+        'comentarios' => $Comentarios,
+        'reserva' => $reserva,
+        ]);
     }
 
     public function generarResena(Request $request)
@@ -191,7 +203,7 @@ class PanelController extends Controller
             'id_empresa' => $id_empresa,
             'id_reserva' => $request->id_reserva,
             'id_usuario' => $user->id_cliente,
-            'estado' => 0
+            'estado' => 1 // TODO: Pendiente
         ];
 
         // Intenta encontrar una Resena existente con el id_usuario dado, si no existe, crea una nueva$

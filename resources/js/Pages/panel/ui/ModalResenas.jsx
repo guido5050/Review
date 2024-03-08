@@ -6,11 +6,21 @@ import { Alert, Badge, Select, Label } from "flowbite-react";
 
 import BtnPrimary from "./BtnPrimary";
 
-const ModalResenas = ({ email, modalOpen, onClose, clienteId, plantillas, empresa }) => {
+const ModalResenas = ({
+    email,
+    modalOpen,
+    onClose,
+    clienteId,
+    plantillas,
+    empresa,
+    nombreCliente,
+}) => {
     const [openModal, setOpenModal] = useState(modalOpen);
     const [text, setText] = useState("");
     const inputRef = useRef();
-    const [selectPlantilla, setSelectPlantilla] = useState(plantillas[0].id_correo);
+    const [selectPlantilla, setSelectPlantilla] = useState(
+        plantillas[0].id_correo
+    );
 
     const onCloseModal = () => {
         setOpenModal(false);
@@ -24,7 +34,9 @@ const ModalResenas = ({ email, modalOpen, onClose, clienteId, plantillas, empres
     };
 
     const generateLink = () => {
-        setText(`${window.location.origin}/generarResena?id_reserva=122&id_usuario=${clienteId}&id_empresa=${empresa}`);
+        setText(
+            `${window.location.origin}/generarResena?id_reserva=122&id_usuario=${clienteId}&id_empresa=${empresa}`
+        );
     };
 
     return (
@@ -32,18 +44,25 @@ const ModalResenas = ({ email, modalOpen, onClose, clienteId, plantillas, empres
             <Modal.Header />
             <Modal.Body>
                 <div className="space-y-6">
-                    <MdOutlineMarkEmailUnread size={"28px"} />
+                    <div className="flex items-center gap-x-1">
+                        <MdOutlineMarkEmailUnread size={"28px"} /> Para:{" "}
+                        <strong>{nombreCliente}</strong>
+                    </div>
                     <div className="p-2 flex flex-col gap-y-3 rounded-lg">
-                        <Badge className="text-xl">
-                            {`numero de cliente:`}
-                            <strong>{clienteId}</strong>📄
+                        <Badge className="text-sm">
+                            {`#cliente:`}
+                            <strong>{clienteId}</strong>
                         </Badge>
                         {email ? (
-                            <Badge className="text-xl font-bold">{`email: ${email}`}</Badge>
+                            <Badge className="text-sm font-bold">{`email: ${email}`}</Badge>
                         ) : (
                             <Alert color="warning" withBorderAccent>
                                 <span>
-                                    <span className="font-medium">Usuario sin correo electrónico</span> puedes generar un link para mandar la evaluación por otro medio
+                                    <span className="font-medium">
+                                        Usuario sin correo electrónico
+                                    </span>{" "}
+                                    puedes generar un link para mandar la
+                                    evaluación por otro medio
                                 </span>
                             </Alert>
                         )}
@@ -53,16 +72,24 @@ const ModalResenas = ({ email, modalOpen, onClose, clienteId, plantillas, empres
                         <>
                             <div className="flex flex-col gap-y-5">
                                 <div className="mb-2 block">
-                                    <Label htmlFor="countries" value="Selecciona una plantilla de correo:" />
+                                    <Label
+                                        htmlFor="countries"
+                                        value="Selecciona una plantilla de correo:"
+                                    />
                                 </div>
                                 <Select
                                     id="countries"
                                     required
                                     value={selectPlantilla}
-                                    onChange={(event) => setSelectPlantilla(event.target.value)}
+                                    onChange={(event) =>
+                                        setSelectPlantilla(event.target.value)
+                                    }
                                 >
                                     {plantillas.map((plantilla, index) => (
-                                        <option key={index} value={plantilla.id_correo}>
+                                        <option
+                                            key={index}
+                                            value={plantilla.id_correo}
+                                        >
                                             {plantilla.nombre_plantilla}
                                         </option>
                                     ))}
@@ -79,7 +106,10 @@ const ModalResenas = ({ email, modalOpen, onClose, clienteId, plantillas, empres
                         </>
                     )}
 
-                    <BtnPrimary className={"bg-blue-600 hover:bg-blue-800"} onClick={generateLink}>
+                    <BtnPrimary
+                        className={"bg-blue-600 hover:bg-blue-800"}
+                        onClick={generateLink}
+                    >
                         Generar link
                     </BtnPrimary>
 

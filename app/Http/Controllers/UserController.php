@@ -75,15 +75,16 @@ class UserController extends Controller
     //  }//
     public function StorePreguntas(Request $request){ //TODO: Guardar las posibles respuestas por el cliente
         // Verifica si el array es multidimensional
-       // dd($request->toArray());
+         // dd($request->toArray());
 
         if (isset($request[0])) {
             // Maneja el caso multidimensional
            //dd("arreglo multi dimensional");
+           $id_resena = $request[0]['id_Resenita'];
+           $id_preguntas = $request[0]['id_preguntas'];
+           $puntuacion = $request[0]['puntuacion'];
 
-            $id_resena = $request[0]['id_Resenita'];
-            $id_preguntas = $request[0]['id_preguntas'];
-            $puntuacion = $request[0]['puntuacion'];
+         //  dd($id_resena);
 
             $imprimir=Calificaciones::updateOrCreate([
                 'id_resena' => $id_resena,
@@ -109,19 +110,29 @@ class UserController extends Controller
                     'id_empresa' => Session::get('empresa')
                 ]);
             }
+
+            $estado =Resena::find($id_resena);
+
+            $estado->estado = 2; //Estado 2 es que se esta contestando las preguntas
+
+            $estado->save();
+
         } else {
             // Maneja el caso unidimensional
            // dd('arreglo unidimensional');
-            $id_resena = $request['id_Resenita'];
-            $id_preguntas = $request['id_preguntas'];
-            $puntuacion = $request['puntuacion'];
+
+           $id_resena = $request['id_Resenita'];
+           $id_preguntas = $request['id_preguntas'];
+           $puntuacion = $request['puntuacion'];
+
+            //dd($id_resena );
 
             $imprimir=Calificaciones::firstOrCreate([
                 'id_resena' => $id_resena,
                 'id_preguntas' => $id_preguntas,
                 'puntuacion' => $puntuacion,
             ]);
-            //En el arreglo unidimencional 
+            //En el arreglo unidimencional
            $data= PreguntasClientes::firstOrCreate([
                 'id_posiblesRespuestas' => null,
                 'id_preguntas' => $id_preguntas,
@@ -133,6 +144,11 @@ class UserController extends Controller
             ]);
 
            // dd($data->toArray());
+
+           $estado =Resena::find($id_resena);
+
+           $estado->estado = 2; //Estado 2 es que se esta contestando las preguntas
+           $estado->save();
 
         }
 
@@ -160,6 +176,11 @@ class UserController extends Controller
           'Puntuacion_global' =>$promedio];
          //dd($resenaData); */
        //Resena::update($data);
+
+       $estado =Resena::find($id_resena);
+
+       $estado->estado = 3; //Estado 3 que ha completado la encuesta
+       $estado->save();
 
        return inertia('components/Final');
     }

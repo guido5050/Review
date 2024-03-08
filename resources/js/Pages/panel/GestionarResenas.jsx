@@ -1,7 +1,7 @@
 import React from "react";
 import Menu_Item from "./Menu_Item";
 import BtnPrimary from "./ui/BtnPrimary";
-import { Table, Card } from "flowbite-react";
+import { Table, Card, Badge } from "flowbite-react";
 
 import { BiMessageRoundedDots } from "react-icons/bi";
 import { BiUser } from "react-icons/bi";
@@ -10,6 +10,10 @@ import { TbMessageStar } from "react-icons/tb";
 import { FaStar } from "react-icons/fa";
 import { FaRegCommentDots } from "react-icons/fa";
 import { FaEnvelopeOpenText } from "react-icons/fa";
+import { FaUserFriends } from "react-icons/fa";
+import { FaRegUser } from "react-icons/fa";
+import { LuMessageCircle } from "react-icons/lu";
+import { BsCalendar2Date } from "react-icons/bs";
 
 import ModalResenasComentarios from "./ui/ModalResenasComentarios";
 import Resenas from "./Resenas";
@@ -23,10 +27,12 @@ const GestionarResenas = ({
     puntuacion,
     respuestas,
     idresena,
+    comentarios,
+    reserva,
 }) => {
     // Transforma respuestas en un objeto donde cada clave es un título de pregunta
     // y cada valor es un objeto que contiene un array de respuestas y la puntuación total para esa pregunta
-     console.log(respuestas);
+    console.log(comentarios);
 
     const respuestasAgrupadas = Object.values(respuestas)
         .flat()
@@ -43,58 +49,71 @@ const GestionarResenas = ({
                 respuesta.puntuacion; //Saco la puntuacion individual por cada pregunta;
             return acc;
         }, {});
-        console.log(respuestasAgrupadas);
+    console.log(respuestasAgrupadas);
 
     return (
         <>
             <Menu_Item user={auth.user} logo={logo} razon_social={razon_social}>
                 <div className="p-8 flex gap-y-2 justify-center mt-2 animate-fade-up animate-ease-in-out flex-col">
                     <Card>
-                        <div className="flex items-center gap-1 text-xl">
-                            <h1 className="text-xl font-extrabold">{nombre}</h1>
-                            <BiUser size={"25px"} />
+                        <div className=" flex  gap-x-4">
+                            <div className="bg-blue-600 rounded-lg w-[100px]">
+                                <p
+                                    className="font-extrabold text-[50px] p-3 text-center  rounded-lg cursor-pointer"
+                                    title="puntuacion del cliente al finalizar la reseña"
+                                >
+                                    <strong className="text-white font-extrabold ">
+                                        {puntuacion}
+                                    </strong>
+                                </p>
+                            </div>
+                            <div className="flex flex-col gap-y-1">
+                                <p className="text-black font-semibold">
+                                    {nombre}
+                                </p>
+                                <p>
+                                    {"Numero de reserva:"}{" "}
+                                    <span className="text-blue-800 font-extrabold">{reserva}</span>
+                                </p>
+                                <p>
+                                    {"Numero de reseña:"}{" "}
+                                    <span className="text-blue-800 font-extrabold">{idresena}</span>
+                                </p>
+                            </div>
                         </div>
+                        <hr className="border-t border-gray-200 my-4" /> {/* Aquí está la línea */}
+
                         <div className="flex items-center gap-x-1 text-xl">
-                            <p className="font-extrabold">
+                            <p className="font-extrabold cursor-pointer" title="comentario dejado por el cliente al finalizar la encuesta">
                                 {`Comentario:`}
-                                <strong className="text-gray-500">
+
+                                <strong className="text-gray-500" >
                                     {comentario
                                         ? comentario
                                         : "Reseña no terminada"}
+
                                 </strong>
                             </p>
-                            <TbMessageStar size={"20px"} />
                         </div>
-                        <div className=" flex items-center gap-x-1">
-                            <p className="font-extrabold text-xl">
-                                {`Puntuacion Global:`}
-                                <strong className="text-gray-500">
-                                    {puntuacion}
-                                </strong>
-                            </p>
-                            <FaStar size={"18px"} />
-                        </div>
-                        <div className=" flex items-center gap-x-1">
-                            <p className="font-extrabold text-xl">
-                                {`Reseña:`}
-                                <strong className="text-gray-500">
-                                    {idresena}
-                                </strong>
-                            </p>
-                            <FaEnvelopeOpenText size={"18px"} />
-                        </div>
+
+
                     </Card>
 
                     <div>
-                        <Table>
+                        <Table className="text-lg">
                             <Table.Head>
-                                <Table.HeadCell>Pregunta y Puntuacion</Table.HeadCell>
-                                <Table.HeadCell>Respuestas Seleccionadas por el cliente</Table.HeadCell>
+                                <Table.HeadCell>Pregunta</Table.HeadCell>
+                                <Table.HeadCell>puntuacion</Table.HeadCell>
+                                <Table.HeadCell>
+                                    Respuestas Seleccionadas
+                                </Table.HeadCell>
                                 <Table.HeadCell>
                                     Dejar comentario
                                 </Table.HeadCell>
-                                <Table.HeadCell>
+                                <Table.HeadCell className="flex gap-x-4 items-center">
                                     {" "}
+                                    Comentarios de Admin
+                                    <FaUserFriends size={"28px"} />
                                     <FaRegCommentDots size={"28px"} />
                                 </Table.HeadCell>
                             </Table.Head>
@@ -103,7 +122,11 @@ const GestionarResenas = ({
                                     (
                                         [
                                             titulo,
-                                            { respuestas, puntuacionTotal, idPregunta },
+                                            {
+                                                respuestas,
+                                                puntuacionTotal,
+                                                idPregunta,
+                                            },
                                         ],
                                         index
                                     ) => (
@@ -119,15 +142,15 @@ const GestionarResenas = ({
                                                             puntuacionTotal
                                                         ),
                                                     ].map((_, i) => (
-                                                        <CiStar
+                                                        <FaStar
                                                             key={i}
-                                                            size={"40px"}
+                                                            size={"20px"}
                                                         />
                                                     ))}
-                                                    <p className="text-2xl">
-                                                        {puntuacionTotal}
-                                                    </p>
                                                 </div>
+                                            </Table.Cell>
+                                            <Table.Cell>
+                                                {puntuacionTotal}
                                             </Table.Cell>
 
                                             <Table.Cell className="whitespace-nowrap">
@@ -148,7 +171,80 @@ const GestionarResenas = ({
                                                     user={auth.user}
                                                 />
                                             </Table.Cell>
-                                            <Table></Table>
+                                            <Table.Cell>
+                                                <div className="overflow-auto max-h-[200px]">
+                                                    <Badge className="">
+                                                        <div className="flex items-center gap-x-1">
+                                                            <h1>
+                                                                {" "}
+                                                                {comentarios[
+                                                                    idPregunta
+                                                                ] &&
+                                                                    comentarios[
+                                                                        idPregunta
+                                                                    ]
+                                                                        .length}{" "}
+                                                            </h1>
+                                                            <FaRegCommentDots
+                                                                size={""}
+                                                            />
+                                                        </div>
+                                                    </Badge>
+                                                    {comentarios[idPregunta] &&
+                                                        comentarios[
+                                                            idPregunta
+                                                        ].map(
+                                                            (
+                                                                comentario,
+                                                                index
+                                                            ) => (
+                                                                <Card className="sm mb-4  flex flex-col text-[12px]">
+                                                                    <div className="flex flex-col ">
+                                                                        <div className="flex justify-between items-cente mb-3 ">
+                                                                            <div className="flex items-center gap-x-2 mb-2 sm:mb-0">
+                                                                                <FaRegUser
+                                                                                    size={
+                                                                                        "12px"
+                                                                                    }
+                                                                                />
+                                                                                <p
+                                                                                    className="overflow-ellipsis overflow-hidden text-[12px]"
+                                                                                    key={
+                                                                                        index
+                                                                                    }
+                                                                                >
+                                                                                    {
+                                                                                        comentario.Nombre_Admin
+                                                                                    }
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className="flex items-center gap-x-2">
+                                                                                <BsCalendar2Date
+                                                                                    size={
+                                                                                        "12px"
+                                                                                    }
+                                                                                />
+                                                                                <p className="text-sm">
+                                                                                    {new Date(
+                                                                                        comentario.fecha
+                                                                                    ).toLocaleDateString()}
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div className="flex flex-col items-center justify-between">
+                                                                            <p className="font-extrabold overflow-ellipsis overflow-hidden leading-tight">
+                                                                                {
+                                                                                    comentario.comentario
+                                                                                }
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </Card>
+                                                            )
+                                                        )}
+                                                </div>
+                                            </Table.Cell>
                                         </Table.Row>
                                     )
                                 )}

@@ -33,13 +33,17 @@ const ModalResenasComentarios = ({ idPregunta, idresena, user }) => {
     console.log(values.comentario);
     function handleSubmit(e) {
         e.preventDefault();
-        router.post("/panela/resenas/comentario", values);
+        router.post("/panela/resenas/comentario", values, {
+            onSuccess: () => {
+                setOpenModal(false);
+            },
+        });
     }
 
     return (
         <>
-            <Button onClick={() => setOpenModal(true)}>
-                Enviar Comentario
+            <Button className="align-top  whitespace-nowrap bg-blue-600 hover:bg-blue-900" size={"sm"} onClick={() => setOpenModal(true) }>
+            Dejar Comentario
             </Button>
             <Modal show={openModal} size="2xl" onClose={onCloseModal} popup>
                 <Modal.Header />

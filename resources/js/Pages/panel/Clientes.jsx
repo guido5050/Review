@@ -14,12 +14,13 @@ import { TbMailUp } from "react-icons/tb";
 
 
 const Clientes = ({ client, auth,logo,razon_social, plantillas, empresaId }) => {
-    console.log(empresaId);
+    console.log(client);
     /**
      * TODO: Client es la respuesta paginada del controlador PanelController ´clientes()´
      */
     const [modalOpen, setModalOpen] = useState(false);
     const [clienteId, setClienteId] = useState(null);
+    const [nombreCliente, setNombreCliente] = useState(null);
     const [email, setEmail] = useState(null);
     const [empresa, setEmpresa]= useState(empresaId);
 
@@ -40,6 +41,7 @@ const Clientes = ({ client, auth,logo,razon_social, plantillas, empresaId }) => 
                             clienteId={clienteId}
                             plantillas={plantillas}
                             empresa={empresa}
+                            nombreCliente={nombreCliente}
                         />
                     )}
 
@@ -108,6 +110,7 @@ const Clientes = ({ client, auth,logo,razon_social, plantillas, empresaId }) => 
                                                     setModalOpen(true);
                                                     setClienteId(cliente.id_cliente);
                                                     setEmail(cliente.email);
+                                                    setNombreCliente(cliente.nombre_completo);
                                                 }}
                                                 span={<TbMailUp size={"20px"}/>}
                                             >
