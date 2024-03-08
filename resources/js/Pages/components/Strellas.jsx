@@ -9,6 +9,7 @@ const Strellas = ({ texto, textos, handleStarClick, currentScore }) => {
             {" "}
             <h1 className="font-extrabold text-xl">{texto}</h1>
             <div className="flex mt-10 gap-x-10 ">
+               
                 {[...Array(5)].map((_, index) => (
                     <button onClick={() => handleStarClick(index)} key={index}>
                         {index < currentScore ? (

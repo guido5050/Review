@@ -164,11 +164,13 @@ class UserController extends Controller
         //dd($promedio);
         $resenas = Resena::where('id_resena',$id_resena)->first();
 
-        $resenas->comentario=$request['comentario'];
+        if ($promedio && is_null($request['comentario'])) {
+            $resenas->comentario = "sin comentario";
+        } else {
+            $resenas->comentario = $request['comentario'];
+        }
 
-        $resenas->Puntuacion_global= $promedio;
-
-        //dd($resenas);
+        $resenas->Puntuacion_global = $promedio;
 
         $resenas->save();
 
@@ -188,16 +190,16 @@ class UserController extends Controller
 
      public function showpreguntas(Request $request) //TODO: Mostrar las posible respuestas este metodo entra aqui cuando doy click en las estrella
      {
-    //dd($request->toArray());
 
-   // $id_empresa = Resena::where('id_resena', $request->idresena)->first()->id_empresa;
-   // dd($id_empresa);
-    //Session::put('empresa', $id_empresa);
-    //dd($request->pregunta);
-$respuesta = Prespuesta::where('id_preguntas', $request->pregunta)
-    ->where('puntuacion', $request->score)
-    ->with('pregunta') // Cargar la relación
-    ->get();
+        //dd($request->toArray());
+     $respuesta = Prespuesta::where('id_preguntas', $request->pregunta)
+     ->where('puntuacion', $request->score)
+     ->with('pregunta') // Cargar la relación
+     ->get();
+
+    
+
+
 
    // dd($respuesta->toArray());
 
@@ -276,7 +278,7 @@ foreach ($respuesta as $WX) {
      */
 
 
-       return redirect()->route('resena');
+       return redirect()->route('showStars');  //TODO aqui
 
     }
 

@@ -35,6 +35,7 @@ export default function Stars({ limpieza, preguntas, idresena }) {
 
     const handleStarClick = (index, idresena) => {
         const newScore = index + 1 === currentScore ? index : index + 1;
+
         setCurrentScore(newScore);
         if (newScore > 0) {
             setBtn(true);
@@ -62,7 +63,6 @@ export default function Stars({ limpieza, preguntas, idresena }) {
 
     const onclick = () => {
         setCurrentScore(0);
-        limpieza.length = 0;
         setBtn(false);
         setMalacalificacion("");
         setTexto("Selecciona una calificación. 📌");
@@ -75,6 +75,7 @@ export default function Stars({ limpieza, preguntas, idresena }) {
         } else {
             router.post("StorePreguntas", respuestaSelec);
         }
+        limpieza.length = 0;
         respuestaSelec.splice(0, respuestaSelec.length);
         setIndicePregunta(indicePregunta + 1);
     };
@@ -102,10 +103,9 @@ export default function Stars({ limpieza, preguntas, idresena }) {
 
     return (
         <div className="flex flex-col gap-y-2 text-center  h-screen items-center animate-fade-down animate-ease-in">
-            <h1>{id}</h1>
             {indicePregunta < posiblesrespuestas.length && (
                 <>
-                    <h1>{tituloPreguntaActual}</h1>
+                    <h1 className="text-gray-500 text-[50px]">{tituloPreguntaActual}</h1>
                     <Strellas
                         texto={texto}
                         textos={textos}
@@ -116,6 +116,8 @@ export default function Stars({ limpieza, preguntas, idresena }) {
             )}
             <div className=" w-full p-2 text-[25px]">
                 <h1 className="font-extrabold mt-5">{malacalificacion}</h1>
+                <hr className="border-t border-gray-200 my-4" /> {/* Aquí está la línea */}
+
             </div>
             <div className="mt-5 mb-5 p-3 animate-shake">
                 {limpieza && limpieza.length > 0 ? (
@@ -136,7 +138,8 @@ export default function Stars({ limpieza, preguntas, idresena }) {
                                 </button>
                             </li>
                         ))}
-                    </ul>
+                    </ul
+                    >
                 ) : null}
             </div>
             {indicePregunta >= posiblesrespuestas.length && (
