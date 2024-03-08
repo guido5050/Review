@@ -197,7 +197,7 @@ class UserController extends Controller
      ->with('pregunta') // Cargar la relación
      ->get();
 
-    
+
 
 
 
@@ -278,7 +278,7 @@ foreach ($respuesta as $WX) {
      */
 
 
-       return redirect()->route('showStars');  //TODO aqui
+        return redirect()->route('showStars');  //TODO aqui
 
     }
 
