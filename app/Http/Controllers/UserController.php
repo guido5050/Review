@@ -162,7 +162,7 @@ class UserController extends Controller
 
         $promedio = round(Calificaciones::where('id_resena', $id_resena)->avg('puntuacion'), 1); // Sacamos promedio
         //dd($promedio);
-        $resenas = Resena::where('id_resena',$id_resena)->first();
+        $resenas = Resena::where('id_resena', $id_resena)->first();
 
         if ($promedio && is_null($request['comentario'])) {
             $resenas->comentario = "sin comentario";
@@ -171,6 +171,7 @@ class UserController extends Controller
         }
 
         $resenas->Puntuacion_global = $promedio;
+        $resenas->fecha = date('Y-m-d'); // Guardar la fecha actual en formato año-mes-día
 
         $resenas->save();
 

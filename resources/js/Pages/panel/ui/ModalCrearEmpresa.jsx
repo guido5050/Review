@@ -16,17 +16,18 @@ const ModalCrearEmpresa = () => {
     const [image, setImage] = useState(null);
 
     const [value, setValues] = useState({
-        logo: "",
+        ruta_logo: "",
         correo: "",
         razon_social: "",
         ruc: "",
         telefono: "",
-        id: "",
         direccion_local: "",
+        item_source: 3,
+        moneda_item_source: 1,
     });
 
     function handleChange(e) {
-        if (e.target.id === "logo") {
+        if (e.target.id === "ruta_logo") {
             // Manejar el archivo de imagen
             let file = e.target.files[0];
             let reader = new FileReader();
@@ -62,6 +63,8 @@ const ModalCrearEmpresa = () => {
                 setImage(null);
             },
         });
+
+        setOpenModal(false);
     };
 
     return (
@@ -96,7 +99,7 @@ const ModalCrearEmpresa = () => {
                                     />
                                 </div>
                                 <FileInput
-                                    id="logo"
+                                    id="ruta_logo"
                                     type="file"
                                     name="logo"
                                     className="form-control-file"

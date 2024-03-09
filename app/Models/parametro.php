@@ -8,32 +8,6 @@ class parametro extends Model
 {
     //protected $table = 'parametro';//
   	protected $primaryKey = 'id';
-  	protected $fillable = [
-      'id',
-      'razon_social',
-      'ruc',
-      'ruta_logo',
-      'direccion_local',
-      'telefono',
-      'correo',
-      'fecha',
-      'impuesto',
-      'venta_dolar',
-      'compra_dolar',
-      'capacidad',
-      'checkin',
-      'checkout',
-      'moneda_principal',
-      'moneda_secundaria',
-      'simbolo_m1',
-      'simbolo_m2',
-      'manual',
-      'item_source',
-      'almacen',
-      'moneda_item_source',
-      'titulo_machote',
-      'cuerpo_machote',
-
-  	];
+      protected $fillable = ['ruta_logo', 'correo', 'razon_social', 'ruc', 'telefono', 'direccion_local', 'item_source', 'moneda_item_source'];
 
 }

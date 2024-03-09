@@ -96,7 +96,24 @@ public function store_data(Request $data)
 
     public function create_empresa(Request $request)
     {
-        dd($request->toArray());
+        // // Validar el request
+        // $request->validate([
+        //     'ruta_logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        //     // Agrega aquí las validaciones para los demás campos
+        // ]);
+
+        // // Guardar la imagen en el directorio 'public/images/logos'
+        // $imageName = time().'.'.$request->ruta_logo->extension();
+        // $request->ruta_logo->move(public_path('images/logos'), $imageName);
+
+        // // Crear un nuevo array de datos con la ruta de la imagen
+        // $data = $request->all();
+        // $data['ruta_logo'] = '/images/logos/'.$imageName;
+
+        // // Crear la empresa
+        // $empresa = parametro::create($data);
+        $empresa = parametro::create($request->all());
+
 
         return redirect()->back()->withSuccess('Se Creó la Empresa Exitosamente');
     }

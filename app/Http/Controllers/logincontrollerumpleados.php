@@ -104,7 +104,8 @@ class logincontrollerumpleados extends Controller
 
     public function aut_user(request $data) {
 
-       // dd($data->toArray());
+        //dd($data->toArray());
+
         $rules = [
             'username' => 'required',
             'password' => 'required',
@@ -126,6 +127,7 @@ class logincontrollerumpleados extends Controller
             // Guarda el valor de 'empresa' en la sesión
             Session::put('empresa', $data->empresa);
             $empresa = Session::get('empresa');
+            //dd($empresa);
             $parametros = parametro::where('id', Session::get('empresa'))->select('ruta_logo', 'razon_social','correo')->first();
             Session::put('logo_ruta', $parametros->ruta_logo);
             Session::put('razon_social', $parametros->razon_social);

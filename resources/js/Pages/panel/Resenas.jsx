@@ -44,23 +44,33 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                                             : "No definido"}
                                     </Table.Cell>
                                     <Table.Cell className="font-extrabold flex items-center gap-x-2">
-                                        <FaStar  size={"25px"}/>
+                                        <FaStar size={"25px"} />
                                     </Table.Cell>
                                     <Table.Cell className="font-extrabold text-black whitespace-nowrap ">
                                         {resena.Puntuacion_global
                                             ? resena.Puntuacion_global
                                             : "no puntuacion"}
                                     </Table.Cell>
-                                    <Table.Cell className="font-extrabold text-black whitespace-nowrap">
-                                        {resena.comentario
-                                            ? resena.comentario
-                                            : "no-comentario"}
+                                    <Table.Cell className="font-extrabold text-black whitespace-normal">
+                                        <p className="w-64 overflow-hidden line-clamp-2">
+                                            {resena.comentario ? resena.comentario : "no-comentario"}
+                                        </p>
                                     </Table.Cell>
 
                                     <Table.Cell className="font-extrabold text-black">
-                                        {estados[resena.estado] && estados[resena.estado][0] ? (
-                                            <strong className="whitespace-nowrap" title={estados[resena.estado][0].descripcion}>
-                                                {estados[resena.estado][0].estado}
+                                        {estados[resena.estado] &&
+                                        estados[resena.estado][0] ? (
+                                            <strong
+                                                className="whitespace-nowrap"
+                                                title={
+                                                    estados[resena.estado][0]
+                                                        .descripcion
+                                                }
+                                            >
+                                                {
+                                                    estados[resena.estado][0]
+                                                        .estado
+                                                }
                                             </strong>
                                         ) : (
                                             "Estado no definido"
