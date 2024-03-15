@@ -74,7 +74,7 @@ const Parametros_de_Empresa = ({ auth, config, logo, razon_social }) => {
 
                 <form
                     onSubmit={handleSubmit}
-                    className="max-w-md mx-auto animate-fade-left animate-ease-in-out flex flex-col justify-center mt-4 overflow-y-auto  gap-y-2 flex-grow mb-7"
+                    className="max-w-md mx-auto  animate-fade-left animate-ease-in-out flex flex-col justify-center mt-4 overflow-y-auto  gap-y-2 flex-grow mb-7"
                 >
                     <Badge color="info" size={"xl"}>
                         {" "}
@@ -156,6 +156,7 @@ const Parametros_de_Empresa = ({ auth, config, logo, razon_social }) => {
                             id="razon_social"
                             type="text"
                             defaultValue={config.razon_social}
+                            required
                             onChange={handleChange}
                             className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                         />
@@ -167,6 +168,7 @@ const Parametros_de_Empresa = ({ auth, config, logo, razon_social }) => {
                         <input
                             id="telefono"
                             type="tel"
+                            required
                             defaultValue={config.telefono}
                             onChange={handleChange}
                             className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
@@ -179,6 +181,7 @@ const Parametros_de_Empresa = ({ auth, config, logo, razon_social }) => {
                         <input
                             id="ruc"
                             type="text"
+                            required
                             defaultValue={config.ruc}
                             onChange={handleChange}
                             className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
@@ -207,6 +210,7 @@ const Parametros_de_Empresa = ({ auth, config, logo, razon_social }) => {
                             type="text"
                             defaultValue={config.direccion_local}
                             onChange={handleChange}
+                            required
                             className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                     </div>

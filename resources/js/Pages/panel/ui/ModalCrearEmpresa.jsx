@@ -147,6 +147,7 @@ const ModalCrearEmpresa = () => {
                             <input
                                 id="razon_social"
                                 type="text"
+                                required
                                 onChange={handleChange}
                                 className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                             />
@@ -157,6 +158,7 @@ const ModalCrearEmpresa = () => {
                             </label>
                             <input
                                 id="telefono"
+                                required
                                 type="tel"
                                 onChange={handleChange}
                                 className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
@@ -169,19 +171,12 @@ const ModalCrearEmpresa = () => {
                             <input
                                 id="ruc"
                                 type="text"
+                                required
                                 onChange={handleChange}
                                 className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                             />
                         </div>
-                        <div className="flex flex-col">
-                            <input
-                                id="id"
-                                hidden
-                                type="text"
-                                onChange={(e) => setId(e.target.value)}
-                                className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
-                            />
-                        </div>
+                       
                         <div className="flex flex-col">
                             <div className="flex">
                                 <label className="font-bold mb-1 flex items-center">
@@ -192,6 +187,7 @@ const ModalCrearEmpresa = () => {
                             <textarea
                                 id="direccion_local"
                                 type="text"
+                                required
                                 onChange={handleChange}
                                 className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                             />

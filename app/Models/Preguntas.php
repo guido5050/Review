@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-use App\Models\PreguntasClientes;
 class Preguntas extends Model
 {
     use HasFactory;
@@ -13,9 +13,18 @@ class Preguntas extends Model
     protected $table = 'preguntas';
     protected $primaryKey = 'id_preguntas';
 
-    // Aquí está la relación
+    protected $fillable = [
+        'titulo',
+        'id_empresa',
+    ];
+
     public function preguntasClientes()
     {
         return $this->hasMany(PreguntasClientes::class, 'id_preguntas');
+    }
+
+    public function posiblesRespuestas()
+    {
+        return $this->hasMany(Prespuesta::class, 'id_preguntas');
     }
 }

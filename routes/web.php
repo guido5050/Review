@@ -26,13 +26,23 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 //Route::get('/roles',[PanelController::class,'roles'])->middleware('auth:empleados');
 
 //Route::get('/panela',[PanelController::class,'index'])->name('index')->middleware('auth:empleados');
+
 Route::get('/',[PanelController::class,'resenas'])->middleware('auth');
 Route::get('/panela/clientes',[PanelController::class,'clientes'])->name('clientes')->middleware('auth:empleados'); //Mostrar clientes
 Route::get('/panela/usuarios',[PanelController::class,'usuarios'])->name('usuarios')->middleware('auth:empleados');//Mostrar Usuarios
 Route::get('/panela/resenas',[PanelController::class,'resenas'])->name('resenas');//Lista de Usuarops
 
+Route::group(['middleware' => 'auth:empleados'], function () { //TODO: Vista de Encuesta
+    Route::get('/panela/encuesta', [PanelController::class, 'encuesta'])->name('encuesta'); // Encuesta
+    Route::post('/panela/encuesta/{idposiblerespuesta}/{estado}', [PanelController::class, 'Estado_preguntas'])->name('estado.preguntas'); // TODO: Estado de preguntas
+    Route::post('/panela/encuesta/crear', [PanelController::class, 'crear_posiblerazon'])->name('crear_preguntas'); // TODO: Crear Posible Razon
+    Route::post('/panela/encuesta/pregunta', [PanelController::class, 'crear_pregunta'])->name('crear.pregunta'); // TODO: Crear Respuesta
+});
+
+
 Route::get('/panela/resenas/{userClienteId}/{Idresena}',[PanelController::class,'gestionar']); //TODO:Gestionar resenas
 Route::post('/panela/resenas/comentario',[PanelController::class,'comentarios_admin']); //ComentariosGuardados por el admin de resenas
+
 
 
 Route::post('/panela/usuarios/update',[PanelController::class,'update'])->name('update');
@@ -84,7 +94,7 @@ Route::get('formulario',[PanelController::class,'Index']);
 Route::get('generarResena',[PanelController::class,'generarResena'])->name('generarResena');
 
 
-Route::post('/show',[UserController::class,'showpreguntas'])->name('show');
+Route::post('/show',[UserController::class,'showpreguntas'])->name('show'); //TODO:Mostrar preguntas(REVISAR)
 
 
 Route::post('StorePreguntas',[UserController::class,'StorePreguntas'])->name('StorePreguntas');

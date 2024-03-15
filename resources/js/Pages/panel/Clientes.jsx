@@ -12,8 +12,15 @@ import BtnPrimary from "./ui/BtnPrimary";
 import ModalResenas from "./ui/ModalResenas";
 import { TbMailUp } from "react-icons/tb";
 
-
-const Clientes = ({ client, auth,logo,razon_social, plantillas, empresaId }) => {
+const Clientes = ({
+    client,
+    encuesta,
+    auth,
+    logo,
+    razon_social,
+    plantillas,
+    empresaId,
+}) => {
     console.log(client);
     /**
      * TODO: Client es la respuesta paginada del controlador PanelController ´clientes()´
@@ -22,7 +29,7 @@ const Clientes = ({ client, auth,logo,razon_social, plantillas, empresaId }) => 
     const [clienteId, setClienteId] = useState(null);
     const [nombreCliente, setNombreCliente] = useState(null);
     const [email, setEmail] = useState(null);
-    const [empresa, setEmpresa]= useState(empresaId);
+    const [empresa, setEmpresa] = useState(empresaId);
 
     if (!client) return "Cargando...";
 
@@ -81,12 +88,12 @@ const Clientes = ({ client, auth,logo,razon_social, plantillas, empresaId }) => 
                         </Badge>
                     </div>
                     <div className="overflow-x-auto animate-shake">
-                        <Table >
+                        <Table>
                             <Table.Head>
                                 <Table.HeadCell>Nombre completo</Table.HeadCell>
                                 <Table.HeadCell>Email</Table.HeadCell>
                                 <Table.HeadCell>Nacionalidad</Table.HeadCell>
-                                <Table.HeadCell>Acciones</Table.HeadCell>
+                                <Table.HeadCell>Enviar Reseñas</Table.HeadCell>
                             </Table.Head>
                             <Table.Body className="divide-y">
                                 {client.data.map((cliente, index) => (
@@ -98,24 +105,46 @@ const Clientes = ({ client, auth,logo,razon_social, plantillas, empresaId }) => 
                                             {cliente.nombre_completo}
                                         </Table.Cell>
                                         <Table.Cell>
-                                            {cliente.email ? cliente.email : "No email"}
+                                            {cliente.email
+                                                ? cliente.email
+                                                : "No email"}
                                         </Table.Cell>
                                         <Table.Cell>
-                                            {cliente.nacionalidad ? cliente.nacionalidad : "No nacionalidad"}
+                                            {cliente.nacionalidad
+                                                ? cliente.nacionalidad
+                                                : "No nacionalidad"}
                                         </Table.Cell>
                                         <Table.Cell>
-                                            <BtnPrimary
-                                                className="bg-blue-600 hover:bg-blue-500 flex items-center"
-                                                onClick={() => {
-                                                    setModalOpen(true);
-                                                    setClienteId(cliente.id_cliente);
-                                                    setEmail(cliente.email);
-                                                    setNombreCliente(cliente.nombre_completo);
-                                                }}
-                                                span={<TbMailUp size={"20px"}/>}
-                                            >
-                                                Enviar reseña
-                                            </BtnPrimary>
+                                            {encuesta ? (
+                                                <BtnPrimary
+                                                    className="bg-blue-600 hover:bg-blue-500 flex items-center"
+                                                    onClick={() => {
+                                                        setModalOpen(true);
+                                                        setClienteId(
+                                                            cliente.id_cliente
+                                                        );
+                                                        setEmail(cliente.email);
+                                                        setNombreCliente(
+                                                            cliente.nombre_completo
+                                                        );
+                                                    }}
+                                                    span={
+                                                        <TbMailUp
+                                                            size={"20px"}
+                                                        />
+                                                    }
+                                                >
+                                                    Enviar reseña
+                                                </BtnPrimary>
+                                            ) : (
+                                                <Link
+                                                    title="Si ve este boton es por que no ha configurado la encuesta"
+                                                    href="/panela/encuesta"
+                                                    className="text-white inline-block bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                                >
+                                                    Gestionar Encuesta
+                                                </Link>
+                                            )}
                                         </Table.Cell>
                                     </Table.Row>
                                 ))}

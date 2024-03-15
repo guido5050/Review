@@ -86,13 +86,14 @@ export default function Menu_Item({
                                         </Disclosure.Button>
                                     </div>
                                     <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                                        <div className="flex flex-shrink-0 items-center text-white flex gap-x-2">
+                                        {/* <div className="flex flex-shrink-0 items-center text-white flex gap-x-2">
                                             <img
                                                 src={logo}
                                                 alt="Mi Imagen"
-                                                className="w-12 h-auto px-0.1"
+                                                //TODO: aqui estaba la imagen
+                                                className="w-[30px] h-auto px-0.1 rounded-xl"
                                             />
-                                        </div>
+                                        </div> */}
                                         <div className="hidden sm:ml-6 sm:block">
                                             <div className="flex space-x-4">
                                                 {navigation.map((item) => (
@@ -131,7 +132,11 @@ export default function Menu_Item({
                                         <div className="flex gap-x-3 p-2">
                                             <h1 className="text-white   py-1 bg-slate-700 font-extrabold flex items-center justify-center rounded-lg px-4 gap-1">
                                                 {razon_social}{" "}
-                                                <FcDepartment size={"20px"} />
+                                                <img
+                                                    src={logo}
+                                                    alt=""
+                                                    className="w-[20px] rounded-xl"
+                                                />
                                             </h1>
                                             <h1 className="text-white bg-slate-700 font-extrabold flex items-center justify-center px-4 rounded-lg gap-1">
                                                 {user.nombre_completo}
@@ -139,7 +144,7 @@ export default function Menu_Item({
                                             </h1>
                                             <a
                                                 href="/logout"
-                                                className="text-white bg-slate-700 font-extrabold flex gap-1 items-center justify-center rounded-lg px-4"
+                                                className="text-blue-400 bg-slate-700 font-extrabold flex gap-1 items-center justify-center rounded-lg px-4"
                                             >
                                                 cerar sesion
                                                 <FiLogOut />
@@ -192,10 +197,11 @@ export default function Menu_Item({
                                                             </Link>
                                                         )}
                                                     </Menu.Item>
+
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <Link
-                                                                href="/panela/empresa"
+                                                                href="/panela/encuesta"
                                                                 preserveState
                                                                 only={[
                                                                     "config",
@@ -207,7 +213,8 @@ export default function Menu_Item({
                                                                     "block px-4 py-2 text-sm text-gray-700"
                                                                 )}
                                                             >
-                                                                Crear Empresa
+                                                                Gestionar
+                                                                Encuesta
                                                             </Link>
                                                         )}
                                                     </Menu.Item>

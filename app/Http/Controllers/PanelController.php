@@ -20,6 +20,8 @@ use App\Models\RedesSociales;
 use App\Models\PreguntasClientes;
 use App\Models\Comentarios;
 use App\Models\Estados;
+use App\Models\Preguntas;
+use App\Models\Prespuesta;
 
 class PanelController extends Controller
 
@@ -42,8 +44,26 @@ class PanelController extends Controller
         $empresa = session('empresa');
         $clientes = UsuariosClientes::where('id_empresa', $empresa)->orderBy('id_cliente', 'desc')->paginate(10);
         $plantillas=Correo::where('id_empresa', $empresa)->get();
-       // dd($empresa);
-        return inertia::render('panel/Clientes', ['client' => $clientes , 'plantillas'=>$plantillas, 'empresaId' => $empresa]);
+        $existePreguntaSinRespuesta = Preguntas::where('id_empresa', $empresa)
+        ->where(function ($query) {
+            foreach (range(1, 5) as $puntuacion) {
+                $query->orWhereDoesntHave('posiblesRespuestas', function ($query) use ($puntuacion) {
+                    $query->where('puntuacion', $puntuacion);
+                });
+            }
+        })
+        ->exists(); //TODO como observacion esta consulta podria ir justo despues de iniciar sesion
+
+        $existePreguntaConRespuesta = !$existePreguntaSinRespuesta;
+
+        // Guardar $existePreguntaConRespuesta en una variable de sesión
+
+         return inertia::render('panel/Clientes',
+        ['client' => $clientes ,
+        'plantillas'=>$plantillas,
+        'empresaId' => $empresa,
+        'encuesta' => $existePreguntaConRespuesta,
+        ]);
     }
 
     public function resenas()
@@ -52,6 +72,8 @@ class PanelController extends Controller
         $resenas = Resena::with('UsuariosClientes')->where('id_empresa', $id_empresa)->paginate(10);
 
         $estados=Estados::all()->groupBy('id_estado');
+
+
 
         return inertia::render('panel/Resenas', ['resenas' => $resenas, 'estados' => $estados]);
     }
@@ -69,6 +91,78 @@ class PanelController extends Controller
                 'cargo' => $cargo,
             ]);
         }
+    }
+
+    public function encuesta()//TODO: Metodo que retorna la vista de la encuesta(GESNTIONAR ENCUESTA)
+    {
+        $empresa = session('empresa');
+        $preguntas = Preguntas::where('id_empresa', $empresa)
+            ->with('posiblesRespuestas')
+            ->groupBy('id_preguntas')
+            ->get();
+            $existePreguntaSinRespuesta = Preguntas::where('id_empresa', $empresa)
+        ->where(function ($query) {
+            foreach (range(1, 5) as $puntuacion) {
+                $query->orWhereDoesntHave('posiblesRespuestas', function ($query) use ($puntuacion) {
+                    $query->where('puntuacion', $puntuacion);
+                });
+            }
+        })
+        ->exists(); //TODO como observacion esta consulta podria ir justo despues de iniciar sesion
+
+        $existePreguntaConRespuesta = !$existePreguntaSinRespuesta;
+         //dd($existePreguntaConRespuesta);
+        return inertia::render('panel/ConfigEncuesta',['preguntas' => $preguntas,'estadoEncuesta' => $existePreguntaConRespuesta]);
+    }
+
+    public function crear_posiblerazon(Request $request) //TODO: Metodo que crea posibles razones
+    {
+     //dd($request->toArray());
+        $preguntaId=$request->preguntaId;
+        $puntuacion=$request->puntuacion;
+        $titulo=$request->titulo;
+        $empresa = session('empresa');
+        //dd($preguntaId, $puntuacion, $empresa,$titulo);
+
+        $pregunta = Prespuesta::create([
+            'id_preguntas' => $preguntaId,
+            'id_empresa' => $empresa,
+            'titulo_respuesta' => $titulo,
+            'puntuacion' => $puntuacion,
+            'estado' => true,
+        ]);
+        return redirect()->route('encuesta');
+
+
+    }
+
+    public function crear_pregunta(Request $request) //TODO: Metodo que crea preguntas
+    {
+        $empresa = session('empresa');
+      /// dd($request->toArray(), $empresa);
+
+        $pregunta = Preguntas::create([
+            'id_empresa' => $empresa,
+            'titulo' => $request->titulo,
+        ]);
+        return to_route('encuesta');
+    }
+
+
+    public function Estado_preguntas($idposiblerespuesta, $estado){
+
+        // dd($idposiblerespuesta, $estado);
+
+        $respuesta = Prespuesta::find($idposiblerespuesta);
+
+       // dd($respuesta->toArray());
+
+        if ($respuesta) {
+            $respuesta->update(['estado' => $estado]);
+        } else {
+            // Manejar el caso en que la respuesta no se encuentra
+        }
+        return back();
     }
 
     public function update(Request $request)

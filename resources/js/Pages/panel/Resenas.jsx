@@ -6,7 +6,6 @@ import { FaStar } from "react-icons/fa";
 import { TbEyeStar } from "react-icons/tb";
 
 const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
-    console.log(estados);
     return (
         <>
             <Menu_Item
@@ -39,8 +38,7 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                                     <Table.Cell>{resena.id_reserva}</Table.Cell>
                                     <Table.Cell>
                                         {resena.usuarios_clientes
-                                            ? resena.usuarios_clientes
-                                                  .nombre_completo
+                                            ? resena.usuarios_clientes.nombre_completo
                                             : "No definido"}
                                     </Table.Cell>
                                     <Table.Cell className="font-extrabold flex items-center gap-x-2">
@@ -62,15 +60,9 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                                         estados[resena.estado][0] ? (
                                             <strong
                                                 className="whitespace-nowrap"
-                                                title={
-                                                    estados[resena.estado][0]
-                                                        .descripcion
-                                                }
+                                                title={estados[resena.estado][0].descripcion}
                                             >
-                                                {
-                                                    estados[resena.estado][0]
-                                                        .estado
-                                                }
+                                                {estados[resena.estado][0].estado}
                                             </strong>
                                         ) : (
                                             "Estado no definido"
@@ -80,7 +72,7 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                                     <Table.Cell className="font-extrabold text-white text-center">
                                         <Link
                                             href={`/panela/resenas/${resena.id_usuario}/${resena.id_resena}`}
-                                            className=" flex  items-center justify-center gap-x-1 bg-blue-700 hover:bg-blue-800 rounded-lg py-1 px-2  "
+                                            className="flex items-center justify-center gap-x-1 bg-blue-700 hover:bg-blue-800 rounded-lg py-1 px-2"
                                         >
                                             GESTIONAR
                                             <TbEyeStar
@@ -106,7 +98,7 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                     {resenas.next_page_url && (
                         <Link
                             href={resenas.next_page_url}
-                            className="ml-3 px-4 flex gap-x-2  items-center py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                            className="ml-3 px-4 flex gap-x-2 items-center py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                         >
                             Página siguiente
                         </Link>

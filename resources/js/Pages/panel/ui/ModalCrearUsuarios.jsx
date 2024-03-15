@@ -11,6 +11,7 @@ const ModalCrearUsuarios = ({
 }) => {
     const [openModal, setOpenModal] = useState(modal_crearusuarios);
     console.log(cargo);
+    
     function onCloseModal() {
         setOpenModal(false);
         setModal_CrearUsuarios(false);

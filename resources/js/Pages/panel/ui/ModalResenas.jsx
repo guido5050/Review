@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { MdContentCopy, MdOutlineMarkEmailUnread } from "react-icons/md";
 import { Link } from "@inertiajs/react";
@@ -18,9 +18,13 @@ const ModalResenas = ({
     const [openModal, setOpenModal] = useState(modalOpen);
     const [text, setText] = useState("");
     const inputRef = useRef();
-    const [selectPlantilla, setSelectPlantilla] = useState(
-        plantillas[0].id_correo
-    );
+    const [selectPlantilla, setSelectPlantilla] = useState("");
+
+    useEffect(() => {
+        if (plantillas && plantillas.length > 0) {
+            setSelectPlantilla(plantillas[0].id_correo);
+        }
+    }, [plantillas]);
 
     const onCloseModal = () => {
         setOpenModal(false);
@@ -85,24 +89,41 @@ const ModalResenas = ({
                                         setSelectPlantilla(event.target.value)
                                     }
                                 >
-                                    {plantillas.map((plantilla, index) => (
-                                        <option
-                                            key={index}
-                                            value={plantilla.id_correo}
-                                        >
-                                            {plantilla.nombre_plantilla}
+                                    {plantillas?.length > 0 ? (
+                                        plantillas.map((plantilla, index) =>
+                                            plantilla ? (
+                                                <option
+                                                    key={index}
+                                                    value={plantilla.id_correo}
+                                                >
+                                                    {plantilla.nombre_plantilla}
+                                                </option>
+                                            ) : null
+                                        )
+                                    ) : (
+                                        <option>
+                                            No se encontró plantillas de correo 
                                         </option>
-                                    ))}
+                                    )}
                                 </Select>
                             </div>
-                            <Link
-                                href={`/preview.email/mail/${clienteId}/${selectPlantilla}`}
-                                method="get"
-                                className="text-white inline-block bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                                preserveState
-                            >
-                                Ver-Preview correo
-                            </Link>
+                            {selectPlantilla ? (
+                                <Link
+                                    href={`/preview.email/mail/${clienteId}/${selectPlantilla}`}
+                                    method="get"
+                                    className="text-white inline-block bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                    preserveState
+                                >
+                                    Ver-Preview correo
+                                </Link>
+                            ) : (
+                               <Link
+                               href="/panela/config.mail"
+                               className="text-white inline-block bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                               preserveState
+                               >Crear plantilla</Link>
+                            )}
+
                         </>
                     )}
 

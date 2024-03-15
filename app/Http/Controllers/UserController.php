@@ -40,10 +40,6 @@ class UserController extends Controller
       }
 
 
-
-
-
-
      public function index()
     {
         //Mostrar vista de review
@@ -192,14 +188,13 @@ class UserController extends Controller
      public function showpreguntas(Request $request) //TODO: Mostrar las posible respuestas este metodo entra aqui cuando doy click en las estrella
      {
 
-        //dd($request->toArray());
-     $respuesta = Prespuesta::where('id_preguntas', $request->pregunta)
-     ->where('puntuacion', $request->score)
-     ->with('pregunta') // Cargar la relación
-     ->get();
+        $respuesta = Prespuesta::where('id_preguntas', $request->pregunta)
+            ->where('puntuacion', $request->score)
+            ->where('estado', true)
+            ->with('pregunta') // Cargar la relación
+            ->get();
 
-
-
+// dd($respuesta->toArray());
 
 
    // dd($respuesta->toArray());
@@ -224,6 +219,7 @@ foreach ($respuesta as $WX) {
 
        $respuesta=Prespuesta::where('id_preguntas', $request->pregunta)
       ->where('puntuacion', $request->score)
+      ->where('estado', true)
       ->with('pregunta') // Cargar la relación
       ->get();
 

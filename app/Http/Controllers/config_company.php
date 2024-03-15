@@ -18,7 +18,7 @@ public function datos_empresas(){
 
 	public function show_main_view()
 	{
-        $empresa = session('empresa');
+        $empresa = session('empresa'); 
 
 		$config_current = \App\Models\parametro::where('id','=',$empresa)->first();
 		// return view('config_company')->with('config',$config_current);
@@ -96,24 +96,31 @@ public function store_data(Request $data)
 
     public function create_empresa(Request $request)
     {
-        // // Validar el request
-        // $request->validate([
-        //     'ruta_logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        //     // Agrega aquí las validaciones para los demás campos
-        // ]);
+        // Validar el request
+        $request->validate([
+            'ruta_logo' => 'required',
+            // Agrega aquí las validaciones para los demás campos
+        ]);
 
-        // // Guardar la imagen en el directorio 'public/images/logos'
-        // $imageName = time().'.'.$request->ruta_logo->extension();
-        // $request->ruta_logo->move(public_path('images/logos'), $imageName);
+        // Decodificar la imagen
+        $imagen = $request->ruta_logo;
+        $imagen = str_replace('data:image/jpeg;base64,', '', $imagen);
+        $imagen = str_replace(' ', '+', $imagen);
+        $imagenDecodificada = base64_decode($imagen);
 
-        // // Crear un nuevo array de datos con la ruta de la imagen
-        // $data = $request->all();
-        // $data['ruta_logo'] = '/images/logos/'.$imageName;
+        // Generar un nombre único para la imagen
+        $nombreImagen = time() . '.png';
 
-        // // Crear la empresa
-        // $empresa = parametro::create($data);
-        $empresa = parametro::create($request->all());
+        // Guardar la imagen en el directorio 'public/images/logos'
+        Storage::disk('images')->put('' . $nombreImagen, $imagenDecodificada);
 
+        // Crear un nuevo array de datos con la ruta de la imagen
+        $data = $request->all();
+        $data['ruta_logo'] = '/images/logos/' . $nombreImagen;
+
+
+        // Crear la empresa
+        $empresa = parametro::create($data);
 
         return redirect()->back()->withSuccess('Se Creó la Empresa Exitosamente');
     }
