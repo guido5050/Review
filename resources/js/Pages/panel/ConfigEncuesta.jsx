@@ -64,7 +64,7 @@ const ConfigEncuesta = ({
                     <Alert color="failure" icon={HiInformationCircle}>
                         <span className="font-medium">Informacion!</span>{" "}
                         Completa el cuestionario debe existir al menos una
-                        posible razon en cada puntuacion
+                        posible razon en cada puntuacion completa las preguntas que estan en color amarillo
                     </Alert>
                 )}
 
@@ -72,7 +72,7 @@ const ConfigEncuesta = ({
                     {preguntas.map((pregunta, preguntaIndex) => (
                         <Accordion.Panel key={preguntaIndex}>
                             <Accordion.Title>
-                                <div className="flex items-center gap-x-2">
+                                <div className={`flex items-center gap-x-2 ${!pregunta.posibles_respuestas.some(respuesta => respuesta.puntuacion === 5) ? 'text-yellow-500' : ''}`}>
                                     {pregunta.titulo} <FaQuestionCircle />
                                 </div>
                             </Accordion.Title>

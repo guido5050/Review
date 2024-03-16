@@ -100,7 +100,8 @@ class PanelController extends Controller
             ->with('posiblesRespuestas')
             ->groupBy('id_preguntas')
             ->get();
-            $existePreguntaSinRespuesta = Preguntas::where('id_empresa', $empresa)
+
+         $existePreguntaSinRespuesta = Preguntas::where('id_empresa', $empresa)
         ->where(function ($query) {
             foreach (range(1, 5) as $puntuacion) {
                 $query->orWhereDoesntHave('posiblesRespuestas', function ($query) use ($puntuacion) {
@@ -110,10 +111,17 @@ class PanelController extends Controller
         })
         ->exists(); //TODO como observacion esta consulta podria ir justo despues de iniciar sesion
 
+        /**
+         *
+         *
+         */
+
         $existePreguntaConRespuesta = !$existePreguntaSinRespuesta;
          //dd($existePreguntaConRespuesta);
         return inertia::render('panel/ConfigEncuesta',['preguntas' => $preguntas,'estadoEncuesta' => $existePreguntaConRespuesta]);
     }
+
+
 
     public function crear_posiblerazon(Request $request) //TODO: Metodo que crea posibles razones
     {
