@@ -1,7 +1,5 @@
 import { useState } from "react";
-
 import { router } from "@inertiajs/react";
-
 import { Accordion, Alert } from "flowbite-react";
 import { HiInformationCircle } from "react-icons/hi";
 import Menu_Item from "./Menu_Item";
@@ -38,7 +36,15 @@ const ConfigEncuesta = ({
         //const respuesta = preguntas[preguntaIndex].posibles_respuestas.find(r => r.id_posiblesRespuestas === Number(respuestaId));
         const estadoActual = checkedState[checkboxKey];
 
-        router.post(`/panela/encuesta/${respuestaId}/${estadoActual ? 0 : 1}`);
+        router.post(`/panela/encuesta/${respuestaId}/${estadoActual ? 0 : 1}`, {
+            onSuccess: () => {
+                router.visit(
+                    "/panela/encuesta",
+                    { method: "get" },
+                    { preserveState: true }
+                );
+            },
+        });
 
         setCheckedState((prevState) => ({
             ...prevState,
@@ -64,7 +70,8 @@ const ConfigEncuesta = ({
                     <Alert color="failure" icon={HiInformationCircle}>
                         <span className="font-medium">Informacion!</span>{" "}
                         Completa el cuestionario debe existir al menos una
-                        posible razon en cada puntuacion completa las preguntas que estan en color amarillo
+                        posible razon en cada puntuacion completa las preguntas
+                        que estan en color amarillo
                     </Alert>
                 )}
 
@@ -72,9 +79,22 @@ const ConfigEncuesta = ({
                     {preguntas.map((pregunta, preguntaIndex) => (
                         <Accordion.Panel key={preguntaIndex}>
                             <Accordion.Title>
-                                <div className={`flex items-center gap-x-2 ${!pregunta.posibles_respuestas.some(respuesta => respuesta.puntuacion === 5) ? 'text-yellow-500' : ''}`}>
-                                    {pregunta.titulo} <FaQuestionCircle />
-                                </div>
+                                <Accordion.Title>
+                                    <div
+                                        className={`flex items-center gap-x-2 ${
+                                            ![2, 3, 4, 5].every(
+                                                (puntuacion) =>
+                                                    pregunta.posibles_respuestas.some(
+                                                        (respuesta) => respuesta.puntuacion === puntuacion
+                                                    )
+                                            )
+                                                ? "text-yellow-500"
+                                                : ""
+                                        }`}
+                                    >
+                                        {pregunta.titulo} <FaQuestionCircle />
+                                    </div>
+                                </Accordion.Title>
                             </Accordion.Title>
                             <Accordion.Content>
                                 <Accordion collapseAll>

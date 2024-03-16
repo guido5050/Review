@@ -53,6 +53,7 @@ const ModalCrear_PosibleRazon = ({ preguntas }) => {
         router.post("/panela/encuesta/crear", values, {
             onSuccess: () => {
                 setOpenModal(false);
+                router.visit("/panela/encuesta", { method: "get" });
             },
         });
     }

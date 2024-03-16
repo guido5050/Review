@@ -139,8 +139,7 @@ class PanelController extends Controller
             'puntuacion' => $puntuacion,
             'estado' => true,
         ]);
-        return redirect()->route('encuesta');
-
+        return to_route('encuesta');
 
     }
 
