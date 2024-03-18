@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 return [
 
@@ -35,7 +35,7 @@ return [
 
     'mailers' => [
         'smtp' => [
-            'transport' => 'smtp',  //mailtrap 
+            'transport' => 'smtp',  //mailtrap
             'url' => env('MAIL_URL'),
             'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
             'port' => env('MAIL_PORT', 587),

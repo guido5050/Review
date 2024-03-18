@@ -98,8 +98,9 @@ class PanelController extends Controller
         $empresa = session('empresa');
         $preguntas = Preguntas::where('id_empresa', $empresa)
             ->with('posiblesRespuestas')
-            ->groupBy('id_preguntas')
             ->get();
+
+           // dd($preguntas);
 
          $existePreguntaSinRespuesta = Preguntas::where('id_empresa', $empresa)
         ->where(function ($query) {
@@ -328,7 +329,11 @@ class PanelController extends Controller
             $titulo = $correo_current->titulo;
             $cuerpo = $correo_current->cuerpo;
             $data = RedesSociales::where('id_empresa', session('empresa'))->get()->toArray();
-           Mail::to('fel123rodriguez@gmail.com')->send(new OrisonContactMailable($cliente->nombre_completo, $url, $titulo, $cuerpo, $logo, $data,$asunto));
+            //'waltdmda15@gmail.com
+
+           //TODO: Metodo que se encarga de enviar el correo
+            Mail::to('fel123rodriguez@gmail.com')->send(new OrisonContactMailable($cliente->nombre_completo, $url, $titulo, $cuerpo, $logo, $data,$asunto));
+
         } catch (\Exception $e) {
             \Log::error('Error al enviar correo: ' . $e->getMessage());
         }
