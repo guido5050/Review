@@ -29,6 +29,8 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 Route::get('/',[PanelController::class,'resenas'])->middleware('auth');
 Route::get('/panela/clientes',[PanelController::class,'clientes'])->name('clientes')->middleware('auth:empleados'); //Mostrar clientes
+Route::post('/panela/clientes/crear',[PanelController::class,'create_clientes'])->name('create_clientes')->middleware('auth:empleados'); //TODO Crear clientes
+Route::get('/panela/clientes/search',[PanelController::class,'clientes_search'])->name('search')->middleware('auth:empleados'); //TODO:Busqueda de clientes
 Route::get('/panela/usuarios',[PanelController::class,'usuarios'])->name('usuarios')->middleware('auth:empleados');//Mostrar Usuarios
 Route::get('/panela/resenas',[PanelController::class,'resenas'])->name('resenas');//Lista de Usuarops
 

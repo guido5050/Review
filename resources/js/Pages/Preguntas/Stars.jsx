@@ -16,7 +16,7 @@ export default function Stars({ limpieza, preguntas, idresena }) {
     const [respuestaSelec, setRespuestaSelec] = useState([]);
     const textos = ["Mala", "Aceptable", "Buena", "Excelente", "Perfecta"];
     const [texto, setTexto] = useState("Selecciona una calificación. 📌");
-    const [malacalificacion, setMalacalificacion] = useState("");
+    const [estadocalificacion, setEstadocalificacion] = useState(""); //maneja el estado actual de la calificacion
     const [btnActive, setBtnActive] = useState([]);
     const [indicePregunta, setIndicePregunta] = useState(0);
     const [tituloPreguntaActual, setTituloPreguntaActual] = useState("");
@@ -29,7 +29,9 @@ export default function Stars({ limpieza, preguntas, idresena }) {
             posiblesrespuestas[indicePregunta]
         ) {
             setTituloPreguntaActual(posiblesrespuestas[indicePregunta].titulo);
-            setIdPreguntaActual(posiblesrespuestas[indicePregunta].id_preguntas);
+            setIdPreguntaActual(
+                posiblesrespuestas[indicePregunta].id_preguntas
+            );
         }
     }, [indicePregunta]);
 
@@ -47,14 +49,32 @@ export default function Stars({ limpieza, preguntas, idresena }) {
             pregunta: idPreguntaActual,
             idresena: id,
         });
-        if (newScore === 1) {
-            setMalacalificacion("Cuentanos que paso?🙁");
-        } else {
-            setMalacalificacion("");
+        switch (newScore) {
+            case 1:
+                setEstadocalificacion("Cuentanos que paso?😔");
+                setTexto(textos[newScore - 1]);
+                break;
+            case 2:
+                setEstadocalificacion("😕");
+                break;
+            case 3:
+                setEstadocalificacion("😉");
+                break;
+            case 4:
+                setEstadocalificacion("😊");
+                break;
+            case 5:
+                setEstadocalificacion("😁");
+                break;
+            case 0:
+                setEstadocalificacion("");
+                setTexto("Selecciona una calificación.📌");
+                break;
+            default:
+                setEstadocalificacion("");
+                setTexto(textos[newScore - 1]);
+                break;
         }
-        newScore === 0
-            ? setTexto("Selecciona una calificación.📌")
-            : setTexto(textos[newScore - 1]);
     };
 
     useEffect(() => {
@@ -64,7 +84,7 @@ export default function Stars({ limpieza, preguntas, idresena }) {
     const onclick = () => {
         setCurrentScore(0);
         setBtn(false);
-        setMalacalificacion("");
+        setEstadocalificacion("");
         setTexto("Selecciona una calificación. 📌");
         if (Array.isArray(respuestaSelec) && respuestaSelec.length === 0) {
             router.post("StorePreguntas", {
@@ -89,7 +109,8 @@ export default function Stars({ limpieza, preguntas, idresena }) {
             setRespuestaSelec(
                 respuestaSelec.filter(
                     (res) =>
-                        res.id_posiblesRespuestas !== respuesta.id_posiblesRespuestas
+                        res.id_posiblesRespuestas !==
+                        respuesta.id_posiblesRespuestas
                 )
             );
         } else {
@@ -105,7 +126,9 @@ export default function Stars({ limpieza, preguntas, idresena }) {
         <div className="flex flex-col gap-y-2 text-center  h-screen items-center animate-fade-down animate-ease-in">
             {indicePregunta < posiblesrespuestas.length && (
                 <>
-                    <h1 className="text-gray-500 text-[50px]">{tituloPreguntaActual}</h1>
+                    <h1 className="text-gray-500 text-[50px]">
+                        {tituloPreguntaActual}
+                    </h1>
                     <Strellas
                         texto={texto}
                         textos={textos}
@@ -115,20 +138,25 @@ export default function Stars({ limpieza, preguntas, idresena }) {
                 </>
             )}
             <div className=" w-full p-2 text-[25px]">
-                <h1 className="font-extrabold mt-5">{malacalificacion}</h1>
-                <hr className="border-t border-gray-200 my-4" /> {/* Aquí está la línea */}
-
+                <h1 className="font-extrabold mt-5">{estadocalificacion}</h1>
+                <hr className="border-t border-gray-200 my-4" />{" "}
+                {/* Aquí está la línea */}
             </div>
             <div className="mt-5 mb-5 p-3 animate-shake">
                 {limpieza && limpieza.length > 0 ? (
                     <ul className="gap-y-5 ">
                         {limpieza.map((respuesta) => (
-                            <li className="" key={respuesta.id_posiblesRespuestas}>
+                            <li
+                                className=""
+                                key={respuesta.id_posiblesRespuestas}
+                            >
                                 <button
                                     key={respuesta.id_posiblesRespuestas}
                                     type="button"
                                     className={`${
-                                        btnActive.includes(respuesta.id_posiblesRespuestas)
+                                        btnActive.includes(
+                                            respuesta.id_posiblesRespuestas
+                                        )
                                             ? "bg-blue-500 text-white"
                                             : "bg-gray-100 text-gray-900"
                                     } py-3 px-5 me-2 mb-2 text-[20.5px] font-medium focus:outline-none rounded-full border border-gray-200 hover:bg-gray-200 hover:text-blue-700 focus:z-10 focus:ring-4  dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700`}
@@ -138,8 +166,7 @@ export default function Stars({ limpieza, preguntas, idresena }) {
                                 </button>
                             </li>
                         ))}
-                    </ul
-                    >
+                    </ul>
                 ) : null}
             </div>
             {indicePregunta >= posiblesrespuestas.length && (

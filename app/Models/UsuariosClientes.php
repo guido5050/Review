@@ -13,6 +13,15 @@ class UsuariosClientes extends Model
     //protected $primarykey= 'id_preguntas';
     protected $primaryKey = 'id_cliente';
 
+    protected $fillable = [
+        'id_empresa',
+        'nombre_completo',
+        'nacionalidad',
+        'ciudad',
+        'email',
+        'num_telefono1',
+        'num_identificacion',
+    ];
 
     public function Resena(): HasMany
     {

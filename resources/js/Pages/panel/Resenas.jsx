@@ -14,7 +14,7 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                 logo={logo}
                 AppName={AppName}
             >
-                <div className="overflow-x-auto animate-shake p-8">
+                <div className="overflow-x-auto animate-fade-down animate-ease-out p-8">
                     <Table>
                         <Table.Head>
                             <Table.HeadCell>ID#</Table.HeadCell>

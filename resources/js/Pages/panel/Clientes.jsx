@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "@inertiajs/react";
-import { Table, Badge } from "flowbite-react";
+import { Link, router } from "@inertiajs/react";
+import { Table, Badge, TextInput } from "flowbite-react";
 import {
     MdKeyboardDoubleArrowLeft,
     MdKeyboardDoubleArrowRight,
@@ -11,6 +11,9 @@ import Menu_Item from "./Menu_Item";
 import BtnPrimary from "./ui/BtnPrimary";
 import ModalResenas from "./ui/ModalResenas";
 import { TbMailUp } from "react-icons/tb";
+import { AiFillPlusCircle } from "react-icons/ai";
+import { FaSearch } from "react-icons/fa";
+import ModalCrearClientes from "./ui/ModalCrearClientes";
 
 const Clientes = ({
     client,
@@ -21,7 +24,6 @@ const Clientes = ({
     plantillas,
     empresaId,
 }) => {
-    console.log(client);
     /**
      * TODO: Client es la respuesta paginada del controlador PanelController ´clientes()´
      */
@@ -30,7 +32,18 @@ const Clientes = ({
     const [nombreCliente, setNombreCliente] = useState(null);
     const [email, setEmail] = useState(null);
     const [empresa, setEmpresa] = useState(empresaId);
+    const [modalCrearClientes, setModalCrearClientes] = useState(true);
 
+    const [busqueda, setBusqueda] = useState("");
+
+    const handleSearchChange = (event) => {
+        const value = event.target.value;
+        setBusqueda(value);
+
+        router.get("/panela/clientes", {busqueda: value},{preserveState: true});
+    };
+
+    console.log(modalCrearClientes);
     if (!client) return "Cargando...";
 
     return (
@@ -75,25 +88,43 @@ const Clientes = ({
                             </Link>
                         )}
                     </div>
-                    <div className=" flex gap-6 mb-6">
-                        <Badge color="info" size="sm">
-                            <p>Página actual: {client.current_page}</p>
-                        </Badge>
-                        <Badge color="success" size="sm">
-                            <p>Total de páginas: {client.last_page}</p>
-                        </Badge>
 
-                        <Badge color="indigo" size="sm">
-                            <p>Total de clientes: {client.total}</p>
-                        </Badge>
+                    <div className=" flex  justify-between items-center p-5 ">
+                        <div>
+                            {modalCrearClientes && <ModalCrearClientes />}
+                        </div>
+                        <div className="relative">
+                            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                            <input
+                                type="text"
+                                className="pl-10 pr-4 py-1 border rounded-md"
+                                placeholder="Buscar Cliente"
+                                value={busqueda}
+                                onChange={handleSearchChange}
+                            />
+                        </div>
+                        <div className="flex gap-3 ">
+                            <Badge color="info" size="sm">
+                                <p>Página actual: {client.current_page}</p>
+                            </Badge>
+                            <Badge color="success" size="sm">
+                                <p>Total de páginas: {client.last_page}</p>
+                            </Badge>
+
+                            <Badge color="indigo" size="sm">
+                                <p>Total de clientes: {client.total}</p>
+                            </Badge>
+                        </div>
                     </div>
-                    <div className="overflow-x-auto animate-shake">
+                    <div className="overflow-x-auto animate-fade-down animate-ease-out">
                         <Table>
                             <Table.Head>
                                 <Table.HeadCell>Nombre completo</Table.HeadCell>
                                 <Table.HeadCell>Email</Table.HeadCell>
                                 <Table.HeadCell>Nacionalidad</Table.HeadCell>
-                                <Table.HeadCell>Enviar Reseñas</Table.HeadCell>
+                                <Table.HeadCell>
+                                    Enviar Evaluaciones
+                                </Table.HeadCell>
                             </Table.Head>
                             <Table.Body className="divide-y">
                                 {client.data.map((cliente, index) => (
@@ -134,7 +165,7 @@ const Clientes = ({
                                                         />
                                                     }
                                                 >
-                                                    Enviar reseña
+                                                    Enviar Evaluacion
                                                 </BtnPrimary>
                                             ) : (
                                                 <Link

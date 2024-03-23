@@ -61,7 +61,7 @@ const ConfigEncuesta = ({
             <div className="p-6 ">
                 <div className="flex items-center justify-start gap-x-2 ">
                     {preguntas && preguntas.length > 0 && (
-                        <ModalCrear_PosibleRazon preguntas={preguntas} />
+                        <ModalCrear_PosibleRazon preguntas={preguntas} estadoEncuesta={estadoEncuesta} />
                     )}
 
                     <ModalCrearPregunta />

@@ -39,31 +39,91 @@ class PanelController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function clientes()
+    public function clientes(Request $request)
     {
         $empresa = session('empresa');
-        $clientes = UsuariosClientes::where('id_empresa', $empresa)->orderBy('id_cliente', 'desc')->paginate(10);
-        $plantillas=Correo::where('id_empresa', $empresa)->get();
+        $busqueda = $request->query('busqueda');
+
+        $query = UsuariosClientes::where('id_empresa', $empresa);
+
+        if ($busqueda) {
+            $query->where(function ($query) use ($busqueda) {
+                $query->where('nombre_completo', 'like', '%' . $busqueda . '%')
+                    ->orWhere('email', 'like', '%' . $busqueda . '%');
+            });
+        }
+
+        $clientes = $query->orderBy('id_cliente', 'desc')->paginate(10);
+
+        $plantillas = Correo::where('id_empresa', $empresa)->get();
+
         $existePreguntaSinRespuesta = Preguntas::where('id_empresa', $empresa)
-        ->where(function ($query) {
-            foreach (range(1, 5) as $puntuacion) {
-                $query->orWhereDoesntHave('posiblesRespuestas', function ($query) use ($puntuacion) {
-                    $query->where('puntuacion', $puntuacion);
-                });
-            }
-        })
-        ->exists(); //TODO como observacion esta consulta podria ir justo despues de iniciar sesion
+            ->where(function ($query) {
+                foreach (range(1, 5) as $puntuacion) {
+                    $query->orWhereDoesntHave('posiblesRespuestas', function ($query) use ($puntuacion) {
+                        $query->where('puntuacion', $puntuacion);
+                    });
+                }
+            })
+            ->exists();
 
         $existePreguntaConRespuesta = !$existePreguntaSinRespuesta;
 
-        // Guardar $existePreguntaConRespuesta en una variable de sesión
+        return inertia::render('panel/Clientes',
+            ['client' => $clientes ,
+            'plantillas'=>$plantillas,
+            'empresaId' => $empresa,
+            'encuesta' => $existePreguntaConRespuesta,
+            ]);
+    }
 
-         return inertia::render('panel/Clientes',
-        ['client' => $clientes ,
-        'plantillas'=>$plantillas,
-        'empresaId' => $empresa,
-        'encuesta' => $existePreguntaConRespuesta,
+
+    public function clientes_search(Request $request)
+    {
+        $busqueda = $request->query('busqueda');
+        $empresaActual = session('empresa'); // Obtén la empresa actual de la sesión
+
+        $clientes = UsuariosClientes::where('id_empresa', $empresaActual)
+            ->where(function ($query) use ($busqueda) {
+                $query->where('nombre_completo', 'like', '%' . $busqueda . '%')
+                    ->orWhere('email', 'like', '%' . $busqueda . '%');
+            })
+            ->get();
+
+       // dd($clientes->toArray());
+
+
+
+        return inertia::render('panel/Clientes', ['client' => $clientes]);
+    }
+
+
+
+    public function create_clientes(Request $request){
+
+        $empresa = session('empresa');
+        $data = $request->all();
+
+        //dd($data);
+
+        $rules = [
+            'nombre_completo' => 'required|string',
+            'email' => 'required|email',
+            'num_telefono' => 'required|string',
+            'nacionalidad' => 'required|string',
+            'num_identificacion' => 'required|string',
+        ];
+
+        $cliente = UsuariosClientes::create([
+            'id_empresa' => $empresa,
+            'nombre_completo' => $request->nombre_completo,
+            'nacionalidad'=> $request->nacionalidad,
+            'ciudad' => $request->ciudad,
+            'email' => $request->email,
+            'num_telefono1' => $request->num_telefono,
+            'num_identificacion' => $request->num_identificacion,
         ]);
+        return redirect()->back();
     }
 
     public function resenas()
@@ -100,22 +160,21 @@ class PanelController extends Controller
             ->with('posiblesRespuestas')
             ->get();
 
-           // dd($preguntas);
-
-         $existePreguntaSinRespuesta = Preguntas::where('id_empresa', $empresa)
-        ->where(function ($query) {
-            foreach (range(1, 5) as $puntuacion) {
-                $query->orWhereDoesntHave('posiblesRespuestas', function ($query) use ($puntuacion) {
-                    $query->where('puntuacion', $puntuacion);
-                });
-            }
-        })
-        ->exists(); //TODO como observacion esta consulta podria ir justo despues de iniciar sesion
-
         /**
+         * Verifica si existe alguna pregunta sin respuesta para una empresa específica.
          *
-         *
+         * @param int $empresa El ID de la empresa.
+         * @return bool Retorna true si existe alguna pregunta sin respuesta, de lo contrario retorna false.
          */
+        $existePreguntaSinRespuesta = Preguntas::where('id_empresa', $empresa)
+            ->where(function ($query) {
+                foreach (range(1, 5) as $puntuacion) {
+                    $query->orWhereDoesntHave('posiblesRespuestas', function ($query) use ($puntuacion) {
+                        $query->where('puntuacion', $puntuacion);
+                    });
+                }
+            })
+            ->exists(); //TODO como observacion esta consulta podria ir justo despues de iniciar sesion
 
         $existePreguntaConRespuesta = !$existePreguntaSinRespuesta;
          //dd($existePreguntaConRespuesta);
@@ -309,10 +368,7 @@ class PanelController extends Controller
         ];
 
         // Intenta encontrar una Resena existente con el id_usuario dado, si no existe, crea una nueva$
-        $resena = Resena::firstOrCreate(
-            ['id_usuario' => $request->id_usuario],
-            $resenaData
-        );
+        $resena = Resena::create($resenaData);
 
         return to_route('showStars',['id_resena' => $resena->id_resena, 'empresa' => $id_empresa]);
     }
@@ -332,7 +388,7 @@ class PanelController extends Controller
             //'waltdmda15@gmail.com
 
            //TODO: Metodo que se encarga de enviar el correo
-            Mail::to('fel123rodriguez@gmail.com')->send(new OrisonContactMailable($cliente->nombre_completo, $url, $titulo, $cuerpo, $logo, $data,$asunto));
+            Mail::to('bot@gmail.com')->send(new OrisonContactMailable($cliente->nombre_completo, $url, $titulo, $cuerpo, $logo, $data,$asunto));
 
         } catch (\Exception $e) {
             \Log::error('Error al enviar correo: ' . $e->getMessage());

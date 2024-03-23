@@ -12,7 +12,8 @@ import { FaStar } from "react-icons/fa";
 import BtnPrimary from "./BtnPrimary";
 import { router } from "@inertiajs/react";
 
-const ModalCrear_PosibleRazon = ({ preguntas }) => {
+const ModalCrear_PosibleRazon = ({ preguntas, estadoEncuesta }) => {
+    console.log(estadoEncuesta);
     const [openModal, setOpenModal] = useState(false);
     const [puntuacion, setPuntuacion] = useState(1);
     const [preguntaId, setPreguntaId] = useState(preguntas[0].id_preguntas);
@@ -43,10 +44,19 @@ const ModalCrear_PosibleRazon = ({ preguntas }) => {
         }));
     }
 
-    console.log(puntuacion);
-    console.log(preguntaId);
+    const todasLasPuntuacionesEstanPresentes = preguntas.every(pregunta => {
+        const puntuaciones = pregunta.posibles_respuestas.map(respuesta => respuesta.puntuacion);
+        for(let i = 1; i <= 5; i++) {
+            if(!puntuaciones.includes(i)) {
+                return false;
+            }
+        }
+        return true;
+    });
 
-    console.log(values);
+    console.log(todasLasPuntuacionesEstanPresentes);
+
+    console.log(preguntas);
     function handleSubmit(e) {
         e.preventDefault();
         console.log(values);
@@ -80,7 +90,7 @@ const ModalCrear_PosibleRazon = ({ preguntas }) => {
                         onSubmit={handleSubmit}
                     >
                         <label htmlFor="">Agregar Posible Razon</label>
-                        <div className=" flex justify-evenly p-1">
+                        <div className=" flex justify-evenly  p-1">
                             <Select
                                 id="preguntaId"
                                 onChange={(e) => {
@@ -91,14 +101,23 @@ const ModalCrear_PosibleRazon = ({ preguntas }) => {
                                     }));
                                 }}
                             >
-                                {preguntas.map((pregunta, preguntaIndex) => (
-                                    <option
-                                        key={preguntaIndex}
-                                        value={pregunta.id_preguntas}
-                                    >
-                                        {pregunta.titulo}
-                                    </option>
-                                ))}
+                                {preguntas.map((pregunta, preguntaIndex) => {
+
+
+                                    const puntuaciones = pregunta.posibles_respuestas.map(respuesta => respuesta.puntuacion);
+
+                                    const todasLasPuntuacionesEstanPresentes = [1, 2, 3, 4, 5].every(puntuacion => puntuaciones.includes(puntuacion));
+
+                                    return (
+                                        <option
+                                            key={preguntaIndex}
+                                            value={pregunta.id_preguntas}
+                                            className={todasLasPuntuacionesEstanPresentes ? 'text-black' : 'text-yellow-500'}
+                                        >
+                                            {pregunta.titulo}
+                                        </option>
+                                    );
+                                })}
                             </Select>
                             <Select
                                 id="puntuacion"
@@ -124,7 +143,7 @@ const ModalCrear_PosibleRazon = ({ preguntas }) => {
                                 required
                                 onChange={handleInputChange}
                                 label="Titulo de la pregunta"
-                                placeholder="Titulo de la pregunta"
+                                placeholder="Titulo de la Posible Razon"
                             />
                             <BtnPrimary
                                 type="submit"

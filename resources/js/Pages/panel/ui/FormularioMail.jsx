@@ -6,7 +6,7 @@ import { HiInformationCircle } from "react-icons/hi";
 import { Alert } from "flowbite-react";
 
 const
-TextAreaMail = ({
+FormularioMail = ({
     plantillaCurrent = {},
     selectedId,
     setAlertcreate,
@@ -108,7 +108,7 @@ TextAreaMail = ({
 
                 <div className="flex flex-col">
                     <label htmlFor="" className="font-extrabold">
-                        Titulo de Mail
+                        Titulo de Email
                     </label>
                     <input
                         className="py-3 px-4 w-[70%] mb-3 rounded-lg"
@@ -227,4 +227,4 @@ TextAreaMail = ({
     );
 };
 
-export default TextAreaMail;
+export default FormularioMail;

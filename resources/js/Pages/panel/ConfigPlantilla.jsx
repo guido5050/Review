@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Menu_Item from "./Menu_Item";
-import TextAreaMail from "./ui/TextAreaMail";
+import FormularioMail from "./ui/FormularioMail";
 import { Label, Select } from "flowbite-react";
 import { RiMailSettingsLine } from "react-icons/ri";
 import { Badge } from "flowbite-react";
-import { HiInformationCircle } from 'react-icons/hi';
-import { Alert } from 'flowbite-react'
+import { HiInformationCircle } from "react-icons/hi";
+import { Alert } from "flowbite-react";
 
 const ConfigPlantilla = ({ auth, logo, razon_social, plantillas }) => {
     const [alertcreate, setAlertcreate] = useState(false);
@@ -26,18 +26,30 @@ const ConfigPlantilla = ({ auth, logo, razon_social, plantillas }) => {
     return (
         <>
             <Menu_Item user={auth.user} logo={logo} razon_social={razon_social}>
-            {alertcreate && (
-                <Alert color="success" icon={HiInformationCircle} className="animate-fade-left animate-ease-in-out ">
-                <span className="font-extrabold text-xl animate-fade animate-ease-in text-center">PLANTILLA CREADA!</span> .
-              </Alert>
-            )}
-            {alertupdate && (
-                <Alert color="info" icon={HiInformationCircle} className="animate-fade-left animate-ease-in-out ">
-                <span className="font-extrabold text-xl animate-fade animate-ease-in text-center">PLANTILLA ACTUALIZADA!</span> .
-              </Alert>
-            )
-
-            }
+                {alertcreate && (
+                    <Alert
+                        color="success"
+                        icon={HiInformationCircle}
+                        className="animate-fade-left animate-ease-in-out "
+                    >
+                        <span className="font-extrabold text-xl animate-fade animate-ease-in text-center">
+                            PLANTILLA CREADA!
+                        </span>{" "}
+                        .
+                    </Alert>
+                )}
+                {alertupdate && (
+                    <Alert
+                        color="info"
+                        icon={HiInformationCircle}
+                        className="animate-fade-left animate-ease-in-out "
+                    >
+                        <span className="font-extrabold text-xl animate-fade animate-ease-in text-center">
+                            PLANTILLA ACTUALIZADA!
+                        </span>{" "}
+                        .
+                    </Alert>
+                )}
 
                 <div className="flex items-center gap-x-1 justify-center p-3">
                     <Badge color="gray">
@@ -78,12 +90,11 @@ const ConfigPlantilla = ({ auth, logo, razon_social, plantillas }) => {
                             ))}
                         </Select>
                     </div>
-                    <TextAreaMail
+                    <FormularioMail
                         key={
                             plantillaCurrent
                                 ? plantillaCurrent.id_correo
-                                :
-                                 "new"
+                                : "new"
                         }
                         plantillaCurrent={plantillaCurrent}
                         selectedId={selectedId}

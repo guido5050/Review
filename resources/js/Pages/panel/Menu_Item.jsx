@@ -10,11 +10,10 @@ import { FcDepartment } from "react-icons/fc";
 import { FiLogOut } from "react-icons/fi";
 import { Head } from "@inertiajs/react";
 import ModalCrearEmpresa from "./ui/ModalCrearEmpresa";
-
-
+import BtnPrimary from "./ui/BtnPrimary";
 
 const navigation = [
-    { name: "Resenas", href: "/panela/resenas", current: true, method: "get" },
+    { name: "Evaluaciones", href: "/panela/resenas", current: true, method: "get" },
     {
         name: "Clientes",
         href: "/panela/clientes",
@@ -41,10 +40,13 @@ export default function Menu_Item({
     const [activeItem, setActiveItem] = useState(
         localStorage.getItem("activeItem") || null
     );
+    const [agregarusuario, setAgregarusuario] = useState(false);
 
     useEffect(() => {
         localStorage.setItem("activeItem", activeItem);
     }, [activeItem]);
+
+    console.log(agregarusuario);
 
     return (
         <div>
@@ -54,7 +56,7 @@ export default function Menu_Item({
                     <link rel="icon" href={`${logo}`} />
                 </Head>
 
-                <Disclosure as="nav" className="bg-gray-800 py-2 shadow-lg ">
+                <Disclosure as="nav" className=" py-2 shadow-lg ">
                     {({ open }) => (
                         <>
                             {/* {btnconfig && <Modal setBtnconfig={setBtnconfig}></Modal>} */}
@@ -97,8 +99,8 @@ export default function Menu_Item({
                                                 className="w-[30px] h-auto px-0.1 rounded-xl"
                                             />
                                         </div> */}
-                                        <div className="hidden sm:ml-6 sm:block">
-                                            <div className="flex space-x-4">
+                                        <div className="sm:ml-6 sm:block ">
+                                            <div className="flex space-x-3 items-center">
                                                 {navigation.map((item) => (
                                                     <Link
                                                         key={item.name}
@@ -113,9 +115,9 @@ export default function Menu_Item({
                                                         className={classNames(
                                                             activeItem ===
                                                                 item.name
-                                                                ? "bg-gray-900 text-white"
-                                                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                                                            "rounded-md px-3 py-2 text-sm font-medium"
+                                                                ? " text-black bg-slate-200 border-b-2 border-black  hover:bg-slate-200 hover:text-black"
+                                                                : "text-gray-500 hover:text-black",
+                                                            "rounded-md px-3 py-2 text-sm font-medium flex items-center justify-center"
                                                         )}
                                                         aria-current={
                                                             activeItem ===
@@ -127,13 +129,14 @@ export default function Menu_Item({
                                                         {item.name}
                                                     </Link>
                                                 ))}
+
                                             </div>
                                         </div>
                                     </div>
                                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                                         {/* Profile dropdown */}
                                         <div className="flex gap-x-3 p-2">
-                                            <h1 className="text-white   py-1 bg-slate-700 font-extrabold flex items-center justify-center rounded-lg px-4 gap-1">
+                                            <h1 className="text-black  py-1 font-extrabold flex items-center justify-center rounded-lg px-4 gap-1">
                                                 {razon_social}{" "}
                                                 <img
                                                     src={logo}
@@ -141,15 +144,15 @@ export default function Menu_Item({
                                                     className="w-[20px] rounded-xl"
                                                 />
                                             </h1>
-                                            <h1 className="text-white bg-slate-700 font-extrabold flex items-center justify-center px-4 rounded-lg gap-1">
+                                            <h1 className="text-black font-extrabold flex items-center justify-center px-4 rounded-lg gap-1">
                                                 {user.nombre_completo}
                                                 <FcBusinessman size={"20px"} />
                                             </h1>
                                             <a
                                                 href="/logout"
-                                                className="text-blue-400 bg-slate-700 font-extrabold flex gap-1 items-center justify-center rounded-lg px-4"
+                                                className="text-blue-700  font-extrabold flex gap-1 items-center justify-center rounded-lg px-4"
                                             >
-                                                cerar sesion
+                                                cerrar sesion
                                                 <FiLogOut />
                                             </a>
                                         </div>
@@ -159,14 +162,14 @@ export default function Menu_Item({
                                             className="relative ml-3"
                                         >
                                             <div>
-                                                <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                                                <Menu.Button className="relative flex rounded-full  text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                                     <span className="absolute -inset-1.5" />
                                                     <span className="sr-only">
                                                         Open user menu
                                                     </span>
                                                     <IoSettingsOutline
                                                         size={"30px"}
-                                                        color={"white"}
+                                                        color={"black"}
                                                         className="animate-pulse"
                                                     />
                                                 </Menu.Button>
