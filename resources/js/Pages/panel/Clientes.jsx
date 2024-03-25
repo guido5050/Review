@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, router } from "@inertiajs/react";
-import { Table, Badge, TextInput } from "flowbite-react";
+import { Table, Badge, TextInput, Select,Label } from "flowbite-react";
 import {
     MdKeyboardDoubleArrowLeft,
     MdKeyboardDoubleArrowRight,
@@ -33,17 +33,29 @@ const Clientes = ({
     const [email, setEmail] = useState(null);
     const [empresa, setEmpresa] = useState(empresaId);
     const [modalCrearClientes, setModalCrearClientes] = useState(true);
+    const [busquedaPor, setBusquedaPor] = useState("Todos");
 
     const [busqueda, setBusqueda] = useState("");
-
+    const handleSelectChange = (event) => {
+        setBusquedaPor(event.target.value);
+        router.get(
+            "/panela/clientes",
+            { busqueda: busqueda, busquedaPor: event.target.value },
+            { preserveState: true }
+        );
+    };
     const handleSearchChange = (event) => {
         const value = event.target.value;
         setBusqueda(value);
 
-        router.get("/panela/clientes", {busqueda: value},{preserveState: true});
+        router.get(
+            "/panela/clientes",
+            { busqueda: value, busquedaPor: event.target.value },
+            { preserveState: true }
+        );
     };
 
-    console.log(modalCrearClientes);
+    console.log(client);
     if (!client) return "Cargando...";
 
     return (
@@ -64,11 +76,10 @@ const Clientes = ({
                             nombreCliente={nombreCliente}
                         />
                     )}
-
-                    <div className="flex overflow-x-auto sm:justify-center mb-7">
+                    <div className="flex overflow-x-auto sm:justify-center mb-7 ">
                         {client.prev_page_url && (
                             <Link
-                                href={client.prev_page_url}
+                                href={`${client.prev_page_url}${client.prev_page_url.includes('?') ? '&' : '?'}busqueda=${busqueda}&busquedaPor=${busquedaPor}`}
                                 method="get"
                                 preserveState
                                 className="px-4 py-2 flex gap-x-2 items-center border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
@@ -78,7 +89,7 @@ const Clientes = ({
                         )}
                         {client.next_page_url && (
                             <Link
-                                href={client.next_page_url}
+                                href={`${client.next_page_url}${client.next_page_url.includes('?') ? '&' : '?'}busqueda=${busqueda}&busquedaPor=${busquedaPor}`}
                                 className="ml-3 px-4 flex gap-x-2  items-center py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                                 method="get"
                                 preserveState
@@ -89,7 +100,7 @@ const Clientes = ({
                         )}
                     </div>
 
-                    <div className=" flex  justify-between items-center p-5 ">
+                    <div className=" flex  justify-between items-center p-5  ">
                         <div>
                             {modalCrearClientes && <ModalCrearClientes />}
                         </div>
@@ -103,6 +114,20 @@ const Clientes = ({
                                 onChange={handleSearchChange}
                             />
                         </div>
+                        <div className="flex items-center gap-x-1">
+                            <Label>
+                                Buscar por:
+                            </Label>
+                            <Select
+                                value={busquedaPor}
+                                onChange={handleSelectChange}
+                            >
+                                <option value="">Todos</option>
+                                <option value="correo">Con correo</option>
+                                <option value="sinCorreo">Sin correo</option>
+                            </Select>
+                        </div>
+
                         <div className="flex gap-3 ">
                             <Badge color="info" size="sm">
                                 <p>Página actual: {client.current_page}</p>

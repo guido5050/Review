@@ -43,8 +43,15 @@ class PanelController extends Controller
     {
         $empresa = session('empresa');
         $busqueda = $request->query('busqueda');
+        $busquedaPor = $request->query('busquedaPor');
 
         $query = UsuariosClientes::where('id_empresa', $empresa);
+
+        if ($busquedaPor === 'correo') {
+            $query->whereNotNull('email');
+        } else if ($busquedaPor === 'sinCorreo') {
+            $query->whereNull('email');
+        }
 
         if ($busqueda) {
             $query->where(function ($query) use ($busqueda) {

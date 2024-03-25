@@ -58,7 +58,7 @@ const ConfigEncuesta = ({
             logo={logo}
             AppName={AppName}
         >
-            <div className="p-6 ">
+            <div className="p-6 animate-fade-down animate-ease-out ">
                 <div className="flex items-center justify-start gap-x-2 ">
                     {preguntas && preguntas.length > 0 && (
                         <ModalCrear_PosibleRazon preguntas={preguntas} estadoEncuesta={estadoEncuesta} />
