@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { router } from "@inertiajs/react";
-import { Accordion, Alert } from "flowbite-react";
+import { Accordion, Alert, } from "flowbite-react";
 import { HiInformationCircle } from "react-icons/hi";
 import Menu_Item from "./Menu_Item";
 import { FaQuestionCircle } from "react-icons/fa";
@@ -9,6 +9,7 @@ import { FaCheck } from "react-icons/fa";
 import BtnPrimary from "./ui/BtnPrimary";
 import ModalCrear_PosibleRazon from "./ui/ModalCrear_PosibleRazon";
 import ModalCrearPregunta from "./ui/ModalCrearPregunta";
+
 
 const ConfigEncuesta = ({
     auth,
@@ -60,11 +61,13 @@ const ConfigEncuesta = ({
         >
             <div className="p-6 animate-fade-down animate-ease-out ">
                 <div className="flex items-center justify-start gap-x-2 ">
-                    {preguntas && preguntas.length > 0 && (
-                        <ModalCrear_PosibleRazon preguntas={preguntas} estadoEncuesta={estadoEncuesta} />
-                    )}
-
                     <ModalCrearPregunta />
+                    {preguntas && preguntas.length > 0 && (
+                        <ModalCrear_PosibleRazon
+                            preguntas={preguntas}
+                            estadoEncuesta={estadoEncuesta}
+                        />
+                    )}
                 </div>
                 {estadoEncuesta === false && (
                     <Alert color="failure" icon={HiInformationCircle}>
@@ -82,11 +85,12 @@ const ConfigEncuesta = ({
                                 <Accordion.Title>
                                     <div
                                         className={`flex items-center gap-x-2 ${
-                                            ![2, 3, 4, 5].every(
-                                                (puntuacion) =>
-                                                    pregunta.posibles_respuestas.some(
-                                                        (respuesta) => respuesta.puntuacion === puntuacion
-                                                    )
+                                            ![2, 3, 4, 5].every((puntuacion) =>
+                                                pregunta.posibles_respuestas.some(
+                                                    (respuesta) =>
+                                                        respuesta.puntuacion ===
+                                                        puntuacion
+                                                )
                                             )
                                                 ? "text-yellow-500"
                                                 : ""

@@ -66,8 +66,8 @@ FormularioMail = ({
                     <RiMailAddFill className="mb-1 mt-3" size={"38px"} />
                 </label>
                 <div className="flex flex-col">
-                    <label htmlFor="" className="font-extrabold">
-                        Nombre de la plantilla de correo
+                    <label htmlFor="" className="font-extrabold" title="Nombre del archivo de la plantilla de correo para identificarla">
+                        Nombre de la plantilla de correo(#identificador)
                     </label>
                     <input
                         className="py-3 px-4 w-[70%] mb-3 rounded-lg"

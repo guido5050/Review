@@ -4,6 +4,7 @@ import { Table, Badge } from "flowbite-react";
 import { Link } from "@inertiajs/react";
 import { FaStar } from "react-icons/fa";
 import { TbEyeStar } from "react-icons/tb";
+import { Rating } from "flowbite-react";
 
 const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
     return (
@@ -20,7 +21,7 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                             <Table.HeadCell>ID#</Table.HeadCell>
                             <Table.HeadCell>Ref</Table.HeadCell>
                             <Table.HeadCell>Nombre Usuario</Table.HeadCell>
-                            <Table.HeadCell></Table.HeadCell>
+                            {/* <Table.HeadCell></Table.HeadCell> */}
                             <Table.HeadCell>Puntuación</Table.HeadCell>
                             <Table.HeadCell>Comentario Final</Table.HeadCell>
                             <Table.HeadCell>Estado</Table.HeadCell>
@@ -38,20 +39,29 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                                     <Table.Cell>{resena.id_reserva}</Table.Cell>
                                     <Table.Cell>
                                         {resena.usuarios_clientes
-                                            ? resena.usuarios_clientes.nombre_completo
+                                            ? resena.usuarios_clientes
+                                                  .nombre_completo
                                             : "No definido"}
                                     </Table.Cell>
-                                    <Table.Cell className="font-extrabold flex items-center gap-x-2">
+                                    {/* <Table.Cell className="font-extrabold flex items-center gap-x-2">
                                         <FaStar size={"25px"} />
-                                    </Table.Cell>
+                                    </Table.Cell> */}
                                     <Table.Cell className="font-extrabold text-black whitespace-nowrap ">
-                                        {resena.Puntuacion_global
-                                            ? resena.Puntuacion_global
-                                            : "no puntuacion"}
+                                        <Rating>
+                                            <Rating.Star />
+                                            <p className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                {resena.Puntuacion_global
+                                                    ? resena.Puntuacion_global
+                                                    : "no puntuacion"}
+
+                                            </p>
+                                        </Rating>
                                     </Table.Cell>
                                     <Table.Cell className="font-extrabold text-black whitespace-normal">
                                         <p className="w-64 overflow-hidden line-clamp-2">
-                                            {resena.comentario ? resena.comentario : "no-comentario"}
+                                            {resena.comentario
+                                                ? resena.comentario
+                                                : "no-comentario"}
                                         </p>
                                     </Table.Cell>
 
@@ -60,9 +70,15 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                                         estados[resena.estado][0] ? (
                                             <strong
                                                 className="whitespace-nowrap"
-                                                title={estados[resena.estado][0].descripcion}
+                                                title={
+                                                    estados[resena.estado][0]
+                                                        .descripcion
+                                                }
                                             >
-                                                {estados[resena.estado][0].estado}
+                                                {
+                                                    estados[resena.estado][0]
+                                                        .estado
+                                                }
                                             </strong>
                                         ) : (
                                             "Estado no definido"

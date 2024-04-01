@@ -53,7 +53,7 @@ const ModalCrearClientes = () => {
                 onClick={() => setOpenModal(true)}
                 className={"bg-blue-700"}
             >
-                Agregar usuario
+                Agregar Cliente
             </BtnPrimary>
             <Modal show={openModal} size="xl" popup onClose={onCloseModal}>
                 <Modal.Header />
@@ -128,7 +128,7 @@ const ModalCrearClientes = () => {
                             </div>
 
                             <BtnPrimary  className={"bg-blue-700"}  type="submit">
-                                Agregar usuario
+                                Agregar Cliente
                             </BtnPrimary>
                         </form>
                     </div>

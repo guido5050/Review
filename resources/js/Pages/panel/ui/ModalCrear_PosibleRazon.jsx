@@ -6,6 +6,7 @@ import {
     Modal,
     TextInput,
     Select,
+    Rating,
 } from "flowbite-react";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
@@ -44,10 +45,12 @@ const ModalCrear_PosibleRazon = ({ preguntas, estadoEncuesta }) => {
         }));
     }
 
-    const todasLasPuntuacionesEstanPresentes = preguntas.every(pregunta => {
-        const puntuaciones = pregunta.posibles_respuestas.map(respuesta => respuesta.puntuacion);
-        for(let i = 1; i <= 5; i++) {
-            if(!puntuaciones.includes(i)) {
+    const todasLasPuntuacionesEstanPresentes = preguntas.every((pregunta) => {
+        const puntuaciones = pregunta.posibles_respuestas.map(
+            (respuesta) => respuesta.puntuacion
+        );
+        for (let i = 1; i <= 5; i++) {
+            if (!puntuaciones.includes(i)) {
                 return false;
             }
         }
@@ -90,56 +93,108 @@ const ModalCrear_PosibleRazon = ({ preguntas, estadoEncuesta }) => {
                         onSubmit={handleSubmit}
                     >
                         <label htmlFor="">Agregar Posible Razon</label>
-                        <div className=" flex justify-evenly  p-1">
-                            <Select
-                                id="preguntaId"
-                                onChange={(e) => {
-                                    setPreguntaId(e.target.value);
-                                    setValues((values) => ({
-                                        ...values,
-                                        preguntaId: Number(e.target.value),
-                                    }));
-                                }}
-                            >
-                                {preguntas.map((pregunta, preguntaIndex) => {
+                        <div className=" flex justify-evenly flex-col  p-1 gap-y-2">
+                            <div>
+                                <Label htmlFor="preguntaId" value=" Seleccione Pregunta" />
+                                <Select
+                                    id="preguntaId"
+                                    onChange={(e) => {
+                                        setPreguntaId(e.target.value);
+                                        setValues((values) => ({
+                                            ...values,
+                                            preguntaId: Number(e.target.value),
+                                        }));
+                                    }}
+                                >
+                                    {preguntas.map(
+                                        (pregunta, preguntaIndex) => {
+                                            const puntuaciones =
+                                                pregunta.posibles_respuestas.map(
+                                                    (respuesta) =>
+                                                        respuesta.puntuacion
+                                                );
 
+                                            const todasLasPuntuacionesEstanPresentes =
+                                                [1, 2, 3, 4, 5].every(
+                                                    (puntuacion) =>
+                                                        puntuaciones.includes(
+                                                            puntuacion
+                                                        )
+                                                );
 
-                                    const puntuaciones = pregunta.posibles_respuestas.map(respuesta => respuesta.puntuacion);
+                                            return (
+                                                <option
+                                                    key={preguntaIndex}
+                                                    value={
+                                                        pregunta.id_preguntas
+                                                    }
+                                                    className={
+                                                        todasLasPuntuacionesEstanPresentes
+                                                            ? "text-black"
+                                                            : "text-yellow-500"
+                                                    }
+                                                >
+                                                    {pregunta.titulo}
+                                                </option>
+                                            );
+                                        }
+                                    )}
+                                </Select>
+                            </div>
 
-                                    const todasLasPuntuacionesEstanPresentes = [1, 2, 3, 4, 5].every(puntuacion => puntuaciones.includes(puntuacion));
+                            <div>
+                                <Label htmlFor="puntuacion" value="Seleccione puntuacion" />
+                                <Select
+                                    id="puntuacion"
+                                    className="bg-white text-black border-gray-300 rounded-md"
+                                    onChange={(e) => {
+                                        setPuntuacion(e.target.value);
+                                        setValues((values) => ({
+                                            ...values,
+                                            puntuacion: e.target.value,
+                                        }));
+                                    }}
+                                >
+                                    {/* Encuentra la pregunta seleccionada */}
+                                    {(() => {
+                                        const preguntaSeleccionada = preguntas.find(
+                                            (pregunta) => pregunta.id_preguntas === preguntaId
+                                        );
 
-                                    return (
-                                        <option
-                                            key={preguntaIndex}
-                                            value={pregunta.id_preguntas}
-                                            className={todasLasPuntuacionesEstanPresentes ? 'text-black' : 'text-yellow-500'}
-                                        >
-                                            {pregunta.titulo}
-                                        </option>
-                                    );
-                                })}
-                            </Select>
-                            <Select
-                                id="puntuacion"
-                                onChange={(e) => {
-                                    setPuntuacion(e.target.value);
-                                    setValues((values) => ({
-                                        ...values,
-                                        puntuacion: e.target.value,
-                                    }));
-                                }}
-                            >
-                                <option value=" 1">puntuacion de 1</option>
-                                <option value="2">puntuacion de 2 </option>
-                                <option value="3">puntuacion de 3 </option>
-                                <option value="4">puntuacion de 4 </option>
-                                <option value="5">puntuacion de 5</option>
-                            </Select>
+                                        if (!preguntaSeleccionada) {
+                                            // Si no se encontró ninguna pregunta seleccionada, devuelve un mensaje de error
+                                            return <option>No se encontró ninguna pregunta con el id {preguntaId}</option>;
+                                        }
+
+                                        /* Crea un conjunto de todas las puntuaciones que tienen al menos una respuesta */
+                                        const puntuacionesConRespuestas = new Set(
+                                            preguntaSeleccionada.posibles_respuestas.map((respuesta) =>
+                                                Number(respuesta.puntuacion)
+                                            )
+                                        );
+
+                                        /* Genera las opciones de puntuación */
+                                        return [1, 2, 3, 4, 5].map((puntuacion) => (
+                                            <option
+                                                key={puntuacion}
+                                                value={puntuacion}
+                                                className={
+                                                    puntuacionesConRespuestas.has(puntuacion)
+                                                        ? "text-black"
+                                                        : "text-yellow-500"
+                                                }
+                                            >
+                                                puntuacion {Array(puntuacion).fill('⭐').join('')} {puntuacion}
+                                            </option>
+                                        ));
+                                    })()}
+                                </Select>
+                            </div>
                         </div>
                         <div>
+                            <Label htmlFor="titulo" value="Escriba el titulo de la razon" />
                             <TextInput
                                 id="titulo"
-                                sizing={"lg"}
                                 required
                                 onChange={handleInputChange}
                                 label="Titulo de la pregunta"
