@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { router } from "@inertiajs/react";
-import { Accordion, Alert, } from "flowbite-react";
+import { Accordion, Alert } from "flowbite-react";
 import { HiInformationCircle } from "react-icons/hi";
 import Menu_Item from "./Menu_Item";
 import { FaQuestionCircle } from "react-icons/fa";
@@ -9,7 +9,6 @@ import { FaCheck } from "react-icons/fa";
 import BtnPrimary from "./ui/BtnPrimary";
 import ModalCrear_PosibleRazon from "./ui/ModalCrear_PosibleRazon";
 import ModalCrearPregunta from "./ui/ModalCrearPregunta";
-
 
 const ConfigEncuesta = ({
     auth,
@@ -75,6 +74,16 @@ const ConfigEncuesta = ({
                         Completa el cuestionario debe existir al menos una
                         posible razon en cada puntuacion completa las preguntas
                         que estan en color amarillo
+                    </Alert>
+                )}
+                {estadoEncuesta === true && (
+                    <Alert color="info" icon={HiInformationCircle}>
+                        <span className="font-medium">Informacion!</span>{" "}
+                        Completa el cuestionario debe existir al menos una
+                        posible razon en cada puntuacion, por
+                        cada una es deicir que por cada
+                        puntuacion del 1 al 5 debe existir al menos una posible
+                        razon que el cliente pueda seleccionar importante! asegurar que todas las posibles respuestas esten en check al menos una
                     </Alert>
                 )}
 

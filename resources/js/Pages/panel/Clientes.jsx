@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Link, router } from "@inertiajs/react";
-import { Table, Badge, TextInput, Select,Label } from "flowbite-react";
+import { Table, Badge, TextInput, Select, Label } from "flowbite-react";
+import { BsCheckLg } from "react-icons/bs";
+import { BiX } from "react-icons/bi";
+
 import {
     MdKeyboardDoubleArrowLeft,
     MdKeyboardDoubleArrowRight,
@@ -33,9 +36,11 @@ const Clientes = ({
     const [email, setEmail] = useState(null);
     const [empresa, setEmpresa] = useState(empresaId);
     const [modalCrearClientes, setModalCrearClientes] = useState(true);
-    const [busquedaPor, setBusquedaPor] = useState("Todos");
 
+    const [busquedaPor, setBusquedaPor] = useState("Todos");
     const [busqueda, setBusqueda] = useState("");
+
+
     const handleSelectChange = (event) => {
         setBusquedaPor(event.target.value);
         router.get(
@@ -79,7 +84,11 @@ const Clientes = ({
                     <div className="flex overflow-x-auto sm:justify-center mb-7 ">
                         {client.prev_page_url && (
                             <Link
-                                href={`${client.prev_page_url}${client.prev_page_url.includes('?') ? '&' : '?'}busqueda=${busqueda}&busquedaPor=${busquedaPor}`}
+                                href={`${client.prev_page_url}${
+                                    client.prev_page_url.includes("?")
+                                        ? "&"
+                                        : "?"
+                                }busqueda=${busqueda}&busquedaPor=${busquedaPor}`}
                                 method="get"
                                 preserveState
                                 className="px-4 py-2 flex gap-x-2 items-center border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
@@ -89,7 +98,11 @@ const Clientes = ({
                         )}
                         {client.next_page_url && (
                             <Link
-                                href={`${client.next_page_url}${client.next_page_url.includes('?') ? '&' : '?'}busqueda=${busqueda}&busquedaPor=${busquedaPor}`}
+                                href={`${client.next_page_url}${
+                                    client.next_page_url.includes("?")
+                                        ? "&"
+                                        : "?"
+                                }busqueda=${busqueda}&busquedaPor=${busquedaPor}`}
                                 className="ml-3 px-4 flex gap-x-2  items-center py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                                 method="get"
                                 preserveState
@@ -115,9 +128,7 @@ const Clientes = ({
                             />
                         </div>
                         <div className="flex items-center gap-x-1">
-                            <Label>
-                                Buscar por:
-                            </Label>
+                            <Label>Buscar por:</Label>
                             <Select
                                 value={busquedaPor}
                                 onChange={handleSelectChange}
@@ -160,11 +171,15 @@ const Clientes = ({
                                         <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                             {cliente.nombre_completo}
                                         </Table.Cell>
-                                        <Table.Cell>
-                                            {cliente.email
-                                                ? cliente.email
-                                                : "No email"}
+                                        <Table.Cell className={cliente.email ? '' : 'text-red-500 flex items-center'}>
+                                            {cliente.email ? cliente.email : (
+                                                <>
+                                                    No email
+                                                    <BiX  size="20px"/>
+                                                </>
+                                            )}
                                         </Table.Cell>
+
                                         <Table.Cell>
                                             {cliente.nacionalidad
                                                 ? cliente.nacionalidad
@@ -173,7 +188,7 @@ const Clientes = ({
                                         <Table.Cell>
                                             {encuesta ? (
                                                 <BtnPrimary
-                                                    className="bg-blue-600 hover:bg-blue-500 flex items-center"
+                                                   className="bg-blue-600 hover:bg-blue-500 flex items-center"
                                                     onClick={() => {
                                                         setModalOpen(true);
                                                         setClienteId(

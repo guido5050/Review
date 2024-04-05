@@ -143,10 +143,12 @@ const ModalCrear_PosibleRazon = ({ preguntas, estadoEncuesta }) => {
                             </div>
 
                             <div>
-                                <Label htmlFor="puntuacion" value="Seleccione puntuacion" />
+                                <Label
+                                    htmlFor="preguntaId"
+                                    value="Seleccione puntuacion"
+                                />
                                 <Select
                                     id="puntuacion"
-                                    className="bg-white text-black border-gray-300 rounded-md"
                                     onChange={(e) => {
                                         setPuntuacion(e.target.value);
                                         setValues((values) => ({
@@ -155,39 +157,17 @@ const ModalCrear_PosibleRazon = ({ preguntas, estadoEncuesta }) => {
                                         }));
                                     }}
                                 >
-                                    {/* Encuentra la pregunta seleccionada */}
-                                    {(() => {
-                                        const preguntaSeleccionada = preguntas.find(
-                                            (pregunta) => pregunta.id_preguntas === preguntaId
-                                        );
-
-                                        if (!preguntaSeleccionada) {
-                                            // Si no se encontró ninguna pregunta seleccionada, devuelve un mensaje de error
-                                            return <option>No se encontró ninguna pregunta con el id {preguntaId}</option>;
-                                        }
-
-                                        /* Crea un conjunto de todas las puntuaciones que tienen al menos una respuesta */
-                                        const puntuacionesConRespuestas = new Set(
-                                            preguntaSeleccionada.posibles_respuestas.map((respuesta) =>
-                                                Number(respuesta.puntuacion)
-                                            )
-                                        );
-
-                                        /* Genera las opciones de puntuación */
-                                        return [1, 2, 3, 4, 5].map((puntuacion) => (
-                                            <option
-                                                key={puntuacion}
-                                                value={puntuacion}
-                                                className={
-                                                    puntuacionesConRespuestas.has(puntuacion)
-                                                        ? "text-black"
-                                                        : "text-yellow-500"
-                                                }
-                                            >
-                                                puntuacion {Array(puntuacion).fill('⭐').join('')} {puntuacion}
-                                            </option>
-                                        ));
-                                    })()}
+                                    <option value="1"> puntuacion ⭐1</option>
+                                    <option value="2">puntuacion ⭐⭐ 2</option>
+                                    <option value="3">
+                                        puntuacion ⭐⭐⭐ 3
+                                    </option>
+                                    <option value="4">
+                                        puntuacion ⭐⭐⭐⭐ 4
+                                    </option>
+                                    <option value="5">
+                                        puntuacion ⭐⭐⭐⭐⭐ 5
+                                    </option>
                                 </Select>
                             </div>
                         </div>

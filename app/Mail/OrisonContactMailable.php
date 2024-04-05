@@ -51,11 +51,8 @@ class OrisonContactMailable extends Mailable
      */
     public function envelope(): Envelope
     {
-        //var_dump($this->asunto); // Agrega esta línea
-
        $email = session('email_empresa'); // Asegúrate de que 'email_empresa' es la clave correcta para el correo electrónico de la empresa en tu sesión
-
-    return new Envelope(
+       return new Envelope(
         from: New Address($email, session('razon_social')), // Utiliza el correo electrónico de la empresa
         subject: $this->asunto, //Asunto dinamico
     );

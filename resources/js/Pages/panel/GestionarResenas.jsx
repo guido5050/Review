@@ -2,11 +2,6 @@ import React from "react";
 import Menu_Item from "./Menu_Item";
 import BtnPrimary from "./ui/BtnPrimary";
 import { Table, Card, Badge } from "flowbite-react";
-
-import { BiMessageRoundedDots } from "react-icons/bi";
-import { BiUser } from "react-icons/bi";
-import { CiStar } from "react-icons/ci";
-import { TbMessageStar } from "react-icons/tb";
 import { FaStar } from "react-icons/fa";
 import { FaRegCommentDots } from "react-icons/fa";
 import { FaEnvelopeOpenText } from "react-icons/fa";
@@ -29,6 +24,7 @@ const GestionarResenas = ({
     idresena,
     comentarios,
     reserva,
+    fecha,
 }) => {
     // Transforma respuestas en un objeto donde cada clave es un título de pregunta
     // y cada valor es un objeto que contiene un array de respuestas y la puntuación total para esa pregunta
@@ -56,47 +52,59 @@ const GestionarResenas = ({
             <Menu_Item user={auth.user} logo={logo} razon_social={razon_social}>
                 <div className="p-8 flex gap-y-2 justify-center mt-2 animate-fade-up animate-ease-in-out flex-col">
                     <Card>
-                        <div className=" flex  gap-x-4">
-                            <div className="bg-blue-600 rounded-lg w-[100px]">
-                                <p
-                                    className="font-extrabold text-[50px] p-3 text-center  rounded-lg cursor-pointer"
-                                    title="puntuacion del cliente al finalizar la reseña"
-                                >
-                                    <strong className="text-white font-extrabold ">
-                                        {puntuacion}
-                                    </strong>
-                                </p>
+                        <div className=" flex  gap-x-4 justify-between">
+                            <div className="flex gap-x-3 items-center">
+                                <div className="bg-blue-600 rounded-lg w-[100px]">
+                                    <p
+                                        className="font-extrabold text-[50px] p-3 text-center  rounded-lg cursor-pointer"
+                                        title="puntuacion del cliente al finalizar la reseña"
+                                    >
+                                        <strong className="text-white font-extrabold ">
+                                            {puntuacion}
+                                        </strong>
+                                    </p>
+                                </div>
+                                <div className="flex flex-col gap-y-1">
+                                    <p className="text-black font-semibold">
+                                        {nombre}
+                                    </p>
+                                    <p>
+                                        {"Numero de reserva:"}{" "}
+                                        <span className="text-blue-800 font-extrabold">
+                                            {reserva}
+                                        </span>
+                                    </p>
+                                    <p>
+                                        {"Numero de reseña:"}{" "}
+                                        <span className="text-blue-800 font-extrabold">
+                                            {idresena}
+                                        </span>
+                                    </p>
+                                </div>
                             </div>
-                            <div className="flex flex-col gap-y-1">
-                                <p className="text-black font-semibold">
-                                    {nombre}
-                                </p>
-                                <p>
-                                    {"Numero de reserva:"}{" "}
-                                    <span className="text-blue-800 font-extrabold">{reserva}</span>
-                                </p>
-                                <p>
-                                    {"Numero de reseña:"}{" "}
-                                    <span className="text-blue-800 font-extrabold">{idresena}</span>
-                                </p>
+                            <div className="flex items-center gap-x-2 self-start font-extrabold">
+                                <BsCalendar2Date />
+                                <span>
+                                    {new Date(fecha).toLocaleDateString()}
+                                </span>
                             </div>
                         </div>
-                        <hr className="border-t border-gray-200 my-4" /> {/* Aquí está la línea */}
-
+                        <hr className="border-t border-gray-200 my-4" />{" "}
+                        {/* Aquí está la línea */}
                         <div className="flex items-center gap-x-1 text-xl">
-                            <p className="font-extrabold cursor-pointer" title="comentario dejado por el cliente al finalizar la encuesta">
+                            <p
+                                className="font-extrabold cursor-pointer"
+                                title="comentario dejado por el cliente al finalizar la encuesta"
+                            >-
                                 {`Comentario:`}
 
-                                <strong className="text-gray-500" >
+                                <strong className="text-gray-500">
                                     {comentario
                                         ? comentario
                                         : "Reseña no terminada"}
-
                                 </strong>
                             </p>
                         </div>
-
-
                     </Card>
 
                     <div>

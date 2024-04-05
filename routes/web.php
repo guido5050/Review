@@ -9,6 +9,7 @@ use App\Http\Controllers\PanelController;
 use App\Http\Controllers\config_company;
 use App\Http\Controllers\logincontrollerumpleados;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\Evaluaciones_Clientes;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,16 @@ Route::post('/panela/usuarios/update',[PanelController::class,'update'])->name('
 Route::post('/panela/usuarios/roles/create',[PanelController::class,'create_roles'])->name('create_role')->middleware('auth:empleados');
 Route::post('/panela/usuarios/roles/update',[PanelController::class,'update_roles'])->name('update_roles')->middleware('auth:empleados');
 Route::delete('/panela/usuarios/{id_usuario}',[PanelController::class,'delete'])->name('delete')->middleware('auth:empleados');//Elimina usuarios
+
+//TODO:Rutas de Evaluaciones_clientes
+Route::middleware('auth:empleados')->group(function () {
+    Route::get('/panela/evaluaciones_clientes', [Evaluaciones_Clientes::class, 'Evaluacion_clientes'])->name('evaluacion.clientes');
+    
+
+
+});
+
+
 
 
 

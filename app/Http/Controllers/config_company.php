@@ -18,7 +18,7 @@ public function datos_empresas(){
 
 	public function show_main_view()
 	{
-        $empresa = session('empresa'); 
+        $empresa = session('empresa');
 
 		$config_current = \App\Models\parametro::where('id','=',$empresa)->first();
 		// return view('config_company')->with('config',$config_current);
@@ -38,7 +38,7 @@ public function datos_empresas(){
  */
 public function store_data(Request $data)
 {
-  ///  dd("entro------");
+   //dd("entro------");
     // Get the company id from the session
     $id = session('empresa');
 

@@ -12,16 +12,6 @@ import { Head } from "@inertiajs/react";
 import ModalCrearEmpresa from "./ui/ModalCrearEmpresa";
 import BtnPrimary from "./ui/BtnPrimary";
 
-const navigation = [
-    { name: "Evaluaciones", href: "/panela/resenas", current: true, method: "get" },
-    {
-        name: "Clientes",
-        href: "/panela/clientes",
-        current: false,
-        method: "get",
-    },
-];
-
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
@@ -33,6 +23,26 @@ export default function Menu_Item({
     razon_social,
     AppName,
 }) {
+    const navigation = [
+        {
+            name: `Evaluaciones a: ${razon_social} `,
+            href: "/panela/resenas",
+            current: true,
+            method: "get",
+        },
+        {
+            name: "Evaluaciones a clientes",
+            href: "/panela/evaluaciones_clientes",
+            current: false,
+        },
+        {
+            name: "Clientes",
+            href: "/panela/clientes",
+            current: false,
+            method: "get",
+        },
+    ];
+
     // console.log(logo);
 
     //const [ModalEmail, setModalEmail] = useState(false);
@@ -129,7 +139,6 @@ export default function Menu_Item({
                                                         {item.name}
                                                     </Link>
                                                 ))}
-
                                             </div>
                                         </div>
                                     </div>

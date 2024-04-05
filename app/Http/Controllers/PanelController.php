@@ -206,11 +206,13 @@ class PanelController extends Controller
             'puntuacion' => $puntuacion,
             'estado' => true,
         ]);
+
+
         return to_route('encuesta');
 
     }
 
-    public function crear_pregunta(Request $request) //TODO: Metodo que crea preguntas
+    public function crear_pregunta(Request $request) //TODO: Metodo que crea preguntas(VISTA DE ADMIN)
     {
         $empresa = session('empresa');
       /// dd($request->toArray(), $empresa);
@@ -219,6 +221,7 @@ class PanelController extends Controller
             'id_empresa' => $empresa,
             'titulo' => $request->titulo,
         ]);
+
         return to_route('encuesta');
     }
 
@@ -334,6 +337,7 @@ class PanelController extends Controller
         $puntuacion= $resena->Puntuacion_global;
         $id_resena = $resena->id_resena;
         $reserva = $resena->id_reserva;
+        $fecha = $resena->fecha;
         //dd($id_resena);
         // Si no se encontró ninguna reseña, redirige de vuelta con un mensaje de error
         if (!$resena) {
@@ -359,6 +363,7 @@ class PanelController extends Controller
         'idresena' =>   $id_resena,
         'comentarios' => $Comentarios,
         'reserva' => $reserva,
+        'fecha' => $fecha,
         ]);
     }
 
@@ -393,9 +398,10 @@ class PanelController extends Controller
             $cuerpo = $correo_current->cuerpo;
             $data = RedesSociales::where('id_empresa', session('empresa'))->get()->toArray();
             //'waltdmda15@gmail.com
-
+            $email= $cliente->email;
+            //dd($email);
            //TODO: Metodo que se encarga de enviar el correo
-            Mail::to('bot@gmail.com')->send(new OrisonContactMailable($cliente->nombre_completo, $url, $titulo, $cuerpo, $logo, $data,$asunto));
+            Mail::to($email)->send(new OrisonContactMailable($cliente->nombre_completo, $url, $titulo, $cuerpo, $logo, $data,$asunto));
 
         } catch (\Exception $e) {
             \Log::error('Error al enviar correo: ' . $e->getMessage());
