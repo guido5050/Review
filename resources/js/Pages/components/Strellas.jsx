@@ -4,6 +4,8 @@ import { CiStar } from "react-icons/ci";
 import { GiRoundStar } from "react-icons/gi";
 
 
+
+
 const Strellas = ({ texto, textos, handleStarClick, currentScore }) => {
     // console.log(currentScore);
 

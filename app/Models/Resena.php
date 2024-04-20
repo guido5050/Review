@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\UsuariosClientes;
+use App\Models\Usuarios_empleado;
 
 class Resena extends Model
 {
@@ -23,6 +24,7 @@ class Resena extends Model
     'id_moderador',
     'fecha',
     'estado',
+    'publicado',
     'Puntuacion_global',
    ];
 /**
@@ -30,8 +32,8 @@ class Resena extends Model
  * se espesifican las llaves id de las tablas en este caso si... puesto que las tablas no han sido creadas por migraciones
  * por ejemplo si usaramos la tipica de tabla de larvel User y siguiendo la nomenclatura de laravel el entenderia que el id de la tabla user es 'id'
  *
- *`'id_usuario'`: Especifica que la clave foránea en la tabla `resenas` es `id_usuario`.
- * `'id_usuario'`: Indica que la clave primaria en la tabla `usuarios` es también `id_usuario`.
+ *`'id_usuario'`  : Especifica que la clave foránea en la tabla `resenas` es `id_usuario`.
+ * `'id_cliente'` : Indica que la clave primaria en la tabla `usuarios` es también `id_usuario`.
  */
 
  //Aqui hacemos el motodo de user usando el tipado decimos que devuelve BelongTo
@@ -39,5 +41,10 @@ class Resena extends Model
  public function UsuariosClientes(): BelongsTo
  {
      return $this->belongsTo(UsuariosClientes::class, 'id_usuario', 'id_cliente');
+ }
+
+ public function UsuarioModerador(): BelongsTo
+ {
+     return $this->belongsTo(Usuarios_empleado::class, 'id_moderador', 'id_empleados');
  }
 }

@@ -66,6 +66,7 @@ class OrisonContactMailable extends Mailable
      * la funcion content() retorna la vista
      * que se va a enviar
      */
+    
     public function build()
     {
        // dd($this->nombre, $this->url, $this->titulo, $this->cuerpo, $this->logo);

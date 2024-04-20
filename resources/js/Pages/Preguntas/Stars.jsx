@@ -6,6 +6,7 @@ import Strellas from "../components/Strellas";
 import Titulo from "../components/Titulo";
 
 export default function Stars({ limpieza, preguntas, idresena }) {
+    console.log(limpieza);
     const [posiblesrespuestas, setPosiblesrespuestas] = useState(preguntas);
     const [id, setId] = useState(idresena);
     const [currentScore, setCurrentScore] = useState(0);
@@ -87,13 +88,14 @@ export default function Stars({ limpieza, preguntas, idresena }) {
         setEstadocalificacion("");
         setTexto("Selecciona una calificación. 📌");
         if (Array.isArray(respuestaSelec) && respuestaSelec.length === 0) {
+            //si no se selecciona ninguna respuesta
             router.post("StorePreguntas", {
                 id_preguntas: idPreguntaActual,
                 id_Resenita: id,
                 puntuacion: currentScore,
             });
         } else {
-            router.post("StorePreguntas", respuestaSelec);
+            router.post("StorePreguntas", respuestaSelec); //si se selecciona alguna respuesta
         }
         limpieza.length = 0;
         respuestaSelec.splice(0, respuestaSelec.length);
@@ -121,6 +123,8 @@ export default function Stars({ limpieza, preguntas, idresena }) {
             ]);
         }
     };
+
+
 
     return (
         <div className="flex flex-col gap-y-2 text-center  h-screen items-center animate-fade-down animate-ease-in">
@@ -171,7 +175,7 @@ export default function Stars({ limpieza, preguntas, idresena }) {
             </div>
             {indicePregunta >= posiblesrespuestas.length && (
                 <TextArea id={id}></TextArea>
-            )}
+            )} 
             {btn && <Btn text={message} onClick={onclick}></Btn>}
         </div>
     );

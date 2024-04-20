@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
 import { useState } from "react";
 import BtnPrimary from "./BtnPrimary";
-import { router } from '@inertiajs/react'
+import { router } from "@inertiajs/react";
 
 const ModalCrearPregunta = () => {
     const [openModal, setOpenModal] = useState(false);
@@ -26,6 +26,7 @@ const ModalCrearPregunta = () => {
         router.post("/panela/encuesta/pregunta", values, {
             onSuccess: () => {
                 setOpenModal(false);
+                router.refresh();
             },
         });
     }
@@ -43,19 +44,25 @@ const ModalCrearPregunta = () => {
             </Button>
             <Modal show={openModal} size="2xl" onClose={onCloseModal} popup>
                 <Modal.Body>
-                <Modal.Header>Creando Pregunta</Modal.Header>
-                    <form onSubmit={handleSubmit} className="overflow-y-auto space-y-6 ">
+                    <Modal.Header>Creando Pregunta</Modal.Header>
+                    <form
+                        onSubmit={handleSubmit}
+                        className="overflow-y-auto space-y-6 "
+                    >
                         <div className="mb-2 block">
-                            <Label htmlFor="text" value="Titulo de la Pregunta" />
+                            <Label
+                                htmlFor="text"
+                                value="Titulo de la Pregunta"
+                            />
                             <TextInput
-                            id="titulo"
-                            type="text"
-                            onChange={handleInputChange}
-                            placeholder="Escriba el titulo de la pregunta"
-                            required
-                        ></TextInput>
+                                id="titulo"
+                                type="text"
+                                onChange={handleInputChange}
+                                placeholder="Escriba el titulo de la pregunta"
+                                required
+                            ></TextInput>
                         </div>{" "}
-                        <BtnPrimary className={'bg-blue-600'}>Crear</BtnPrimary>
+                        <BtnPrimary className={"bg-blue-600"}>Crear</BtnPrimary>
                     </form>
                 </Modal.Body>
             </Modal>

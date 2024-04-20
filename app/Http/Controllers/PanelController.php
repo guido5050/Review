@@ -22,6 +22,8 @@ use App\Models\Comentarios;
 use App\Models\Estados;
 use App\Models\Preguntas;
 use App\Models\Prespuesta;
+use App\Models\PosiblesRespuestasEvaluacionesClientes;
+use App\Models\PreguntasEvaluacionesClientes;
 
 class PanelController extends Controller
 
@@ -99,9 +101,7 @@ class PanelController extends Controller
 
        // dd($clientes->toArray());
 
-
-
-        return inertia::render('panel/Clientes', ['client' => $clientes]);
+    return inertia::render('panel/Clientes', ['client' => $clientes]);
     }
 
 
@@ -134,6 +134,7 @@ class PanelController extends Controller
     }
 
     public function resenas()
+
     {
         $id_empresa = session('empresa');
         $resenas = Resena::with('UsuariosClientes')->where('id_empresa', $id_empresa)->paginate(10);
@@ -160,7 +161,8 @@ class PanelController extends Controller
         }
     }
 
-    public function encuesta()//TODO: Metodo que retorna la vista de la encuesta(GESNTIONAR ENCUESTA)
+    public function encuesta()
+    //TODO: Metodo que retorna la vista de la encuesta(GESNTIONAR ENCUESTA para evaluar a la empresa donde configuramos preguntas y posiblesRespuestas)
     {
         $empresa = session('empresa');
         $preguntas = Preguntas::where('id_empresa', $empresa)
@@ -188,11 +190,33 @@ class PanelController extends Controller
         return inertia::render('panel/ConfigEncuesta',['preguntas' => $preguntas,'estadoEncuesta' => $existePreguntaConRespuesta]);
     }
 
-
-
-    public function crear_posiblerazon(Request $request) //TODO: Metodo que crea posibles razones
+    public function encuesta_clientes()
     {
-     //dd($request->toArray());
+         //TODO: Metodo que retorna la vista de la encuesta a clientes(donde podemos configurar la encuesta a clientes, preguntas y respuestas)
+         $empresa = session('empresa');
+         $preguntas = PreguntasEvaluacionesClientes::where('id_empresa', $empresa)
+         ->with('posiblesRespuestasEvaluacionesClientes')
+         ->get();
+         //dd($preguntas->toArray());
+        return inertia::render('Evaluacionesclientes/ConfigEncuesta_Clientes',['preguntas' => $preguntas]);
+    }
+
+    public function crearpreguntaCliente(Request $request)  //TODO: Metodo que crea las preguntas en la vista de encuesta a clientes
+    {
+        //dd($request->toArray());
+        $empresa = session('empresa');
+        $pregunta = PreguntasEvaluacionesClientes::create([
+            'id_empresa' => $empresa,
+            'titulo' => $request->titulo,
+        ]);
+    }
+
+
+
+    public function crear_posiblerazon(Request $request) //TODO: Metodo que crea posibles razones en la encuesta (VISTA DE ADMIN) evaluacion a  empresa
+    {
+
+       // dd($request->toArray());
         $preguntaId=$request->preguntaId;
         $puntuacion=$request->puntuacion;
         $titulo=$request->titulo;
@@ -207,15 +231,13 @@ class PanelController extends Controller
             'estado' => true,
         ]);
 
-
         return to_route('encuesta');
-
     }
 
-    public function crear_pregunta(Request $request) //TODO: Metodo que crea preguntas(VISTA DE ADMIN)
+    public function crear_pregunta(Request $request) //TODO: Metodo que crea preguntas en vista Admin de encuesta a empresa
     {
+       //dd($request->toArray());
         $empresa = session('empresa');
-      /// dd($request->toArray(), $empresa);
 
         $pregunta = Preguntas::create([
             'id_empresa' => $empresa,
@@ -228,7 +250,7 @@ class PanelController extends Controller
 
     public function Estado_preguntas($idposiblerespuesta, $estado){
 
-        // dd($idposiblerespuesta, $estado);
+       // dd($idposiblerespuesta, $estado);
 
         $respuesta = Prespuesta::find($idposiblerespuesta);
 
@@ -323,22 +345,26 @@ class PanelController extends Controller
 
 
 
-    public function gestionar($userClienteId,$Idresena) //TODO Metodo de la vista de resena por id de usuario
+    public function gestionar($userClienteId,$Idresena) //TODO Metodo de la vista de resena por id de usuario /muestra comentarios
     {
        // dd($userClienteId, $Idresena);
         // Obtén la reseña para este userClienteId
-        $resena = Resena::with('UsuariosClientes')->where('id_usuario', $userClienteId)->first();
 
-        $Comentarios = Comentarios::where('id_resena', $Idresena) ->get()->groupBy('id_preguntas');
+        $resena = Resena::with(['UsuariosClientes', 'UsuarioModerador'])
+            ->where('id_usuario', $userClienteId)
+            ->first();
+        //dd($resena->toArray());
+        $Comentarios = Comentarios::where('id_resena', $Idresena)->get()->groupBy('id_preguntas');
 
-        // dd($Comentarios->toArray());
+       /// dd($Comentarios->toArray());
          $nombre=$resena->UsuariosClientes->nombre_completo;
          $comentario = $resena->comentario;
-        $puntuacion= $resena->Puntuacion_global;
-        $id_resena = $resena->id_resena;
-        $reserva = $resena->id_reserva;
-        $fecha = $resena->fecha;
-        //dd($id_resena);
+         $puntuacion= $resena->Puntuacion_global;
+         $id_resena = $resena->id_resena;
+         $reserva = $resena->id_reserva;
+         $fecha = $resena->fecha;
+        $moderador = $resena->UsuarioModerador ? $resena->UsuarioModerador->nombre_completo:'Reseña no aprobada';
+        //dd($moderador);
         // Si no se encontró ninguna reseña, redirige de vuelta con un mensaje de error
         if (!$resena) {
             return redirect()->back()->with('error', 'No se encontró ninguna reseña para este usuario');
@@ -360,16 +386,43 @@ class PanelController extends Controller
         'comentario' =>  $comentario,
         'puntuacion' =>  $puntuacion,
         'respuestas'  =>  $preguntasClientes,
-        'idresena' =>   $id_resena,
+        'idresena' =>   $Idresena,
+        'userid' => $userClienteId,
         'comentarios' => $Comentarios,
         'reserva' => $reserva,
         'fecha' => $fecha,
+        'moderador' => $moderador,
         ]);
     }
+
+    public function publicar_resena(Request $request)
+    {
+        //TODO: Metodo de aprobar resena para publicar en la vista ADMIN de resenas a empresa
+        //idresena
+        //estado
+        $userId = Auth::id();
+        $id_resena = $request->idresena;
+        $estado = $request->estado;
+        // Encuentra la reseña por su id
+        $resena = Resena::find($id_resena);
+       //dd($resena->toArray());
+        if ($resena){
+        $resena->publicado = $estado;
+        $resena->id_moderador = $userId;
+        $resena->save();
+       // Obtén una nueva instancia del modelo desde la base de datos
+        $resena = $resena->fresh();
+       // Volcar los datos de la reseña
+        //dd($resena->toArray());
+    }
+
+    }
+
 
     public function generarResena(Request $request)
     {
         $nombreDominio = $request->getHost();
+
         $user = UsuariosClientes::where('id_cliente', $request->id_usuario)->first();
         $id_empresa = $request->id_empresa;
         $resenaData = [
@@ -406,7 +459,8 @@ class PanelController extends Controller
         } catch (\Exception $e) {
             \Log::error('Error al enviar correo: ' . $e->getMessage());
         }
-        return to_route('clientes'); //para retornar usando inertia
+        return to_route('clientes');
+        //para retornar usando inertia
     }
 
 
@@ -490,9 +544,10 @@ class PanelController extends Controller
 
     public function comentarios_admin(Request $request) //TODO: Metodo que guarda los comentarios de los administradores
     {
-        //dd($request->toArray());
+       // dd($request->toArray());
             $Idpregunta= $request->id_preguntas;
             $Idresena= $request->id_resena;
+           // dd($Idresena);
             //dd($nombreadmin, $request->comentario, $idUserAdmin, $Idpregunta, $Idresena);
         Comentarios::create([
                 'id_resena' => $Idresena,

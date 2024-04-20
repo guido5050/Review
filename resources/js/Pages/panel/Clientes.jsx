@@ -161,6 +161,9 @@ const Clientes = ({
                                 <Table.HeadCell>
                                     Enviar Evaluaciones
                                 </Table.HeadCell>
+                                <Table.HeadCell>
+                                    Evaluar cliente
+                                </Table.HeadCell>
                             </Table.Head>
                             <Table.Body className="divide-y">
                                 {client.data.map((cliente, index) => (
@@ -213,9 +216,17 @@ const Clientes = ({
                                                     href="/panela/encuesta"
                                                     className="text-white inline-block bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                                                 >
-                                                    Gestionar Encuesta
+                                                    Editar Encuesta
                                                 </Link>
                                             )}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            <Link
+                                                href={`/panela/evaluaciones_clientes/${cliente.id_cliente}`}
+                                                className="text-white inline-block bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                            >
+                                                Evaluar cliente
+                                            </Link>
                                         </Table.Cell>
                                     </Table.Row>
                                 ))}

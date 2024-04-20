@@ -33,4 +33,14 @@ class usuarios_empleado extends Authenticatable
   public function getAuthPassword() {
     return $this->contrasena;
   }
+  public function evaluaciones_clientes(): HasMany
+  {
+    return $this->hasMany(EvaluacionesClientes::class, 'id_moderador', 'id_empleado');
+  }
+
+    public function resenasAprobadas(): HasMany
+    {
+        return $this->hasMany(Resena::class, 'id_moderador', 'id_empleado');
+    }
 }
+

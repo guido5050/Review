@@ -1,120 +1,43 @@
-import { useState } from "react";
-import { router } from "@inertiajs/react";
-import { Accordion, Alert } from "flowbite-react";
-import { HiInformationCircle } from "react-icons/hi";
-import Menu_Item from "./Menu_Item";
-import { FaQuestionCircle } from "react-icons/fa";
-import { FaStar } from "react-icons/fa6";
-import { FaCheck } from "react-icons/fa";
-import BtnPrimary from "./ui/BtnPrimary";
-import ModalCrear_PosibleRazon from "./ui/ModalCrear_PosibleRazon";
-import ModalCrearPregunta from "./ui/ModalCrearPregunta";
-import ModalCrear_PosibleRazon_de_Estrellas from "./ui/ModalCrear_PosibleRazon_de_Estrellas";
+import { React, useState } from "react";
+import Menu_Item from "../panel/Menu_Item";
+import ModalCrearPreguntas_ev_clientes from "./components/ModalCrearPreguntas_ev_clientes";
+import { Accordion, Alert, Button } from "flowbite-react";
+import { FaQuestionCircle, FaStar } from "react-icons/fa";
 
-const ConfigEncuesta = ({
+const ConfigEncuesta_Clientes = ({
     auth,
     logo,
     razon_social,
     AppName,
     preguntas,
-    estadoEncuesta,
 }) => {
-    console.log(preguntas);
     const [openModal, setOpenModal] = useState(false);
-    const [puntuacion, setPuntuacion] = useState();
-    const [preguntaId, setPreguntaId] = useState();
-    const [tituloPregunta, setTituloPregunta] = useState("");
 
-    const [checkedState, setCheckedState] = useState(
-        preguntas.reduce((acc, pregunta, preguntaIndex) => {
-            pregunta.posibles_respuestas.forEach((respuesta) => {
-                const checkboxKey = `${preguntaIndex}-${respuesta.id_posiblesRespuestas}`;
-                acc[checkboxKey] = Boolean(respuesta.estado);
-            });
-            return acc;
-        }, {})
-    );
+    const handleCheckboxChange = (checkboxKey) => {
+        // Implementar la lógica para manejar el cambio de estado del checkbox aquí
+        console.log("ok");
+    };
 
-    function handleCheckboxChange(checkboxKey) {
-        if (!checkboxKey.includes("-")) {
-            console.error("checkboxKey no contiene un guión");
-            return;
-        }
-
-        const [preguntaIndex, respuestaId] = checkboxKey.split("-");
-        const estadoActual = checkedState[checkboxKey];
-
-        router.post(`/panela/encuesta/${respuestaId}/${estadoActual ? 0 : 1}`, {
-            onSuccess: () => {
-                router.refresh();
-            },
-        });
-
-        setCheckedState((prevState) => ({
-            ...prevState,
-            [checkboxKey]: !prevState[checkboxKey],
-        }));
-    }
-
-    const ModalF = (preguntaIndex, puntuacion) => {
-        setPuntuacion(puntuacion);
-
-        // Buscar la pregunta correspondiente
-        let pregunta = preguntas[preguntaIndex];
-        setPreguntaId(pregunta.id_preguntas);
-        setTituloPregunta(pregunta.titulo);
-
-        console.log(preguntaIndex, puntuacion - 1);
-        console.log(preguntaId);
+    const ModalF = (preguntaIndex, index) => {
         setOpenModal(true);
+        // Implementar la lógica para manejar el clic en el botón "Agregar posible respuesta" aquí
+    };
+    
+    const handleCreateQuestion = () => {
+        console.log("Crear pregunta");
     };
 
     return (
         <Menu_Item
             user={auth.user}
-            razon_social={razon_social}
             logo={logo}
+            razon_social={razon_social}
             AppName={AppName}
         >
             <div className="p-6 animate-fade-down animate-ease-out ">
-                <div className="flex items-center justify-start gap-x-2 ">
-                    <ModalCrearPregunta />
-                    {/* {preguntas && preguntas.length > 0 && (
-                        <ModalCrear_PosibleRazon
-                            preguntas={preguntas}
-                            estadoEncuesta={estadoEncuesta}
-                        />
-                    )} */}
-                    {openModal && (
-                        <ModalCrear_PosibleRazon_de_Estrellas
-                            openModal={openModal}
-                            setOpenModal={setOpenModal}
-                            preguntaId={preguntaId}
-                            tituloPregunta={tituloPregunta}
-                            puntuacion={puntuacion}
-                        />
-                    )}
+                <div className="mb-2">
+                    <ModalCrearPreguntas_ev_clientes />
                 </div>
-                {estadoEncuesta === false && (
-                    <Alert color="failure" icon={HiInformationCircle}>
-                        <span className="font-medium">Informacion!</span>{" "}
-                        Completa el cuestionario debe existir al menos una
-                        posible razon en cada puntuacion completa las preguntas
-                        que estan en color amarillo
-                    </Alert>
-                )}
-                {estadoEncuesta === true && (
-                    <Alert color="info" icon={HiInformationCircle}>
-                        <span className="font-medium">Informacion!</span>{" "}
-                        Completa el cuestionario debe existir al menos una
-                        posible razon en cada puntuacion, por cada una es deicir
-                        que por cada puntuacion del 1 al 5 debe existir al menos
-                        una posible razon que el cliente pueda seleccionar
-                        importante! asegurar que todas las posibles respuestas
-                        esten en check al menos una
-                    </Alert>
-                )}
-
                 <Accordion collapseAll>
                     {preguntas.map((pregunta, preguntaIndex) => (
                         <Accordion.Panel key={preguntaIndex}>
@@ -122,7 +45,7 @@ const ConfigEncuesta = ({
                                 <div
                                     className={`flex items-center gap-x-2 ${
                                         ![2, 3, 4, 5].every((puntuacion) =>
-                                            pregunta.posibles_respuestas.some(
+                                            pregunta.posibles_respuestas_evaluaciones_clientes.some(
                                                 (respuesta) =>
                                                     respuesta.puntuacion ===
                                                     puntuacion
@@ -140,16 +63,14 @@ const ConfigEncuesta = ({
                                     {[1, 2, 3, 4, 5].map(
                                         (puntuacion, index) => {
                                             const respuestas =
-                                                pregunta.posibles_respuestas.filter(
+                                                pregunta.posibles_respuestas_evaluaciones_clientes.filter(
                                                     (respuesta) =>
                                                         respuesta.puntuacion ===
                                                         puntuacion
                                                 );
 
                                             return (
-                                                <Accordion.Panel
-                                                    key={`${preguntaIndex}-${index}`}
-                                                >
+                                                <Accordion.Panel key={index}>
                                                     <Accordion.Title>
                                                         <div className="flex items-center gap-x-2">
                                                             {[
@@ -178,7 +99,7 @@ const ConfigEncuesta = ({
                                                                 return (
                                                                     <div
                                                                         key={
-                                                                            respuesta.id_posiblesRespuestas
+                                                                            respuesta.id
                                                                         }
                                                                         className="flex items-center mb-2 text-gray-500 dark:text-gray-400"
                                                                     >
@@ -206,16 +127,15 @@ const ConfigEncuesta = ({
 
                                                         <button
                                                             className="text-blue-800 font-extrabold underline"
-                                                            onClick={(e) => {
-                                                                e.nativeEvent.stopImmediatePropagation();
+                                                            onClick={() =>
                                                                 ModalF(
                                                                     `${preguntaIndex}`,
                                                                     `${
                                                                         index +
                                                                         1
                                                                     }`
-                                                                );
-                                                            }}
+                                                                )
+                                                            }
                                                         >
                                                             Agregar posible
                                                             respuesta
@@ -235,4 +155,4 @@ const ConfigEncuesta = ({
     );
 };
 
-export default ConfigEncuesta;
+export default ConfigEncuesta_Clientes;

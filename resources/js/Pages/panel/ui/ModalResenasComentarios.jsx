@@ -6,6 +6,7 @@ import { router } from "@inertiajs/react";
 import { LuMessageCircle } from "react-icons/lu";
 
 const ModalResenasComentarios = ({ idPregunta, idresena, user }) => {
+    console.log(idresena);
     const [openModal, setOpenModal] = useState(false);
     const [comment, setComment] = useState("");
     function onCloseModal() {
@@ -30,7 +31,7 @@ const ModalResenasComentarios = ({ idPregunta, idresena, user }) => {
             [key]: value,
         }));
     }
-    console.log(values.comentario);
+    console.log(values);
     function handleSubmit(e) {
         e.preventDefault();
         router.post("/panela/resenas/comentario", values, {

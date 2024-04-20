@@ -35,17 +35,29 @@ Route::get('/panela/clientes/search',[PanelController::class,'clientes_search'])
 Route::get('/panela/usuarios',[PanelController::class,'usuarios'])->name('usuarios')->middleware('auth:empleados');//Mostrar Usuarios
 Route::get('/panela/resenas',[PanelController::class,'resenas'])->name('resenas');//Lista de Usuarops
 
-Route::group(['middleware' => 'auth:empleados'], function () { //TODO: Vista de Encuesta
-    Route::get('/panela/encuesta', [PanelController::class, 'encuesta'])->name('encuesta'); // Encuesta
+
+//TODO: Vista de Encuesta
+Route::group(['middleware' => 'auth:empleados'], function () {
+    Route::get('/panela/encuesta/', [PanelController::class, 'encuesta'])->name('encuesta'); // Encuesta
     Route::post('/panela/encuesta/{idposiblerespuesta}/{estado}', [PanelController::class, 'Estado_preguntas'])->name('estado.preguntas'); // TODO: Estado de preguntas
     Route::post('/panela/encuesta/crear', [PanelController::class, 'crear_posiblerazon'])->name('crear_preguntas'); // TODO: Crear Posible Razon
     Route::post('/panela/encuesta/pregunta', [PanelController::class, 'crear_pregunta'])->name('crear.pregunta'); // TODO: Crear Respuesta
 });
 
 
-Route::get('/panela/resenas/{userClienteId}/{Idresena}',[PanelController::class,'gestionar']); //TODO:Gestionar resenas
-Route::post('/panela/resenas/comentario',[PanelController::class,'comentarios_admin']); //ComentariosGuardados por el admin de resenas
+//TODO:Rutas de Encuesta a Clientes
+Route::group([ 'middleware' => 'auth:empleados'], function () {
+  Route::get('/panela/encuestaclientes/', [PanelController::class, 'encuesta_clientes'])->name('encuesta.clientes'); // Vista de Encuesta Clientes
+  Route::post('/panela/encuestaclientes/save', [PanelController::class, 'crearpreguntaCliente'])->name('encuesta.clientes.save'); //save
+});
 
+
+
+Route::prefix('panela/resenas/')->group(function () {
+    Route::get('{userClienteId}/{Idresena}', [PanelController::class,'gestionar']);
+    Route::post('comentario', [PanelController::class,'comentarios_admin']); //ComentariosGuardados por el admin de resenas
+    Route::post('publicar', [PanelController::class,'publicar_resena'])->name('publicar.resena'); //Publicar resena
+});
 
 
 Route::post('/panela/usuarios/update',[PanelController::class,'update'])->name('update');
@@ -53,12 +65,12 @@ Route::post('/panela/usuarios/roles/create',[PanelController::class,'create_role
 Route::post('/panela/usuarios/roles/update',[PanelController::class,'update_roles'])->name('update_roles')->middleware('auth:empleados');
 Route::delete('/panela/usuarios/{id_usuario}',[PanelController::class,'delete'])->name('delete')->middleware('auth:empleados');//Elimina usuarios
 
-//TODO:Rutas de Evaluaciones_clientes
+//TODO:Rutas de Evaluaciones_a?clientes(estrellas)
 Route::middleware('auth:empleados')->group(function () {
-    Route::get('/panela/evaluaciones_clientes', [Evaluaciones_Clientes::class, 'Evaluacion_clientes'])->name('evaluacion.clientes');
-    
-
-
+    Route::get('/panela/evaluaciones_clientes/show', [Evaluaciones_Clientes::class, 'Evaluacion_clientes'])->name('evaluacion.clientes');
+    Route::get('/panela/evaluaciones_clientes/{id}', [Evaluaciones_Clientes::class, 'Evaluacion_clientes_show'])->name('evaluacion.clientes.id');
+    Route::post('/panela/evaluaciones_clientes/', [Evaluaciones_Clientes::class, 'showposiblesrespuestas'])->name('showposiblesrespuestas');
+    Route::post('/panela/evaluaciones_clientes/save',[Evaluaciones_Clientes::class,'saveposiblesrespuestas'])->name('saveposiblesrespuestas');
 });
 
 

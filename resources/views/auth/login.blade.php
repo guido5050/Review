@@ -3,22 +3,21 @@
 
 <div class="container ">
     <div class="row justify-content-center">
-        <div class="col-md-11">
+        <div class="">
             <div class="card">
 
-                <div class="card-body">
+                <div class="">
 
-                    <section class="">
+                    <section class="d-flex justify-content-center align-items-center vh-100">
                         <div class="container  ">
-                            <div class="row d-flex align-items-center justify-content-center ">
-                                <div class="col-md-8 col-lg-7 col-xl-6">
+                            <div class="row d-flex align-items-center justify-content-center  vh-100 ">
+                                <div class="col-md-4 col-lg-7 col-xl-6 ">
                                     <img class="thumb" fetchpriority="high" data-pin-no-hover="true"
-                                        src="https://img.freepik.com/vector-gratis/concepto-resenas-landing-page_52683-12186.jpg?t=st=1707231462~exp=1707232062~hmac=99aef5110fc72e4495f14d7cc660849567f196a697ff29c31986eae409bb657e"
+                                        src="{{ asset('images/login/image2.jpg') }}"
                                         sizes="(max-width: 479px) 100vw, (min-aspect-ratio: 626/626) calc((100vh - 184px) * 1), (max-width: 1095px) calc(100vw - 40px), calc(100vw - 540px)"
-                                        width="626" height="626"
                                         alt="Vector gratuito concepto de reseñas para landing page"
                                         style="max-width: calc((100vh - 184px) * 1)"
-                                        srcset="https://img.freepik.com/vector-gratis/concepto-resenas-landing-page_52683-12186.jpg?w=360&amp;t=st=1707231470~exp=1707232070~hmac=6ad10499a628859e2f4b0ac4bb15b40970dc2d75c378d4e7bc81807de555410d 360w, https://img.freepik.com/vector-gratis/concepto-resenas-landing-page_52683-12186.jpg?w=740&amp;t=st=1707231470~exp=1707232070~hmac=6ad10499a628859e2f4b0ac4bb15b40970dc2d75c378d4e7bc81807de555410d 740w, https://img.freepik.com/vector-gratis/concepto-resenas-landing-page_52683-12186.jpg?w=826&amp;t=st=1707231470~exp=1707232070~hmac=6ad10499a628859e2f4b0ac4bb15b40970dc2d75c378d4e7bc81807de555410d 826w, https://img.freepik.com/vector-gratis/concepto-resenas-landing-page_52683-12186.jpg?w=900&amp;t=st=1707231470~exp=1707232070~hmac=6ad10499a628859e2f4b0ac4bb15b40970dc2d75c378d4e7bc81807de555410d 900w, https://img.freepik.com/vector-gratis/concepto-resenas-landing-page_52683-12186.jpg?w=996&amp;t=st=1707231470~exp=1707232070~hmac=6ad10499a628859e2f4b0ac4bb15b40970dc2d75c378d4e7bc81807de555410d 996w, https://img.freepik.com/vector-gratis/concepto-resenas-landing-page_52683-12186.jpg?w=1060&amp;t=st=1707231470~exp=1707232070~hmac=6ad10499a628859e2f4b0ac4bb15b40970dc2d75c378d4e7bc81807de555410d 1060w, https://img.freepik.com/vector-gratis/concepto-resenas-landing-page_52683-12186.jpg?w=1380&amp;t=st=1707231470~exp=1707232070~hmac=6ad10499a628859e2f4b0ac4bb15b40970dc2d75c378d4e7bc81807de555410d 1380w, https://img.freepik.com/vector-gratis/concepto-resenas-landing-page_52683-12186.jpg?w=1480&amp;t=st=1707231470~exp=1707232070~hmac=6ad10499a628859e2f4b0ac4bb15b40970dc2d75c378d4e7bc81807de555410d 1480w, https://img.freepik.com/vector-gratis/concepto-resenas-landing-page_52683-12186.jpg?w=1800&amp;t=st=1707231470~exp=1707232070~hmac=6ad10499a628859e2f4b0ac4bb15b40970dc2d75c378d4e7bc81807de555410d 1800w, https://img.freepik.com/vector-gratis/concepto-resenas-landing-page_52683-12186.jpg?w=2000&amp;t=st=1707231470~exp=1707232070~hmac=6ad10499a628859e2f4b0ac4bb15b40970dc2d75c378d4e7bc81807de555410d 2000w">
+                                        srcset="{{ asset('images/login/image1.png') }}">
                                 </div>
                                 <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
 

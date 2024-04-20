@@ -27,15 +27,15 @@ class UserController extends Controller
 
      public function showStars(Request $request){
 
-    //dd($request->toArray());
+  //dd($request->toArray());
 
       $id_resena = $request->id_resena;
 
       $preguntas = Preguntas::Where('id_empresa', $request->empresa)->get();//Aqui se obtienen las preguntas
-    //  $preguntas->prepend('');
+    // $preguntas->prepend('');
      //dd($preguntas->toArray());
       $resena = Resena::where('id_resena',$id_resena)->first();
-   // dd($resena);
+      //dd($resena);
      return Inertia::render('Preguntas/Stars',['preguntas' => $preguntas,'idresena' => $id_resena]);
 
       }
@@ -188,17 +188,14 @@ class UserController extends Controller
 
      public function showpreguntas(Request $request) //TODO: Mostrar las posible respuestas este metodo entra aqui cuando doy click en las estrella
      {
-
+        //dd($request->toArray());
         $respuesta = Prespuesta::where('id_preguntas', $request->pregunta)
             ->where('puntuacion', $request->score)
             ->where('estado', true)
             ->with('pregunta') // Cargar la relación
             ->get();
-
-// dd($respuesta->toArray());
-
-
-   // dd($respuesta->toArray());
+     //dd($respuesta->toArray());
+ // dd($respuesta->toArray());
 
 $wx2 = 0;
 foreach ($respuesta as $WX) {

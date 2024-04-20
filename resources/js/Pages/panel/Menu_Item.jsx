@@ -16,7 +16,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-export default function Menu_Item({
+export default function  Menu_Item({
     user,
     children,
     logo,
@@ -32,11 +32,11 @@ export default function Menu_Item({
         },
         {
             name: "Evaluaciones a clientes",
-            href: "/panela/evaluaciones_clientes",
+            href: "/panela/evaluaciones_clientes/show",
             current: false,
         },
         {
-            name: "Clientes",
+            name: "Lista de Clientes",
             href: "/panela/clientes",
             current: false,
             method: "get",
@@ -230,6 +230,25 @@ export default function Menu_Item({
                                                             >
                                                                 Gestionar
                                                                 Encuesta
+                                                            </Link>
+                                                        )}
+                                                    </Menu.Item>
+                                                    <Menu.Item>
+                                                        {({ active }) => (
+                                                            <Link
+                                                                href="/panela/encuestaclientes/"
+                                                                preserveState
+                                                                only={[
+                                                                    "config",
+                                                                ]}
+                                                                className={classNames(
+                                                                    active
+                                                                        ? "bg-gray-100"
+                                                                        : "",
+                                                                    "block px-4 py-2 text-sm text-gray-700"
+                                                                )}
+                                                            >
+                                                                Encuesta/Clientes
                                                             </Link>
                                                         )}
                                                     </Menu.Item>

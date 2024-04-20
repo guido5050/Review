@@ -9,6 +9,9 @@ import { FaUserFriends } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import { LuMessageCircle } from "react-icons/lu";
 import { BsCalendar2Date } from "react-icons/bs";
+import { IoIosCheckmark } from "react-icons/io";
+import { Button } from "flowbite-react";
+import { router } from "@inertiajs/react";
 
 import ModalResenasComentarios from "./ui/ModalResenasComentarios";
 import Resenas from "./Resenas";
@@ -22,12 +25,16 @@ const GestionarResenas = ({
     puntuacion,
     respuestas,
     idresena,
+    userid,
     comentarios,
     reserva,
     fecha,
+    moderador,
 }) => {
     // Transforma respuestas en un objeto donde cada clave es un título de pregunta
     // y cada valor es un objeto que contiene un array de respuestas y la puntuación total para esa pregunta
+    console.log(userid);
+    console.log(idresena);
     console.log(comentarios);
 
     const respuestasAgrupadas = Object.values(respuestas)
@@ -45,59 +52,88 @@ const GestionarResenas = ({
                 respuesta.puntuacion; //Saco la puntuacion individual por cada pregunta;
             return acc;
         }, {});
-    console.log(respuestasAgrupadas);
+    const AprobarResena = () => {
+        router.post(
+            "/panela/resenas/publicar",
+            { idresena: idresena, estado: 1 },
+            {
+                onSuccess: () => {
+                    router.refresh();
+                },
+            }
+        );
+    };
 
     return (
         <>
             <Menu_Item user={auth.user} logo={logo} razon_social={razon_social}>
                 <div className="p-8 flex gap-y-2 justify-center mt-2 animate-fade-up animate-ease-in-out flex-col">
                     <Card>
-                        <div className=" flex  gap-x-4 justify-between">
-                            <div className="flex gap-x-3 items-center">
-                                <div className="bg-blue-600 rounded-lg w-[100px]">
-                                    <p
-                                        className="font-extrabold text-[50px] p-3 text-center  rounded-lg cursor-pointer"
-                                        title="puntuacion del cliente al finalizar la reseña"
-                                    >
-                                        <strong className="text-white font-extrabold ">
-                                            {puntuacion}
-                                        </strong>
-                                    </p>
-                                </div>
-                                <div className="flex flex-col gap-y-1">
-                                    <p className="text-black font-semibold">
-                                        {nombre}
-                                    </p>
-                                    <p>
-                                        {"Numero de reserva:"}{" "}
-                                        <span className="text-blue-800 font-extrabold">
-                                            {reserva}
-                                        </span>
-                                    </p>
-                                    <p>
-                                        {"Numero de reseña:"}{" "}
-                                        <span className="text-blue-800 font-extrabold">
-                                            {idresena}
-                                        </span>
-                                    </p>
+                        <div className=" flex  gap-x-4 justify-between   ">
+                            <div className="flex flex-col gap-y-4 ">
+                                {" "}
+                                {/* por si toca poner un elemento a abjo lo deje flex-col */}
+                                <div className="flex gap-x-3 items-center ">
+                                    <div className="bg-blue-600 rounded-lg w-[100px]">
+                                        <p
+                                            className="font-extrabold text-[50px] p-3 text-center  rounded-lg cursor-pointer"
+                                            title="puntuacion del cliente al finalizar la reseña"
+                                        >
+                                            <strong className="text-white font-extrabold ">
+                                                {puntuacion}
+                                            </strong>
+                                        </p>
+                                    </div>
+
+                                    <div className="flex flex-col gap-y-1 ">
+                                        <p className="text-black font-semibold">
+                                            {nombre}
+                                        </p>
+                                        <p>
+                                            {"Numero de referencia:"}{" "}
+                                            <span className="text-blue-800 font-extrabold">
+                                                {reserva}
+                                            </span>
+                                        </p>
+                                        <p>
+                                            {"Numero de reseña:"}{" "}
+                                            <span className="text-blue-800 font-extrabold">
+                                                {idresena}
+                                            </span>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-x-2 self-start font-extrabold">
+
+                            <div className="flex items-center gap-x-2 self-start font-extrabold underline ">
                                 <BsCalendar2Date />
                                 <span>
                                     {new Date(fecha).toLocaleDateString()}
                                 </span>
                             </div>
                         </div>
+                        <div className="flex items-end justify-between ">
+                            <p className="font-extrabold text-blue-800 md:text-xl">
+                                {moderador === "Reseña no aprobada"
+                                    ? `${moderador}`
+                                    : `Aprobada por:  ${moderador} 📌`}
+                            </p>
+                            <Button
+                                color="success"
+                                onClick={AprobarResena}
+                                disabled={moderador != "Reseña no aprobada"}
+                            >
+                                Aprobar
+                            </Button>
+                        </div>
                         <hr className="border-t border-gray-200 my-4" />{" "}
                         {/* Aquí está la línea */}
-                        <div className="flex items-center gap-x-1 text-xl">
+                        <div className="flex items-center justify-between gap-x-1 text-xl">
                             <p
                                 className="font-extrabold cursor-pointer"
                                 title="comentario dejado por el cliente al finalizar la encuesta"
-                            >-
+                            >
                                 {`Comentario:`}
-
                                 <strong className="text-gray-500">
                                     {comentario
                                         ? comentario
@@ -206,7 +242,10 @@ const GestionarResenas = ({
                                                                 comentario,
                                                                 index
                                                             ) => (
-                                                                <Card className="sm mb-4  flex flex-col text-[12px]">
+                                                                <Card
+                                                                    className="sm mb-4  flex flex-col text-[12px]"
+                                                                    key={index}
+                                                                >
                                                                     <div className="flex flex-col ">
                                                                         <div className="flex justify-between items-cente mb-3 ">
                                                                             <div className="flex items-center gap-x-2 mb-2 sm:mb-0">
@@ -215,12 +254,7 @@ const GestionarResenas = ({
                                                                                         "12px"
                                                                                     }
                                                                                 />
-                                                                                <p
-                                                                                    className="overflow-ellipsis overflow-hidden text-[12px]"
-                                                                                    key={
-                                                                                        index
-                                                                                    }
-                                                                                >
+                                                                                <p className="overflow-ellipsis overflow-hidden text-[12px]">
                                                                                     {
                                                                                         comentario.Nombre_Admin
                                                                                     }

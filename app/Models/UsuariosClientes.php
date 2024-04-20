@@ -27,6 +27,11 @@ class UsuariosClientes extends Model
     {
         return $this->hasMany(Resena::class, 'id_usuario', 'id_cliente');
      }
+
+     public function EvaluacionesClientes()
+     {
+         return $this->hasMany(EvaluacionesClientes::class, 'id_cliente', 'id_cliente');
+     }
 }
 
 
