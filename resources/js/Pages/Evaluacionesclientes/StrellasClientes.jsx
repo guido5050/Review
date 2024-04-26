@@ -36,8 +36,6 @@ const StrellasClientes = ({
             : {}
     );
 
-
-
     console.log(historialPuntajes);
     // ... Resto del código ...
     useEffect(() => {
@@ -81,7 +79,7 @@ const StrellasClientes = ({
         } else {
             setBtn(false);
         }
-        router.post("/panela/evaluaciones_clientes/", {
+        router.post("/panela/estrellasCliente/", {
             score: newScore,
             idEvaluacion: idEvaluaciones,
             idmoderador: idmoderador,
@@ -157,7 +155,7 @@ const StrellasClientes = ({
     const SaveEncuesta = () => {
         console.log("guardar encuesta");
         console.log(idEvaluaciones);
-        router.post("/panela/evaluaciones_clientes/save", {
+        router.post("/panela/estrellasCliente/save", {
             historialRespuestas,
             historialPuntajes,
             idEvaluaciones_,
@@ -171,109 +169,134 @@ const StrellasClientes = ({
     return (
         <>
             <header className=" w-full  p-2 justify-start border">
-                <img src={logo} alt="" className="w-[45px] ps-px-[50px] rounded-xl" />
+                <img
+                    src={logo}
+                    alt=""
+                    className="w-[45px] ps-px-[50px] rounded-xl"
+                />
             </header>
-            <div className="flex flex-col h-[calc(100vh-70px)] justify-between px-4">
-                <div>
-                    <div className="flex flex-col gap-y-4  mt-24 text-center items-center animate-fade-down animate-ease-in">
-                        {indicePregunta < posiblesrespuestas.length && (
-                            <>
-                                <h1 className="text-black  text-[16px] mt-3 md:text-2xl md:text-black font-extrabold">
-                                    {tituloPreguntaActual}
-                                </h1>
-                                <Strellas_clientes
-                                    texto={texto}
-                                    textos={textos}
-                                    handleStarClick={handleStarClick}
-                                    currentScore={currentScore}
-                                />
-                            </>
-                        )}
-                        <div className="w-full p-2 text-[25px] sm:text-[30px] md:text-[35px] lg:text-[40px] xl:text-[45px] 2xl:text-[50px]">
-                            {indicePregunta < posiblesrespuestas.length ? (
-                                <hr className="border-t border-gray-200 my-4" />
-                            ) : (
-                                <div className="md:m-auto md:w-[50%]  ">
-                                    <TextArea_Encuesta
-                                        setComentario={setComentario}
+            {preguntas.length === 0 ? (
+                <div className="flex items-center justify-center h-screen">
+                    <Link className=" bg-blue-700 hover:bg-blue-800 rounded-lg py-1 px-2 text-white"
+                    href="/panela/encuestaclientes/"
+                    >
+                        ir a encuesta
+                    </Link>
+                </div>
+            ) : (
+                <div className="flex flex-col h-[calc(100vh-70px)] justify-between px-4">
+                    <div>
+                        <div className="flex flex-col gap-y-4  mt-24 text-center items-center animate-fade-down animate-ease-in">
+                            {indicePregunta < posiblesrespuestas.length && (
+                                <>
+                                    <h1 className="text-black  text-[16px] mt-3 md:text-2xl md:text-black font-extrabold">
+                                        {tituloPreguntaActual}
+                                    </h1>
+                                    <Strellas_clientes
+                                        texto={texto}
+                                        textos={textos}
+                                        handleStarClick={handleStarClick}
+                                        currentScore={currentScore}
                                     />
-                                </div>
+                                </>
                             )}
+                            <div className="w-full p-2 text-[25px] sm:text-[30px] md:text-[35px] lg:text-[40px] xl:text-[45px] 2xl:text-[50px]">
+                                {indicePregunta < posiblesrespuestas.length ? (
+                                    <hr className="border-t border-gray-200 my-4" />
+                                ) : (
+                                    <div className="md:m-auto md:w-[50%]  ">
+                                        <TextArea_Encuesta
+                                            setComentario={setComentario}
+                                        />
+                                    </div>
+                                )}
 
-                            <div className="mt-5 mb-5 p-3 animate-shake ]">
-                                {posiblesRespuestas &&
-                                posiblesRespuestas.length > 0 ? (
-                                    <ul className="gap-y-5 ">
-                                        {posiblesRespuestas.map((respuesta) => (
-                                            <li className="" key={respuesta.id}>
-                                                <button
-                                                    key={respuesta.id}
-                                                    type="button"
-                                                    className={`${
-                                                        btnActive.includes(
-                                                            respuesta.id
-                                                        )
-                                                            ? "bg-blue-500 text-white"
-                                                            : "bg-gray-100 text-gray-900"
-                                                    } rounded-lg p-2 font-bold text-lg `}
-                                                    onClick={() =>
-                                                        manejarClick(respuesta)
-                                                    }
-                                                >
-                                                    {respuesta.titulo_respuesta}
-                                                </button>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : null}
+                                <div className="mt-5 mb-5 p-3 animate-shake ]">
+                                    {posiblesRespuestas &&
+                                    posiblesRespuestas.length > 0 ? (
+                                        <ul className="gap-y-5 ">
+                                            {posiblesRespuestas.map(
+                                                (respuesta) => (
+                                                    <li
+                                                        className=""
+                                                        key={respuesta.id}
+                                                    >
+                                                        <button
+                                                            key={respuesta.id}
+                                                            type="button"
+                                                            className={`${
+                                                                btnActive.includes(
+                                                                    respuesta.id
+                                                                )
+                                                                    ? "bg-blue-500 text-white"
+                                                                    : "bg-gray-100 text-gray-900"
+                                                            } rounded-lg p-2 font-bold text-lg `}
+                                                            onClick={() =>
+                                                                manejarClick(
+                                                                    respuesta
+                                                                )
+                                                            }
+                                                        >
+                                                            {
+                                                                respuesta.titulo_respuesta
+                                                            }
+                                                        </button>
+                                                    </li>
+                                                )
+                                            )}
+                                        </ul>
+                                    ) : null}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="  ">
-                    <Progress progress={progress} size="sm" color="dark" />
-                    <div className="w-full flex justify-between items-center p-5   md:px-[250px]">
-                        <div className="flex items-center gap-x-1">
-                            <button
-                                className={`underline flex items-center ${
-                                    indicePregunta === 0
+                    <div className="  ">
+                        <Progress progress={progress} size="sm" color="dark" />
+                        <div className="w-full flex justify-between items-center p-5   md:px-[250px]">
+                            <div className="flex items-center gap-x-1">
+                                <button
+                                    className={`underline flex items-center ${
+                                        indicePregunta === 0
+                                            ? "opacity-50 cursor-not-allowed"
+                                            : "opacity-100 cursor-pointer"
+                                    }`}
+                                    onClick={
+                                        indicePregunta > 0
+                                            ? onClickVolver
+                                            : null
+                                    }
+                                    disabled={indicePregunta === 0}
+                                >
+                                    <MdKeyboardArrowLeft size={"20px"} />
+                                    Atras
+                                </button>
+                            </div>
+                            <Btn
+                                text={
+                                    indicePregunta >= posiblesrespuestas.length
+                                        ? "Finalizar"
+                                        : "Siguiente"
+                                }
+                                onClick={
+                                    indicePregunta >= posiblesrespuestas.length
+                                        ? SaveEncuesta
+                                        : onClick
+                                }
+                                disabled={
+                                    currentScore === 0 &&
+                                    indicePregunta < posiblesrespuestas.length
+                                }
+                                className={`mt-auto ${
+                                    currentScore === 0 &&
+                                    indicePregunta < posiblesrespuestas.length
                                         ? "opacity-50 cursor-not-allowed"
                                         : "opacity-100 cursor-pointer"
                                 }`}
-                                onClick={
-                                    indicePregunta > 0 ? onClickVolver : null
-                                }
-                                disabled={indicePregunta === 0}
-                            >
-                                <MdKeyboardArrowLeft size={"20px"} />
-                                Atras
-                            </button>
+                            />
                         </div>
-                        <Btn
-                            text={
-                                indicePregunta >= posiblesrespuestas.length
-                                    ? "Finalizar"
-                                    : "Siguiente"
-                            }
-                            onClick={
-                                indicePregunta >= posiblesrespuestas.length
-                                    ? SaveEncuesta
-                                    : onClick
-                            }
-                            disabled={
-                                currentScore === 0 &&
-                                indicePregunta < posiblesrespuestas.length
-                            }
-                            className={`mt-auto ${
-                                currentScore === 0 &&
-                                indicePregunta < posiblesrespuestas.length
-                                    ? "opacity-50 cursor-not-allowed"
-                                    : "opacity-100 cursor-pointer"
-                            }`}
-                        />
                     </div>
-                </div>{" "}
-            </div>
+                </div>
+            )}
         </>
     );
 };

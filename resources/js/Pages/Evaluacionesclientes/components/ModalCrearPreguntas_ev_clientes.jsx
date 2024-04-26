@@ -26,20 +26,19 @@ const ModalCrearPreguntas_ev_clientes = () => {
 
     function handleSubmit(e) {
         e.preventDefault();
-        router.post("/panela/encuestaclientes/save",values, {
+        router.post("/panela/encuestaclientes/save", values, {
             onSuccess: () => {
                 setOpenModal(false);
                 router.refresh();
-            }
-
+            },
         });
     }
 
-    console.log(values);
-
     return (
         <>
-            <Button color="blue" onClick={() => setOpenModal(true)}>Crear Pregunta</Button>
+            <Button color="blue" onClick={() => setOpenModal(true)}>
+                Crear Pregunta
+            </Button>
             <Modal show={openModal} size="xl" onClose={onCloseModal} popup>
                 <Modal.Header />
                 <Modal.Body>
@@ -60,7 +59,9 @@ const ModalCrearPreguntas_ev_clientes = () => {
                                 onChange={handleChange}
                             />
                             <div className="w-full mt-2">
-                                <Button color="blue" type="submit">crear</Button>
+                                <Button color="blue" type="submit">
+                                    crear
+                                </Button>
                             </div>
                         </form>
                     </div>

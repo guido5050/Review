@@ -189,7 +189,7 @@ const Clientes = ({
                                                 : "No nacionalidad"}
                                         </Table.Cell>
                                         <Table.Cell>
-                                            {encuesta ? (
+                                            {encuesta === true  ? (
                                                 <BtnPrimary
                                                    className="bg-blue-600 hover:bg-blue-500 flex items-center"
                                                     onClick={() => {

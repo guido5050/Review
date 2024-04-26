@@ -8,13 +8,16 @@ use App\Models\PreguntasEvaluacionesClientes;
 use App\Models\PosiblesRespuestasEvaluacionesClientes;
 use App\Models\EvaluacionesClientes;
 use App\Models\CalificacionesEva_clientes;
+use App\Models\respuesta_ev_clientes;
 use Illuminate\Support\Facades\Auth;
 
 class Evaluaciones_Clientes extends Controller
 {
     public function Evaluacion_clientes()
     {
+        $empresa = session('empresa');
         $evaluaciones = EvaluacionesClientes::with(['UsuariosClientes', 'usuarios_empleado'])
+            ->where('id_empresa', $empresa)
             ->orderBy('id', 'desc')
             ->paginate(10);
           // dd($evaluaciones->toArray());
@@ -33,21 +36,28 @@ class Evaluaciones_Clientes extends Controller
             'id_usuario' => $userId,
             'fecha' => date('Y-m-d'),];
             //dd($evaluacionData);
-        $evaluacion = EvaluacionesClientes::create($evaluacionData); //TODO:Genera la evaluacion del cliente
+            //dd($preguntas->toArray());
+
+        if($preguntas->isNotEmpty()){
+            $evaluacion = EvaluacionesClientes::create($evaluacionData);
+            //TODO:Genera la evaluacion del cliente
+        }
+
 
 
         return Inertia::render('Evaluacionesclientes/StrellasClientes',
         [
             'preguntas' => $preguntas,
-                'idmoderador' => $userId,
-             'idEvaluaciones' => $evaluacion->id
-        ]);
+            'idmoderador' => $userId,
+            'idEvaluaciones' => isset($evaluacion->id) ? $evaluacion->id : 0
+            ]);
     }
 
     public function showposiblesrespuestas(Request $request)
     {
         $posiblesRespuestas =PosiblesRespuestasEvaluacionesClientes::where('id_preguntas_evaluacion',$request->pregunta)
         ->where('puntuacion',$request->score)
+        ->where('estado',1)
         ->with('preguntasEvaluacionesClientes')
         ->get();
 
@@ -59,9 +69,14 @@ class Evaluaciones_Clientes extends Controller
 
     public function saveposiblesrespuestas(Request $request)
     {
-       //  dd($request->toArray());
+       //dd($request->toArray());
+       /**
+        * Metodo para guardar las respuestas de las estrellas
+        *en vista de evaluaciones a clientes
+        */
 
         $historialPuntajes = $request->get('historialPuntajes');
+        $historialRespuestas = $request->get('historialRespuestas');
         $idEvaluacion = $request->get('idEvaluaciones_');
         $comentatio = $request->get('comentario');
 
@@ -73,7 +88,32 @@ class Evaluaciones_Clientes extends Controller
             ]);
         }
 
-        $promedio = CalificacionesEva_clientes::where('id_evaluacion', $idEvaluacion)
+        //Guardado de respuetas
+
+        if ($historialRespuestas !== null) {
+            foreach ($historialRespuestas as $respuesta) {
+                if ($respuesta !== null) {
+                    $pregunta= $respuesta['preguntas_evaluaciones_clientes']['titulo'];
+                    $id_PosibleRespuestas = $respuesta['id'];
+                    $nombre_respuesta = $respuesta['titulo_respuesta'];
+                    $id_preguntas=$respuesta['preguntas_evaluaciones_clientes']['id'];
+                    $puntuacion = $respuesta['puntuacion'];
+
+                    //dd($id_preguntas);
+
+                    respuesta_ev_clientes::create([
+                        'id_evaluacion' => $idEvaluacion,
+                        'pregunta' => $pregunta,
+                        'id_posiblesRespuestas' => $id_PosibleRespuestas,
+                        'nombre_respuesta' => $nombre_respuesta,
+                        'id_preguntas' => $id_preguntas,
+                        'puntuacion' => $puntuacion,
+                    ]);
+                }
+            }
+        }
+
+      $promedio = CalificacionesEva_clientes::where('id_evaluacion', $idEvaluacion)
             ->avg('puntuacion') ?? 0;
         $promedio = $promedio ? round($promedio, 1) : 0; // Formateamos a un decimal
 
@@ -82,7 +122,7 @@ class Evaluaciones_Clientes extends Controller
         $evaluacion->comentario = $comentatio;
         $evaluacion->save();
 
-        return Inertia::render('components/Final');
+        return redirect()->route('evaluacion.clientes');
     }
 
 

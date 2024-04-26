@@ -49,6 +49,8 @@ Route::group(['middleware' => 'auth:empleados'], function () {
 Route::group([ 'middleware' => 'auth:empleados'], function () {
   Route::get('/panela/encuestaclientes/', [PanelController::class, 'encuesta_clientes'])->name('encuesta.clientes'); // Vista de Encuesta Clientes
   Route::post('/panela/encuestaclientes/save', [PanelController::class, 'crearpreguntaCliente'])->name('encuesta.clientes.save'); //save
+  Route::post('/panela/encuestaclientes/crearrazon', [PanelController::class, 'crear_posiblerazon_cliente'])->name('crear_preguntas.clientes'); // TODO: Crear Posible Razon
+  Route::post('/panela/encuestaclientes/{idposiblerespuesta}/{estado}', [PanelController::class, 'estado_pregunta_cliente'])->name('estado.pregunta.clientes'); // TODO:estado de pregunta
 });
 
 
@@ -67,11 +69,13 @@ Route::delete('/panela/usuarios/{id_usuario}',[PanelController::class,'delete'])
 
 //TODO:Rutas de Evaluaciones_a?clientes(estrellas)
 Route::middleware('auth:empleados')->group(function () {
-    Route::get('/panela/evaluaciones_clientes/show', [Evaluaciones_Clientes::class, 'Evaluacion_clientes'])->name('evaluacion.clientes');
+    Route::get('/panela/evaluaciones_clientes/show', [Evaluaciones_Clientes::class, 'Evaluacion_clientes'])->name('evaluacion.clientes');//vista de la tabla
     Route::get('/panela/evaluaciones_clientes/{id}', [Evaluaciones_Clientes::class, 'Evaluacion_clientes_show'])->name('evaluacion.clientes.id');
-    Route::post('/panela/evaluaciones_clientes/', [Evaluaciones_Clientes::class, 'showposiblesrespuestas'])->name('showposiblesrespuestas');
-    Route::post('/panela/evaluaciones_clientes/save',[Evaluaciones_Clientes::class,'saveposiblesrespuestas'])->name('saveposiblesrespuestas');
+    //estrellas
+    Route::post('/panela/estrellasCliente/', [Evaluaciones_Clientes::class, 'showposiblesrespuestas'])->name('showposiblesrespuestas');
+    Route::post('/panela/estrellasCliente/save',[Evaluaciones_Clientes::class,'saveposiblesrespuestas'])->name('saveposiblesrespuestas');
 });
+
 
 
 

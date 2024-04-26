@@ -13,6 +13,16 @@ class PosiblesRespuestasEvaluacionesClientes extends Model
     protected $table = 'posiblesrespuestas_evaluaciones_clientes';
     protected $primaryKey = 'id';
 
+    protected $fillable = [
+        'id_preguntas_evaluacion',
+        'titulo_respuesta',
+        'puntuacion',
+        'estado',
+        'id_empresa',
+        'created_at',
+        'updated_at',
+    ];
+
 
  public function preguntasEvaluacionesClientes(): BelongsTo
 {

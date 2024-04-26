@@ -42,6 +42,7 @@ class PanelController extends Controller
      * @return \Inertia\Response
      */
     public function clientes(Request $request)
+    //TODO: Metodo que retorna la vista de clientes
     {
         $empresa = session('empresa');
         $busqueda = $request->query('busqueda');
@@ -78,6 +79,7 @@ class PanelController extends Controller
 
         $existePreguntaConRespuesta = !$existePreguntaSinRespuesta;
 
+        //dd($existePreguntaConRespuesta);
         return inertia::render('panel/Clientes',
             ['client' => $clientes ,
             'plantillas'=>$plantillas,
@@ -137,9 +139,12 @@ class PanelController extends Controller
 
     {
         $id_empresa = session('empresa');
-        $resenas = Resena::with('UsuariosClientes')->where('id_empresa', $id_empresa)->paginate(10);
-
+        $resenas = Resena::with('UsuariosClientes')
+            ->where('id_empresa', $id_empresa)
+            ->orderBy('id_resena', 'desc')
+            ->paginate(10);
         $estados=Estados::all()->groupBy('id_estado');
+
 
 
 
@@ -211,7 +216,40 @@ class PanelController extends Controller
         ]);
     }
 
+    public function crear_posiblerazon_cliente(Request $request)
+    {   //PosiblesRespuestasEvaluacionesClientes
+        //dd($request->toArray());
+        $empresa = session('empresa');
+        $preguntaId=$request->preguntaId;
+        $puntuacion=$request->puntuacion;
+        $titulo=$request->titulo;
+        $pregunta = PosiblesRespuestasEvaluacionesClientes::create([
+            'id_preguntas_evaluacion' => $preguntaId,
+            'titulo_respuesta' => $titulo,
+            'puntuacion' => $puntuacion,
+            'estado' =>1,
+            'id_empresa' => $empresa,
 
+        ]);
+    }
+
+    public function estado_pregunta_cliente($idposiblerespuesta, $estado)
+    //TODO:metodo que cambia el estado de las preguntas en la vista de encuesta a cliente
+    {
+
+    //dd($idposiblerespuesta, $estado);
+
+        $respuesta = PosiblesRespuestasEvaluacionesClientes::find($idposiblerespuesta);
+
+        // dd($respuesta->toArray());
+
+        if ($respuesta) {
+            $respuesta->update(['estado' => $estado]);
+        } else {
+            // Manejar el caso en que la respuesta no se encuentra
+        }
+        return back();
+    }
 
     public function crear_posiblerazon(Request $request) //TODO: Metodo que crea posibles razones en la encuesta (VISTA DE ADMIN) evaluacion a  empresa
     {
@@ -248,7 +286,9 @@ class PanelController extends Controller
     }
 
 
-    public function Estado_preguntas($idposiblerespuesta, $estado){
+    public function Estado_preguntas($idposiblerespuesta, $estado)
+    //TODO:metodo que cambia el estado de las preguntas en la vista de encuesta a empresa
+    {
 
        // dd($idposiblerespuesta, $estado);
 

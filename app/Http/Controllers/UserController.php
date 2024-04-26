@@ -104,7 +104,6 @@ class UserController extends Controller
                     'puntuacion' => $puntuacion,
                     'pregunta' => $pregunta,
                     'id_resena' => $id_reseni2,
-                    'id_empresa' => Session::get('empresa')
                 ]);
             }
 
@@ -137,7 +136,6 @@ class UserController extends Controller
                 'puntuacion' => $puntuacion,
                 'pregunta' => null,
                 'id_resena' => $id_resena,
-                'id_empresa' => Session::get('empresa') //Esta viene en null siempre igual no se necesita
             ]);
 
            // dd($data->toArray());
