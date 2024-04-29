@@ -4,14 +4,15 @@ import Btn from "../components/Btn";
 import TextArea_Encuesta from "./components/TextArea_Encuesta";
 import { router, Link } from "@inertiajs/react";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-import { Progress } from "flowbite-react";
+import { Progress, Alert } from "flowbite-react";
 
 const StrellasClientes = ({
     idmoderador,
     preguntas,
     idEvaluaciones,
-    posiblesRespuestas,
+    posiblesRespuestas_,
     logo,
+    estadoPreguntas,
 }) => {
     const [posiblesrespuestas, setPosiblesrespuestas] = useState(preguntas);
     const [idEvaluaciones_, setIdEvaluaciones] = useState(idEvaluaciones);
@@ -36,7 +37,7 @@ const StrellasClientes = ({
             : {}
     );
 
-    console.log(historialPuntajes);
+    console.log(preguntas);
     // ... Resto del código ...
     useEffect(() => {
         if (
@@ -79,12 +80,18 @@ const StrellasClientes = ({
         } else {
             setBtn(false);
         }
-        router.post("/panela/estrellasCliente/", {
-            score: newScore,
-            idEvaluacion: idEvaluaciones,
-            idmoderador: idmoderador,
-            pregunta: idPreguntaActual,
-        });
+        router.get(
+            "/panela/estrellasCliente/",
+            {
+                score: newScore,
+                idEvaluacion: idEvaluaciones,
+                idmoderador: idmoderador,
+                pregunta: idPreguntaActual,
+            },
+            {
+                preserveState: true,
+            }
+        );
 
         setRespuestaSeleccionada([]);
         setBtnActive([]);
@@ -97,7 +104,7 @@ const StrellasClientes = ({
         // Guarda el estado de btnActive en el historial antes de pasar a la siguiente pregunta
         //  setHistorialBtnActive([...historialBtnActive, btnActive]);
         // Resto del código...
-        posiblesRespuestas.length = 0;
+        posiblesRespuestas_.length = 0;
         setBtnActive([]); // Reinicia el estado de btnActive
         // Extrae el objeto de respuestaSeleccionada si es un array
         const respuesta = Array.isArray(respuestaSeleccionada)
@@ -122,7 +129,7 @@ const StrellasClientes = ({
         setBtn(true);
         setCurrentScore(0);
         setBtn(false);
-        posiblesRespuestas.length = 0;
+        posiblesRespuestas_.length = 0;
         setTexto("Selecciona una calificación. 📌");
 
         // Elimina el estado de btnActive de la pregunta anterior del historial
@@ -175,14 +182,22 @@ const StrellasClientes = ({
                     className="w-[45px] ps-px-[50px] rounded-xl"
                 />
             </header>
-            {preguntas.length === 0 ? (
-                <div className="flex items-center justify-center h-screen">
-                    <Link className=" bg-blue-700 hover:bg-blue-800 rounded-lg py-1 px-2 text-white"
-                    href="/panela/encuestaclientes/"
-                    >
-                        ir a encuesta
-                    </Link>
-                </div>
+
+            {posiblesrespuestas.length === 0 || estadoPreguntas === false ? (
+                <>
+                    <Alert color="failure">
+                        <span className="font-medium">Info alert!</span>
+                        completa el cuestionario para evaluar al cliente 📌
+                    </Alert>
+                    <div className="flex items-center justify-center h-screen">
+                        <Link
+                            className=" bg-blue-700 hover:bg-blue-800 rounded-lg py-1 px-2 text-white"
+                            href="/panela/encuestaclientes/"
+                        >
+                            ir a encuesta
+                        </Link>
+                    </div>
+                </>
             ) : (
                 <div className="flex flex-col h-[calc(100vh-70px)] justify-between px-4">
                     <div>
@@ -212,10 +227,10 @@ const StrellasClientes = ({
                                 )}
 
                                 <div className="mt-5 mb-5 p-3 animate-shake ]">
-                                    {posiblesRespuestas &&
-                                    posiblesRespuestas.length > 0 ? (
+                                    {posiblesRespuestas_ &&
+                                    posiblesRespuestas_.length > 0 ? (
                                         <ul className="gap-y-5 ">
-                                            {posiblesRespuestas.map(
+                                            {posiblesRespuestas_.map(
                                                 (respuesta) => (
                                                     <li
                                                         className=""

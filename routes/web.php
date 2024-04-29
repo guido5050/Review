@@ -58,7 +58,7 @@ Route::group([ 'middleware' => 'auth:empleados'], function () {
 Route::prefix('panela/resenas/')->group(function () {
     Route::get('{userClienteId}/{Idresena}', [PanelController::class,'gestionar']);
     Route::post('comentario', [PanelController::class,'comentarios_admin']); //ComentariosGuardados por el admin de resenas
-    Route::post('publicar', [PanelController::class,'publicar_resena'])->name('publicar.resena'); //Publicar resena
+    Route::post('publicar', [PanelController::class,'publicar_resena'])->name('publicar.resena'); //Publicar resena(Aprobar)
 });
 
 
@@ -71,10 +71,13 @@ Route::delete('/panela/usuarios/{id_usuario}',[PanelController::class,'delete'])
 Route::middleware('auth:empleados')->group(function () {
     Route::get('/panela/evaluaciones_clientes/show', [Evaluaciones_Clientes::class, 'Evaluacion_clientes'])->name('evaluacion.clientes');//vista de la tabla
     Route::get('/panela/evaluaciones_clientes/{id}', [Evaluaciones_Clientes::class, 'Evaluacion_clientes_show'])->name('evaluacion.clientes.id');
+    Route::get('/panela/evaluaciones_clientes/{idCliente}/{IdEvaluacion}',[Evaluaciones_Clientes::class,'ClientesGestionar']);
     //estrellas
-    Route::post('/panela/estrellasCliente/', [Evaluaciones_Clientes::class, 'showposiblesrespuestas'])->name('showposiblesrespuestas');
+    Route::get('/panela/estrellasCliente/', [Evaluaciones_Clientes::class, 'showposiblesrespuestas'])->name('showposiblesrespuestas');
     Route::post('/panela/estrellasCliente/save',[Evaluaciones_Clientes::class,'saveposiblesrespuestas'])->name('saveposiblesrespuestas');
 });
+
+
 
 
 

@@ -85,12 +85,7 @@ const ConfigEncuesta_Clientes = ({
                 <div className="mb-2">
                     <ModalCrearPreguntas_ev_clientes />
                 </div>
-                <Alert color="info">
-                                <span className="font-medium">Info alert!</span>{" "}
-                                Completa el cuestionario debe existir al menos
-                                una posible razon en cada puntuacion completa
-                                las preguntas que estan en color amarillo
-                            </Alert>
+
                 <div>
                     {preguntas &&
                         preguntas.some(
@@ -105,7 +100,7 @@ const ConfigEncuesta_Clientes = ({
                                         )
                                 )
                         ) && (
-                            <Alert color="info">
+                            <Alert color="red">
                                 <span className="font-medium">Info alert!</span>{" "}
                                 Completa el cuestionario debe existir al menos
                                 una posible razon en cada puntuacion completa

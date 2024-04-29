@@ -67,6 +67,10 @@ class PanelController extends Controller
 
         $plantillas = Correo::where('id_empresa', $empresa)->get();
 
+        $existePregunta = Preguntas::where('id_empresa', $empresa)->exists();
+
+        //dd($existePregunta);
+
         $existePreguntaSinRespuesta = Preguntas::where('id_empresa', $empresa)
             ->where(function ($query) {
                 foreach (range(1, 5) as $puntuacion) {
@@ -79,12 +83,14 @@ class PanelController extends Controller
 
         $existePreguntaConRespuesta = !$existePreguntaSinRespuesta;
 
-        //dd($existePreguntaConRespuesta);
+
+        //dd($existePreguntaSinRespuesta,$existePregunta);
         return inertia::render('panel/Clientes',
             ['client' => $clientes ,
             'plantillas'=>$plantillas,
             'empresaId' => $empresa,
             'encuesta' => $existePreguntaConRespuesta,
+            'estadoPreguntas'=>$existePregunta
             ]);
     }
 

@@ -24,30 +24,60 @@ class Evaluaciones_Clientes extends Controller
 
         return Inertia::render('Evaluacionesclientes/EvaluacionesClientes', ['evaluaciones' => $evaluaciones]);
     }
+
+    public function ClientesGestionar($idCliente,$Iid_clientedEvaluacion){
+        //dd($idCliente, $IdEvaluacion);
+        $evaluacion = EvaluacionesClientes::where('id_clientes', $idCliente);
+        dd($evaluacion);
+    }
+
     public function Evaluacion_clientes_show($id)
     {
         $empresa = session('empresa');
          $preguntas = PreguntasEvaluacionesClientes::where('id_empresa', $empresa)->get();
+         // posiblesRespuestasEvaluacionesClientes
          $userId = Auth::id();
-        $evaluacionData=[
+         //TODO: hacer la condicion de si existe al menos una posible respuesta por cada pregunta
+
+         $evaluacionData=[
             'id_empresa' => $empresa,
             'id_moderador'=> $userId,
             'id_cliente' => $id,
             'id_usuario' => $userId,
-            'fecha' => date('Y-m-d'),];
-            //dd($evaluacionData);
-            //dd($preguntas->toArray());
+            'fecha' => date('Y-m-d'),
+            ];
+            /**
+             * Verifica si existe alguna pregunta sin respuesta para un determinado empresa.
+             *
+             * @return bool True si existe alguna pregunta sin respuesta, False en caso contrario.
+             */
+            $existePreguntaSinRespuesta = PreguntasEvaluacionesClientes::where('id_empresa', $empresa)
+                ->where(function ($query) {
+                    foreach (range(1, 5) as $puntuacion) {
+                        $query->orWhereDoesntHave('posiblesRespuestasEvaluacionesClientes', function ($query) use ($puntuacion) {
+                            $query->where('puntuacion', $puntuacion);
+                        });
+                    }
+                })
+                ->exists();
 
-        if($preguntas->isNotEmpty()){
+            $existePreguntaConRespuesta = !$existePreguntaSinRespuesta;
+
+        //dd($existePreguntaConRespuesta);
+        /**
+         *  en la condicional del if $preguntas->isNotEmpty() se valida que existan preguntas
+         * y que exista al menos una posible respuesta por cada pregunta es decir
+         * cuando $existePreguntaConRespuesta sea igual a true se crea la evaluacion
+         * que seria la contra parte de generar resena
+         */
+        if ($preguntas->isNotEmpty() && $existePreguntaConRespuesta === true) {
             $evaluacion = EvaluacionesClientes::create($evaluacionData);
-            //TODO:Genera la evaluacion del cliente
         }
-
-
 
         return Inertia::render('Evaluacionesclientes/StrellasClientes',
         [
             'preguntas' => $preguntas,
+            'estadoPreguntas' => $existePreguntaConRespuesta,
             'idmoderador' => $userId,
             'idEvaluaciones' => isset($evaluacion->id) ? $evaluacion->id : 0
             ]);
@@ -61,7 +91,8 @@ class Evaluaciones_Clientes extends Controller
         ->with('preguntasEvaluacionesClientes')
         ->get();
 
-        return Inertia::render('Evaluacionesclientes/StrellasClientes', ['posiblesRespuestas' => $posiblesRespuestas]);
+
+        return Inertia::render('Evaluacionesclientes/StrellasClientes', ['posiblesRespuestas_' => $posiblesRespuestas]);
 
 
     }

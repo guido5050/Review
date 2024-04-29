@@ -1,15 +1,30 @@
-import React from 'react'
-import Menu_Item from '../panel/Menu_Item'
-import { Table, Badge } from "flowbite-react";
-import { Link } from "@inertiajs/react";
-import { FaStar } from "react-icons/fa";
-import { TbEyeStar } from "react-icons/tb";
+import React from "react";
+import Menu_Item from "../panel/Menu_Item";
+import { Table, Button } from "flowbite-react";
+import { Link, router } from "@inertiajs/react";
 import { Rating } from "flowbite-react";
-const EvaluacionesClientes = ({auth, razon_social, logo, AppName, evaluaciones}) => {
-    console.log(evaluaciones);
+const EvaluacionesClientes = ({
+    auth,
+    razon_social,
+    logo,
+    AppName,
+    evaluaciones,
+}) => {
+    const gestionar = (idUsuario, IdEvaluacion) => {
+        console.log(idUsuario, IdEvaluacion);
+        router.get(
+            `/panela/evaluaciones_clientes/${idUsuario}/${IdEvaluacion}`
+        );
+    };
+
     return (
         <>
-            <Menu_Item user={auth.user} razon_social={razon_social} logo={logo} AppName={AppName}>
+            <Menu_Item
+                user={auth.user}
+                razon_social={razon_social}
+                logo={logo}
+                AppName={AppName}
+            >
                 <div className="overflow-x-auto animate-fade-down animate-ease-out p-8">
                     <Table>
                         <Table.Head>
@@ -19,6 +34,7 @@ const EvaluacionesClientes = ({auth, razon_social, logo, AppName, evaluaciones})
                             <Table.HeadCell>Moderador</Table.HeadCell>
                             <Table.HeadCell>Comentario</Table.HeadCell>
                             <Table.HeadCell>Fecha</Table.HeadCell>
+                            <Table.HeadCell></Table.HeadCell>
                         </Table.Head>
                         <Table.Body className="divide-y">
                             {evaluaciones.data.map((evaluacion, index) => (
@@ -29,19 +45,45 @@ const EvaluacionesClientes = ({auth, razon_social, logo, AppName, evaluaciones})
                                     <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                         {evaluacion.id}
                                     </Table.Cell>
-                                    <Table.Cell>{evaluacion.usuarios_clientes.nombre_completo}</Table.Cell>
-                                    <Table.Cell><Rating>
+                                    <Table.Cell>
+                                        {
+                                            evaluacion.usuarios_clientes
+                                                .nombre_completo
+                                        }
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        <Rating>
                                             <Rating.Star />
                                             <p className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
                                                 {evaluacion.puntuacion_global
                                                     ? evaluacion.puntuacion_global
                                                     : "no puntuacion"}
-
                                             </p>
-                                        </Rating></Table.Cell>
-                                    <Table.Cell>{evaluacion.usuarios_empleado.nombre_completo  }</Table.Cell>
-                                    <Table.Cell>{evaluacion.comentario}</Table.Cell>
+                                        </Rating>
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        {
+                                            evaluacion.usuarios_empleado
+                                                .nombre_completo
+                                        }
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        {evaluacion.comentario}
+                                    </Table.Cell>
                                     <Table.Cell>{evaluacion.fecha}</Table.Cell>
+                                    <Table.Cell>
+                                        <Button
+                                            onClick={() => {
+                                                gestionar(
+                                                    evaluacion.id_cliente,
+                                                    evaluacion.id
+                                                );
+                                            }}
+                                            color="blue"
+                                        >
+                                            Gestionar
+                                        </Button>
+                                    </Table.Cell>
                                 </Table.Row>
                             ))}
                         </Table.Body>
@@ -68,6 +110,6 @@ const EvaluacionesClientes = ({auth, razon_social, logo, AppName, evaluaciones})
             </Menu_Item>
         </>
     );
-}
+};
 
-export default EvaluacionesClientes
+export default EvaluacionesClientes;

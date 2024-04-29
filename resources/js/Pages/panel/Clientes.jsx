@@ -21,6 +21,7 @@ import ModalCrearClientes from "./ui/ModalCrearClientes";
 const Clientes = ({
     client,
     encuesta,
+    estadoPreguntas,
     auth,
     logo,
     razon_social,
@@ -30,6 +31,7 @@ const Clientes = ({
     /**
      * TODO: Client es la respuesta paginada del controlador PanelController ´clientes()´
      */
+    console.log(estadoPreguntas);
     const [modalOpen, setModalOpen] = useState(false);
     const [clienteId, setClienteId] = useState(null);
     const [nombreCliente, setNombreCliente] = useState(null);
@@ -39,7 +41,6 @@ const Clientes = ({
 
     const [busquedaPor, setBusquedaPor] = useState("Todos");
     const [busqueda, setBusqueda] = useState("");
-
 
     const handleSelectChange = (event) => {
         setBusquedaPor(event.target.value);
@@ -161,9 +162,7 @@ const Clientes = ({
                                 <Table.HeadCell>
                                     Enviar Evaluaciones
                                 </Table.HeadCell>
-                                <Table.HeadCell>
-                                    Evaluar cliente
-                                </Table.HeadCell>
+                                <Table.HeadCell>Evaluar cliente</Table.HeadCell>
                             </Table.Head>
                             <Table.Body className="divide-y">
                                 {client.data.map((cliente, index) => (
@@ -174,11 +173,19 @@ const Clientes = ({
                                         <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                             {cliente.nombre_completo}
                                         </Table.Cell>
-                                        <Table.Cell className={cliente.email ? '' : 'text-red-500 flex items-center'}>
-                                            {cliente.email ? cliente.email : (
+                                        <Table.Cell
+                                            className={
+                                                cliente.email
+                                                    ? ""
+                                                    : "text-red-500 flex items-center"
+                                            }
+                                        >
+                                            {cliente.email ? (
+                                                cliente.email
+                                            ) : (
                                                 <>
                                                     No email
-                                                    <BiX  size="20px"/>
+                                                    <BiX size="20px" />
                                                 </>
                                             )}
                                         </Table.Cell>
@@ -189,9 +196,10 @@ const Clientes = ({
                                                 : "No nacionalidad"}
                                         </Table.Cell>
                                         <Table.Cell>
-                                            {encuesta === true  ? (
+                                            {encuesta === true &&
+                                            estadoPreguntas === true ? (
                                                 <BtnPrimary
-                                                   className="bg-blue-600 hover:bg-blue-500 flex items-center"
+                                                    className="bg-blue-600 hover:bg-blue-500 flex items-center"
                                                     onClick={() => {
                                                         setModalOpen(true);
                                                         setClienteId(
