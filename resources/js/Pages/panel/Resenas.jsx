@@ -1,10 +1,10 @@
 import React from "react";
 import Menu_Item from "./Menu_Item";
-import { Table, Badge } from "flowbite-react";
+import { Table, Rating, Button } from "flowbite-react";
 import { Link } from "@inertiajs/react";
 import { FaStar } from "react-icons/fa";
 import { TbEyeStar } from "react-icons/tb";
-import { Rating } from "flowbite-react";
+import { router } from "@inertiajs/react";
 
 const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
     return (
@@ -53,7 +53,6 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                                                 {resena.Puntuacion_global
                                                     ? resena.Puntuacion_global
                                                     : "no puntuacion"}
-
                                             </p>
                                         </Rating>
                                     </Table.Cell>
@@ -85,17 +84,17 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                                         )}
                                     </Table.Cell>
 
-                                    <Table.Cell className="font-extrabold text-white text-center">
-                                        <Link
-                                            href={`/panela/resenas/${resena.id_usuario}/${resena.id_resena}`}
-                                            className="flex items-center justify-center gap-x-1 bg-blue-700 hover:bg-blue-800 rounded-lg py-1 px-2"
+                                    <Table.Cell className="font-extrabold text-white ">
+                                        <Button
+                                            color="blue"
+                                            onClick={() => {
+                                                router.visit(
+                                                    `/panela/resenas/${resena.id_usuario}/${resena.id_resena}`
+                                                );
+                                            }}
                                         >
-                                            GESTIONAR
-                                            <TbEyeStar
-                                                size={"20"}
-                                                className="animate-pulse animate-ease-linear"
-                                            />
-                                        </Link>
+                                            Gestionar
+                                        </Button>
                                     </Table.Cell>
                                 </Table.Row>
                             ))}

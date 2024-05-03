@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\respuestas_ev_clientes;
 class PreguntasClientes extends Model
 {
     use HasFactory;
@@ -25,6 +26,10 @@ class PreguntasClientes extends Model
     public function pregunta()
     {
         return $this->belongsTo(Preguntas::class, 'id_preguntas');
+    }
+    public function respuestaEvClientes(): HasMany
+    {
+        return $this->hasMany(respuestas_ev_clientes::class, 'id_preguntas');
     }
 
 }

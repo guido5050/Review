@@ -67,11 +67,14 @@ Route::post('/panela/usuarios/roles/create',[PanelController::class,'create_role
 Route::post('/panela/usuarios/roles/update',[PanelController::class,'update_roles'])->name('update_roles')->middleware('auth:empleados');
 Route::delete('/panela/usuarios/{id_usuario}',[PanelController::class,'delete'])->name('delete')->middleware('auth:empleados');//Elimina usuarios
 
-//TODO:Rutas de Evaluaciones_a?clientes(estrellas)
+//TODO:Rutas de Evaluaciones_a?clientes y (estrellas)
 Route::middleware('auth:empleados')->group(function () {
+
     Route::get('/panela/evaluaciones_clientes/show', [Evaluaciones_Clientes::class, 'Evaluacion_clientes'])->name('evaluacion.clientes');//vista de la tabla
     Route::get('/panela/evaluaciones_clientes/{id}', [Evaluaciones_Clientes::class, 'Evaluacion_clientes_show'])->name('evaluacion.clientes.id');
     Route::get('/panela/evaluaciones_clientes/{idCliente}/{IdEvaluacion}',[Evaluaciones_Clientes::class,'ClientesGestionar']);
+    //Guardar Comentarios de evaluaciones a clientes (comentarios)
+    Route::post('/panela/evaluaciones_clientes/saveComentario',[Evaluaciones_Clientes::class,'saveComentario'])->name('save.comentatio.ev'); //
     //estrellas
     Route::get('/panela/estrellasCliente/', [Evaluaciones_Clientes::class, 'showposiblesrespuestas'])->name('showposiblesrespuestas');
     Route::post('/panela/estrellasCliente/save',[Evaluaciones_Clientes::class,'saveposiblesrespuestas'])->name('saveposiblesrespuestas');

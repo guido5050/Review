@@ -37,7 +37,8 @@ const StrellasClientes = ({
             : {}
     );
 
-    console.log(preguntas);
+    // console.log(respuestaSeleccionada);
+    // console.log(historialRespuestas);
     // ... Resto del código ...
     useEffect(() => {
         if (
@@ -108,7 +109,7 @@ const StrellasClientes = ({
         setBtnActive([]); // Reinicia el estado de btnActive
         // Extrae el objeto de respuestaSeleccionada si es un array
         const respuesta = Array.isArray(respuestaSeleccionada)
-            ? respuestaSeleccionada[0]
+            ? respuestaSeleccionada
             : respuestaSeleccionada;
 
         // Guarda la respuesta y el puntaje actual en el historial antes de pasar a la siguiente pregunta

@@ -9,6 +9,8 @@ use App\Models\PosiblesRespuestasEvaluacionesClientes;
 use App\Models\EvaluacionesClientes;
 use App\Models\CalificacionesEva_clientes;
 use App\Models\respuesta_ev_clientes;
+use App\Models\ComentariosEvClientes;
+
 use Illuminate\Support\Facades\Auth;
 
 class Evaluaciones_Clientes extends Controller
@@ -25,10 +27,25 @@ class Evaluaciones_Clientes extends Controller
         return Inertia::render('Evaluacionesclientes/EvaluacionesClientes', ['evaluaciones' => $evaluaciones]);
     }
 
-    public function ClientesGestionar($idCliente,$Iid_clientedEvaluacion){
-        //dd($idCliente, $IdEvaluacion);
-        $evaluacion = EvaluacionesClientes::where('id_clientes', $idCliente);
-        dd($evaluacion);
+    public function ClientesGestionar($idCliente,$IdEvaluacion){
+
+        $evaluacion = EvaluacionesClientes::with(['UsuariosClientes','usuarios_empleado'])->
+        where('id_cliente', $idCliente)->first();
+
+        $preguntas = PreguntasEvaluacionesClientes::where('id_empresa', session('empresa'))->get();
+
+        $respuestas = respuesta_ev_clientes::with('preguntasEvaluacionesClientes')->
+        where('id_evaluacion', $IdEvaluacion)->get();
+
+        $comentarios = ComentariosEvClientes::where('id_evaluacion', $IdEvaluacion)->get();
+        // dd($comentarios->toArray());
+
+
+        return Inertia::render('Evaluacionesclientes/GestionarEv_Clientes',
+         ['evaluacion' => $evaluacion,
+          'preguntas'=>$preguntas,
+           'respuestas' => $respuestas,
+           'comentarios' => $comentarios]);
     }
 
     public function Evaluacion_clientes_show($id)
@@ -97,6 +114,21 @@ class Evaluaciones_Clientes extends Controller
 
     }
 
+        public function saveComentario(Request $request){
+            // Validar los datos del request si es necesario
+           // dd($request->toArray());
+            // Crear un nuevo comentario
+            ComentariosEvClientes::create([
+                'comentario' => $request->comentario,
+                'id_empleados' => $request->id_empleado,
+                'Nombre_Admin' => $request->Nombre_Admin,
+                'id_evaluacion' => $request->id_evaluacion,
+                'id_preguntas' => $request->id_preguntas,
+                    'fecha' => date('Y-m-d'), // Asume que la fecha es la fecha actual
+            ]);
+            return back();
+            // Redirigir o devolver una respuesta si es necesario
+        }
 
     public function saveposiblesrespuestas(Request $request)
     {
@@ -122,28 +154,27 @@ class Evaluaciones_Clientes extends Controller
         //Guardado de respuetas
 
         if ($historialRespuestas !== null) {
-            foreach ($historialRespuestas as $respuesta) {
-                if ($respuesta !== null) {
-                    $pregunta= $respuesta['preguntas_evaluaciones_clientes']['titulo'];
-                    $id_PosibleRespuestas = $respuesta['id'];
-                    $nombre_respuesta = $respuesta['titulo_respuesta'];
-                    $id_preguntas=$respuesta['preguntas_evaluaciones_clientes']['id'];
-                    $puntuacion = $respuesta['puntuacion'];
+            foreach ($historialRespuestas as $respuestas) {
+                foreach ($respuestas as $respuesta) {
+                    if ($respuesta !== null) {
+                        $pregunta= $respuesta['preguntas_evaluaciones_clientes']['titulo'];
+                        $id_PosibleRespuestas = $respuesta['id'];
+                        $nombre_respuesta = $respuesta['titulo_respuesta'];
+                        $id_preguntas=$respuesta['preguntas_evaluaciones_clientes']['id'];
+                        $puntuacion = $respuesta['puntuacion'];
 
-                    //dd($id_preguntas);
-
-                    respuesta_ev_clientes::create([
-                        'id_evaluacion' => $idEvaluacion,
-                        'pregunta' => $pregunta,
-                        'id_posiblesRespuestas' => $id_PosibleRespuestas,
-                        'nombre_respuesta' => $nombre_respuesta,
-                        'id_preguntas' => $id_preguntas,
-                        'puntuacion' => $puntuacion,
-                    ]);
+                        respuesta_ev_clientes::create([
+                            'id_evaluacion' => $idEvaluacion,
+                            'pregunta' => $pregunta,
+                            'id_posiblesRespuestas' => $id_PosibleRespuestas,
+                            'nombre_respuesta' => $nombre_respuesta,
+                            'id_preguntas' => $id_preguntas,
+                            'puntuacion' => $puntuacion,
+                        ]);
+                    }
                 }
             }
         }
-
       $promedio = CalificacionesEva_clientes::where('id_evaluacion', $idEvaluacion)
             ->avg('puntuacion') ?? 0;
         $promedio = $promedio ? round($promedio, 1) : 0; // Formateamos a un decimal
@@ -155,6 +186,7 @@ class Evaluaciones_Clientes extends Controller
 
         return redirect()->route('evaluacion.clientes');
     }
+
 
 
 }

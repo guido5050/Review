@@ -423,7 +423,7 @@ class PanelController extends Controller
                             ->groupBy('id_preguntas');
 
 
-        //dd($nombre, $comentario,$puntuacion, $preguntasClientes->toArray());
+       // dd($preguntasClientes->toArray());
 
         // Ahora puedes pasar estas preguntas y la reseña a tu vista
         return Inertia::render('panel/GestionarResenas',

@@ -34,7 +34,9 @@ const EvaluacionesClientes = ({
                             <Table.HeadCell>Moderador</Table.HeadCell>
                             <Table.HeadCell>Comentario</Table.HeadCell>
                             <Table.HeadCell>Fecha</Table.HeadCell>
-                            <Table.HeadCell></Table.HeadCell>
+                            <Table.HeadCell>
+                                
+                            </Table.HeadCell>
                         </Table.Head>
                         <Table.Body className="divide-y">
                             {evaluaciones.data.map((evaluacion, index) => (
