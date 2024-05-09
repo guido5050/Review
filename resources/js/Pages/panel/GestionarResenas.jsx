@@ -1,7 +1,15 @@
 import React from "react";
 import Menu_Item from "./Menu_Item";
 import BtnPrimary from "./ui/BtnPrimary";
-import { Table, Card, Badge } from "flowbite-react";
+import {
+    Table,
+    Card,
+    Badge,
+    Button,
+    Tooltip,
+    Breadcrumb,
+} from "flowbite-react";
+import { HiHome } from "react-icons/hi";
 import { FaStar } from "react-icons/fa";
 import { FaRegCommentDots } from "react-icons/fa";
 import { FaEnvelopeOpenText } from "react-icons/fa";
@@ -10,7 +18,6 @@ import { FaRegUser } from "react-icons/fa";
 import { LuMessageCircle } from "react-icons/lu";
 import { BsCalendar2Date } from "react-icons/bs";
 import { IoIosCheckmark } from "react-icons/io";
-import { Button } from "flowbite-react";
 import { router } from "@inertiajs/react";
 
 import ModalResenasComentarios from "./ui/ModalResenasComentarios";
@@ -68,6 +75,16 @@ const GestionarResenas = ({
         <>
             <Menu_Item user={auth.user} logo={logo} razon_social={razon_social}>
                 <div className="p-8 flex gap-y-2 justify-center mt-2 animate-fade-up animate-ease-in-out flex-col">
+                    <Breadcrumb aria-label="Default breadcrumb example">
+                        <Breadcrumb.Item
+                            onClick={() => window.history.back()}
+                            icon={HiHome}
+                            className="cursor-pointer"
+                        >
+                            <p className="hover:text-blue-400" >{`Evaluaciones a: ${razon_social}`}</p>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>Gestion de Evaluaciones a {razon_social}</Breadcrumb.Item>
+                    </Breadcrumb>
                     <Card>
                         <div className=" flex  gap-x-4 justify-between   ">
                             <div className="flex flex-col gap-y-4 ">
@@ -75,18 +92,23 @@ const GestionarResenas = ({
                                 {/* por si toca poner un elemento a abjo lo deje flex-col */}
                                 <div className="flex gap-x-3 items-center ">
                                     <div className="bg-blue-600 rounded-lg w-[100px]">
-                                        <p
-                                            className="font-extrabold text-[50px] p-3 text-center  rounded-lg cursor-pointer"
-                                            title="puntuacion del cliente al finalizar la reseña"
-                                        >
-                                            <strong className="text-white font-extrabold ">
-                                                {puntuacion}
-                                            </strong>
-                                        </p>
+                                        <Tooltip content="Puntuacion Global">
+                                            <p
+                                                className="font-extrabold text-[50px] p-3 text-center  rounded-lg cursor-pointer"
+                                                title="puntuacion del cliente al finalizar la reseña"
+                                            >
+                                                <strong className="text-white font-extrabold ">
+                                                    {puntuacion}
+                                                </strong>
+                                            </p>
+                                        </Tooltip>
                                     </div>
 
                                     <div className="flex flex-col gap-y-1 ">
-                                        <p className="text-black font-semibold">
+                                        <p className="text-gray-500 font-semibold">
+                                            <span className="text-black">
+                                                ¿Quién nos Evaluo?:
+                                            </span>{" "}
                                             {nombre}
                                         </p>
                                         <p>
@@ -116,30 +138,31 @@ const GestionarResenas = ({
                             <p className="font-extrabold text-blue-800 md:text-xl">
                                 {moderador === "Reseña no aprobada"
                                     ? `${moderador}`
-                                    : `Aprobada por:  ${moderador} 📌`}
+                                    : `Aprobada por el admin:  ${moderador} 📌`}
                             </p>
-                            <Button
-                                color="success"
-                                onClick={AprobarResena}
-                                disabled={moderador != "Reseña no aprobada"}
-                            >
-                                Aprobar
-                            </Button>
+                            <Tooltip content="Aprobar esta reseña">
+                                <Button
+                                    color="success"
+                                    onClick={AprobarResena}
+                                    disabled={moderador != "Reseña no aprobada"}
+                                >
+                                    Aprobar
+                                </Button>
+                            </Tooltip>
                         </div>
                         <hr className="border-t border-gray-200 my-4" />{" "}
                         {/* Aquí está la línea */}
                         <div className="flex items-center justify-between gap-x-1 text-xl">
-                            <p
-                                className="font-extrabold cursor-pointer"
-                                title="comentario dejado por el cliente al finalizar la encuesta"
-                            >
-                                {`Comentario:`}
-                                <strong className="text-gray-500">
-                                    {comentario
-                                        ? comentario
-                                        : "Reseña no terminada"}
-                                </strong>
-                            </p>
+                            <Tooltip content="Comentario dejado por el cliente al finalizar la encuesta">
+                                <p className="font-extrabold cursor-pointer">
+                                    {`Comentario del Cliente:`}
+                                    <strong className="text-gray-500">
+                                        {comentario
+                                            ? comentario
+                                            : "Reseña no terminada"}
+                                    </strong>
+                                </p>
+                            </Tooltip>
                         </div>
                     </Card>
 

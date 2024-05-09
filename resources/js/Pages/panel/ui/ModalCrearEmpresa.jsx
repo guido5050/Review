@@ -3,6 +3,9 @@ import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { FileInput } from "flowbite-react";
 import { router } from "@inertiajs/react";
+import { FaSquareFacebook } from "react-icons/fa6";
+import { FaInstagram } from "react-icons/fa";
+import { TbWorld } from "react-icons/tb";
 
 const ModalCrearEmpresa = () => {
     const [openModal, setOpenModal] = useState(false);
@@ -21,6 +24,9 @@ const ModalCrearEmpresa = () => {
         razon_social: "",
         ruc: "",
         telefono: "",
+        facebook: "",
+        instagram: "",
+        web: "",
         direccion_local: "",
         item_source: 3,
         moneda_item_source: 1,
@@ -164,6 +170,50 @@ const ModalCrearEmpresa = () => {
                                 className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                             />
                         </div>
+
+                        <div className="flex flex-col">
+                            <label className="font-bold mb-1 flex items-center">
+                                Facebook:
+                                <FaSquareFacebook />
+                            </label>
+                            <input
+                                id="facebook"
+                                type="text"
+                                placeholder="Inserta la url"
+                                //defaultValue={facebook}
+                                onChange={handleChange}
+                                className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <label className="font-bold mb-1 flex items-center">
+                                Instagran: <FaInstagram />
+                            </label>
+                            <input
+                                id="instagram"
+                                type="text"
+                                placeholder="Inserta la url"
+                                //defaultValue={instagram}
+                                onChange={handleChange}
+                                className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label className="font-bold mb-1 flex items-center">
+                                Sitio Web:
+                                <TbWorld />
+                            </label>
+                            <input
+                                id="web"
+                                type="text"
+                                //defaultValue={web}
+                                placeholder="Inserta la url"
+                                onChange={handleChange}
+                                className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                        </div>
+
                         <div className="flex flex-col">
                             <label className="font-bold mb-1 flex items-center">
                                 Numero Ruc:
@@ -176,7 +226,7 @@ const ModalCrearEmpresa = () => {
                                 className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                             />
                         </div>
-                       
+
                         <div className="flex flex-col">
                             <div className="flex">
                                 <label className="font-bold mb-1 flex items-center">

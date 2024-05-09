@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { router } from "@inertiajs/react";
 import { Accordion, Alert } from "flowbite-react";
-import { HiInformationCircle } from "react-icons/hi";
+import { HiEye, HiInformationCircle } from "react-icons/hi";
+
 import Menu_Item from "./Menu_Item";
 import { FaQuestionCircle } from "react-icons/fa";
 import { FaStar } from "react-icons/fa6";
-import { FaCheck } from "react-icons/fa";
-import BtnPrimary from "./ui/BtnPrimary";
 import ModalCrear_PosibleRazon from "./ui/ModalCrear_PosibleRazon";
 import ModalCrearPregunta from "./ui/ModalCrearPregunta";
 import ModalCrear_PosibleRazon_de_Estrellas from "./ui/ModalCrear_PosibleRazon_de_Estrellas";
+import ModalUpdateRazon from "./ui/ModalUpdateRazon";
 
 const ConfigEncuesta = ({
     auth,
@@ -104,14 +104,18 @@ const ConfigEncuesta = ({
                     </Alert>
                 )}
                 {estadoEncuesta === true && (
-                    <Alert color="info" icon={HiInformationCircle}>
-                        <span className="font-medium">Informacion!</span>{" "}
-                        Completa el cuestionario debe existir al menos una
-                        posible razon en cada puntuacion, por cada una es deicir
-                        que por cada puntuacion del 1 al 5 debe existir al menos
-                        una posible razon que el cliente pueda seleccionar
-                        importante! asegurar que todas las posibles respuestas
-                        esten en check al menos una
+                    <Alert
+                        color="success"
+                        icon={HiInformationCircle}
+                        rounded
+                    >
+                        <span className="font-medium">Informacion!</span>
+                        Cada pregunta tiene cinco opciones de puntuación, del 1
+                        al 5 ★, presentadas en acordeones
+                        separados cada pregunta despliega las puntuaciones.
+                        Puedes
+                        editar y crear razones específicas para cada
+                        calificación{" "}
                     </Alert>
                 )}
 
@@ -199,6 +203,17 @@ const ConfigEncuesta = ({
                                                                                 respuesta.titulo_respuesta
                                                                             }
                                                                         </p>
+                                                                        <ModalUpdateRazon
+                                                                            id_posiblesRespuestas={
+                                                                                respuesta.id_posiblesRespuestas
+                                                                            }
+                                                                            titulo_respuesta={
+                                                                                respuesta.titulo_respuesta
+                                                                            }
+                                                                            puntuacion={
+                                                                                respuesta.puntuacion
+                                                                            }
+                                                                        />
                                                                     </div>
                                                                 );
                                                             }

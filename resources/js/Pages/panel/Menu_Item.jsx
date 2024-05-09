@@ -4,19 +4,17 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState, useEffect } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FcBusinessman } from "react-icons/fc";
-import BtnPanel from "./ui/BtnPanel";
-import ModalCrearUsuarios from "./ui/ModalCrearUsuarios";
-import { FcDepartment } from "react-icons/fc";
 import { FiLogOut } from "react-icons/fi";
 import { Head } from "@inertiajs/react";
-import ModalCrearEmpresa from "./ui/ModalCrearEmpresa";
-import BtnPrimary from "./ui/BtnPrimary";
+import Footer2 from "./components/Footer2";
+import { RiUserSettingsLine } from "react-icons/ri";
+import { MdOutlineMailOutline } from "react-icons/md";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-export default function  Menu_Item({
+export default function Menu_Item({
     user,
     children,
     logo,
@@ -59,7 +57,7 @@ export default function  Menu_Item({
     console.log(agregarusuario);
 
     return (
-        <div>
+        <div className="flex flex-col min-h-screen">
             <>
                 <Head>
                     <title>{` ${razon_social}. ${AppName}`}</title>
@@ -100,7 +98,7 @@ export default function  Menu_Item({
                                             )}
                                         </Disclosure.Button>
                                     </div>
-                                    <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                                    <div className="flex flex-1 items-center justify-center  sm:items-stretch sm:justify-start">
                                         {/* <div className="flex flex-shrink-0 items-center text-white flex gap-x-2">
                                             <img
                                                 src={logo}
@@ -109,7 +107,7 @@ export default function  Menu_Item({
                                                 className="w-[30px] h-auto px-0.1 rounded-xl"
                                             />
                                         </div> */}
-                                        <div className="sm:ml-6 sm:block ">
+                                        <div className="sm:ml-6 hidden md:block ">
                                             <div className="flex space-x-3 items-center">
                                                 {navigation.map((item) => (
                                                     <Link
@@ -142,9 +140,13 @@ export default function  Menu_Item({
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ">
+                                        <h1 className="text-black font-extrabold flex items-center justify-center px-4 rounded-lg gap-1">
+                                            {user.nombre_completo}
+                                            <FcBusinessman size={"20px"} />
+                                        </h1>
                                         {/* Profile dropdown */}
-                                        <div className="flex gap-x-3 p-2">
+                                        {/* <div className="flex gap-x-3 p-2">
                                             <h1 className="text-black  py-1 font-extrabold flex items-center justify-center rounded-lg px-4 gap-1">
                                                 {razon_social}{" "}
                                                 <img
@@ -164,11 +166,11 @@ export default function  Menu_Item({
                                                 cerrar sesion
                                                 <FiLogOut />
                                             </a>
-                                        </div>
+                                        </div> */}
 
                                         <Menu
                                             as="div"
-                                            className="relative ml-3"
+                                            className="relative ml-3 "
                                         >
                                             <div>
                                                 <Menu.Button className="relative flex rounded-full  text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
@@ -192,7 +194,7 @@ export default function  Menu_Item({
                                                 leaveFrom="transform opacity-100 scale-100"
                                                 leaveTo="transform opacity-0 scale-95"
                                             >
-                                                <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                <Menu.Items className="absolute  right-0 z-10 mt-2 w-72 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ">
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <Link
@@ -203,12 +205,19 @@ export default function  Menu_Item({
                                                                 ]}
                                                                 className={classNames(
                                                                     active
-                                                                        ? "bg-gray-100"
-                                                                        : "",
+                                                                        ? "bg-gray-100 flex items-center space-x-2 gap-x-1 "
+                                                                        : "flex items-center space-x-2 gap-x-1",
                                                                     "block px-4 py-2 text-sm text-gray-700"
                                                                 )}
                                                             >
-                                                                Config Empresa
+                                                                <IoSettingsOutline
+                                                                    size={
+                                                                        "20px"
+                                                                    }
+                                                                    className="align-middle"
+                                                                />
+                                                                Configuracion de
+                                                                Empresa{" "}
                                                             </Link>
                                                         )}
                                                     </Menu.Item>
@@ -223,13 +232,20 @@ export default function  Menu_Item({
                                                                 ]}
                                                                 className={classNames(
                                                                     active
-                                                                        ? "bg-gray-100"
-                                                                        : "",
+                                                                        ? "bg-gray-100 flex items-center space-x-2 gap-x-1 "
+                                                                        : "flex items-center space-x-2 gap-x-1",
                                                                     "block px-4 py-2 text-sm text-gray-700"
                                                                 )}
                                                             >
-                                                                Gestionar
-                                                                Encuesta
+                                                                <IoSettingsOutline
+                                                                    size={
+                                                                        "16px"
+                                                                    }
+                                                                    className="align-middle"
+                                                                />
+                                                                Configurar
+                                                                Evaluacion a
+                                                                Empresa{" "}
                                                             </Link>
                                                         )}
                                                     </Menu.Item>
@@ -243,12 +259,20 @@ export default function  Menu_Item({
                                                                 ]}
                                                                 className={classNames(
                                                                     active
-                                                                        ? "bg-gray-100"
-                                                                        : "",
+                                                                        ? "bg-gray-100 flex items-center space-x-2 gap-x-1 "
+                                                                        : "flex items-center space-x-2 gap-x-1",
                                                                     "block px-4 py-2 text-sm text-gray-700"
                                                                 )}
                                                             >
-                                                                Encuesta/Clientes
+                                                                <IoSettingsOutline
+                                                                    size={
+                                                                        "16px"
+                                                                    }
+                                                                    className="align-middle"
+                                                                />
+                                                                Configurar
+                                                                Evaluacion a
+                                                                Clientes{" "}
                                                             </Link>
                                                         )}
                                                     </Menu.Item>
@@ -259,12 +283,18 @@ export default function  Menu_Item({
                                                                 href="/panela/usuarios"
                                                                 className={classNames(
                                                                     active
-                                                                        ? "bg-gray-100"
-                                                                        : "",
-                                                                    "block px-4 py-2 text-sm text-gray-700 w-full text-start"
+                                                                        ? "bg-gray-100 flex items-center space-x-2 gap-x-1 "
+                                                                        : "flex items-center space-x-2 gap-x-1",
+                                                                    "block px-4 py-2 text-sm text-gray-700"
                                                                 )}
                                                             >
-                                                                Config Usuarios
+                                                                <RiUserSettingsLine
+                                                                    size={
+                                                                        "16px"
+                                                                    }
+                                                                />
+                                                                Configurar de
+                                                                Usuarios{" "}
                                                             </Link>
                                                         )}
                                                     </Menu.Item>
@@ -274,14 +304,40 @@ export default function  Menu_Item({
                                                                 href="/panela/config.mail"
                                                                 className={classNames(
                                                                     active
-                                                                        ? "bg-gray-100"
-                                                                        : "",
-                                                                    "block px-4 py-2 text-sm text-gray-700 w-full text-start"
+                                                                        ? "bg-gray-100 flex items-center space-x-2 gap-x-1 "
+                                                                        : "flex items-center space-x-2 gap-x-1",
+                                                                    "block px-4 py-2 text-sm text-gray-700"
                                                                 )}
                                                             >
-                                                                Config Plantilla
+                                                                <MdOutlineMailOutline
+                                                                    size={
+                                                                        "16px"
+                                                                    }
+                                                                />
+                                                                Configurar
+                                                                Plantilla de
                                                                 Email
                                                             </Link>
+                                                        )}
+                                                    </Menu.Item>
+                                                    <Menu.Item>
+                                                        {({ active }) => (
+                                                            <a
+                                                                href="/logout"
+                                                                className={classNames(
+                                                                    active
+                                                                        ? "bg-gray-100 flex items-center space-x-2 gap-x-1 "
+                                                                        : "flex items-center space-x-2 gap-x-1 mt-5",
+                                                                    "block px-4 py-2 text-sm text-gray-700 mt-5"
+                                                                )}
+                                                            >
+                                                                <FiLogOut
+                                                                    size={
+                                                                        "16px"
+                                                                    }
+                                                                />
+                                                                Cerrar Sesion
+                                                            </a>
                                                         )}
                                                     </Menu.Item>
                                                 </Menu.Items>
@@ -319,7 +375,26 @@ export default function  Menu_Item({
                     )}
                 </Disclosure>
             </>
-            <main>{children}</main>
+            {/* <div>
+                <div className="flex gap-x-3 p-2 justify-end ">
+                   <h1 className="text-black  py-1 font-extrabold flex items-center justify-center rounded-lg px-4 gap-1">
+                        {razon_social}{" "}
+                        <img
+                            src={logo}
+                            alt=""
+                            className="w-[20px] rounded-xl"
+                        />
+                    </h1>
+                    <h1 className="text-black font-extrabold flex items-center justify-center px-4 rounded-lg gap-1">
+                        {user.nombre_completo}
+                        <FcBusinessman size={"20px"} />
+                    </h1>
+                </div>
+            </div> */}
+            <main className="mb-auto">{children}</main>
+            <footer>
+                <Footer2 />
+            </footer>
         </div>
     );
 }

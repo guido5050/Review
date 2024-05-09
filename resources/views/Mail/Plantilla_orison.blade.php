@@ -41,17 +41,17 @@
                     <table style="display: inline-table;">
                         <tr>
                             <td style="text-align: center;">
-                                <a href="{{ isset($redSocial['enlace']) ? $redSocial['enlace'] : 'enlace_por_defecto' }}"
+                                <a href="{{ isset($redSocial['enlace']) ? $redSocial['enlace'] : '' }}"
                                     style="margin: 0 10px; color: #fff; display: inline-block;">
-                                    @if ($redSocial['nombre_redsocial'] == 'Facebook')
-                                        <img src="{{ asset('images/SocialMedia/icons8-facebook-24.png') }}" alt="Facebook"
-                                            width="24" height="24" style="max-width: 100%;">
-                                    @elseif($redSocial['nombre_redsocial'] == 'Instagram')
-                                        <img src="{{ asset('images/SocialMedia/icons8-instagram-50.png') }}" alt="Instagram"
-                                            width="24" height="24" style="max-width: 100%;">
-                                    @elseif($redSocial['nombre_redsocial'] == 'Pagina web')
-                                        <img src="{{ asset('images/SocialMedia/icons8-website-64.png') }}" alt="Web"
-                                            width="24" height="24" style="max-width: 100%;">
+                                    @if ($redSocial['nombre_redsocial'] == 'facebook' && $redSocial['enlace'] != null)
+                                        <img src="{{ asset('images/SocialMedia/icons8-facebook-24.png') }}"
+                                            alt="Facebook" width="24" height="24" style="max-width: 100%;">
+                                    @elseif($redSocial['nombre_redsocial'] == 'instagram' && $redSocial['enlace'] != null)
+                                        <img src="{{ asset('images/SocialMedia/icons8-instagram-50.png') }}"
+                                            alt="Instagram" width="24" height="24" style="max-width: 100%;">
+                                    @elseif($redSocial['nombre_redsocial'] == 'web' && $redSocial['enlace'] != null)
+                                        <img src="{{ asset('images/SocialMedia/icons8-website-64.png') }}"
+                                            alt="Web" width="24" height="24" style="max-width: 100%;">
                                     @endif
                                 </a>
                             </td>

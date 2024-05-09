@@ -40,6 +40,7 @@ Route::get('/panela/resenas',[PanelController::class,'resenas'])->name('resenas'
 Route::group(['middleware' => 'auth:empleados'], function () {
     Route::get('/panela/encuesta/', [PanelController::class, 'encuesta'])->name('encuesta'); // Encuesta
     Route::post('/panela/encuesta/{idposiblerespuesta}/{estado}', [PanelController::class, 'Estado_preguntas'])->name('estado.preguntas'); // TODO: Estado de preguntas
+    Route::post('/panela/encuesta/updateRazon', [PanelController::class, 'updateRazon'])->name('update.posible.Razon'); // TODO: update de posibles razones
     Route::post('/panela/encuesta/crear', [PanelController::class, 'crear_posiblerazon'])->name('crear_preguntas'); // TODO: Crear Posible Razon
     Route::post('/panela/encuesta/pregunta', [PanelController::class, 'crear_pregunta'])->name('crear.pregunta'); // TODO: Crear Respuesta
 });
@@ -50,6 +51,7 @@ Route::group([ 'middleware' => 'auth:empleados'], function () {
   Route::get('/panela/encuestaclientes/', [PanelController::class, 'encuesta_clientes'])->name('encuesta.clientes'); // Vista de Encuesta Clientes
   Route::post('/panela/encuestaclientes/save', [PanelController::class, 'crearpreguntaCliente'])->name('encuesta.clientes.save'); //save
   Route::post('/panela/encuestaclientes/crearrazon', [PanelController::class, 'crear_posiblerazon_cliente'])->name('crear_preguntas.clientes'); // TODO: Crear Posible Razon
+  Route::post('/panela/encuestaclientes/updateRazon', [PanelController::class, 'updateRazon_cliente'])->name('update.posible.Razon.clientes'); // TODO: update de posibles razones
   Route::post('/panela/encuestaclientes/{idposiblerespuesta}/{estado}', [PanelController::class, 'estado_pregunta_cliente'])->name('estado.pregunta.clientes'); // TODO:estado de pregunta
 });
 

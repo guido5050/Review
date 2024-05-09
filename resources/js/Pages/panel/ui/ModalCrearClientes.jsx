@@ -1,8 +1,16 @@
 import React, { useState } from "react";
-import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
-import BtnPrimary from "./BtnPrimary";
-import { router } from '@inertiajs/react'
+import {
+    Button,
+    Checkbox,
+    Label,
+    Modal,
+    TextInput,
+    Tooltip
+} from "flowbite-react";
+import { HiHome } from "react-icons/hi";
 
+import BtnPrimary from "./BtnPrimary";
+import { router } from "@inertiajs/react";
 
 const ModalCrearClientes = () => {
     const [openModal, setOpenModal] = useState(false);
@@ -39,26 +47,27 @@ const ModalCrearClientes = () => {
     }
 
     function handleSubmit(e) {
-        e.preventDefault()
-        router.post('/panela/clientes/crear', values,{
+        e.preventDefault();
+        router.post("/panela/clientes/crear", values, {
             onSuccess: () => {
                 onCloseModal();
-            }
-        })
-      }
+            },
+        });
+    }
 
     return (
         <>
+            <Tooltip content="Agregar Cliente con sus Datos">
             <BtnPrimary
                 onClick={() => setOpenModal(true)}
                 className={"bg-blue-700"}
             >
                 Agregar Cliente
             </BtnPrimary>
+            </Tooltip>
             <Modal show={openModal} size="xl" popup onClose={onCloseModal}>
                 <Modal.Header />
                 <Modal.Body>
-
                     <div className="space-y-6">
                         <h3 className="text-xl font-medium text-gray-900 dark:text-white">
                             Ingresa Datos del Cliente
@@ -127,7 +136,7 @@ const ModalCrearClientes = () => {
                                 />
                             </div>
 
-                            <BtnPrimary  className={"bg-blue-700"}  type="submit">
+                            <BtnPrimary className={"bg-blue-700"} type="submit">
                                 Agregar Cliente
                             </BtnPrimary>
                         </form>

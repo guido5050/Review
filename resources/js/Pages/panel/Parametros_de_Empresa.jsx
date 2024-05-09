@@ -10,9 +10,28 @@ import { IoDocumentAttachOutline } from "react-icons/io5";
 import ModalCrearEmpresa from "./ui/ModalCrearEmpresa";
 import { FileInput, Label, Badge } from "flowbite-react";
 import { IoIosAlert } from "react-icons/io";
+import { FaSquareFacebook } from "react-icons/fa6";
+import { FaInstagram } from "react-icons/fa";
+import { TbWorld } from "react-icons/tb";
 
-const Parametros_de_Empresa = ({ auth, config, logo, razon_social }) => {
+const Parametros_de_Empresa = ({
+    auth,
+    config,
+    logo,
+    razon_social,
+    redes_sociales,
+}) => {
     const [image, setImage] = useState(null);
+
+    const facebook = redes_sociales.find(
+        (red) => red.nombre_redsocial === "facebook"
+    )?.enlace;
+    const instagram = redes_sociales.find(
+        (red) => red.nombre_redsocial === "instagram"
+    )?.enlace;
+    const web = redes_sociales.find(
+        (red) => red.nombre_redsocial === "web"
+    )?.enlace;
 
     const [value, setValues] = useState({
         logo: config.logo,
@@ -22,7 +41,14 @@ const Parametros_de_Empresa = ({ auth, config, logo, razon_social }) => {
         telefono: config.telefono,
         id: config.id,
         direccion_local: config.direccion_local,
+        facebook: facebook,
+        instagram: instagram,
+        web: web,
     });
+
+    console.log(value);
+
+    console.log(typeof value); // object
 
     function handleChange(e) {
         if (e.target.id === "logo") {
@@ -183,6 +209,48 @@ const Parametros_de_Empresa = ({ auth, config, logo, razon_social }) => {
                             type="text"
                             required
                             defaultValue={config.ruc}
+                            onChange={handleChange}
+                            className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="font-bold mb-1 flex items-center">
+                            Facebook:
+                            <FaSquareFacebook />
+                        </label>
+                        <input
+                            id="facebook"
+                            type="text"
+                            placeholder="Inserta la url"
+                            defaultValue={facebook}
+                            onChange={handleChange}
+                            className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="font-bold mb-1 flex items-center">
+                            Instagran: <FaInstagram />
+                        </label>
+                        <input
+                            id="instagram"
+                            type="text"
+                            required
+                            placeholder="Inserta la url"
+                            defaultValue={instagram}
+                            onChange={handleChange}
+                            className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="font-bold mb-1 flex items-center">
+                            Sitio Web:
+                            <TbWorld />
+                        </label>
+                        <input
+                            id="web"
+                            type="text"
+                            placeholder="Inserta la url"
+                            defaultValue={web}
                             onChange={handleChange}
                             className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                         />

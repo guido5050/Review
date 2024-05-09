@@ -212,6 +212,23 @@ class PanelController extends Controller
         return inertia::render('Evaluacionesclientes/ConfigEncuesta_Clientes',['preguntas' => $preguntas]);
     }
 
+    public function updateRazon(Request $request)
+    //TODO: este metodo se encarga de actualizar las posibles razones en evaluaciones a la empresa
+    {
+    // dd($request->toArray());
+
+        $Razon = Prespuesta::find($request->id_posiblesRespuestas);
+
+    //dd($request->posible_razon);
+        $Razon->update([
+            'titulo_respuesta' => $request->posible_razon
+        ]);
+
+       /// dd($Razon->toArray());
+
+        return back();
+    }
+
     public function crearpreguntaCliente(Request $request)  //TODO: Metodo que crea las preguntas en la vista de encuesta a clientes
     {
         //dd($request->toArray());
@@ -237,6 +254,18 @@ class PanelController extends Controller
             'id_empresa' => $empresa,
 
         ]);
+    }
+
+    public function updateRazon_cliente(Request $request){
+
+        //TODO: Metodo que actualiza las posibles razones en la vista de encuesta a clientes
+       // dd($request->toArray());
+        $Razon = PosiblesRespuestasEvaluacionesClientes::find($request->id);
+        //dd($Razon->toArray());
+        $Razon->update([
+            'titulo_respuesta' => $request->titulo_respuesta,
+        ]);
+        return back();
     }
 
     public function estado_pregunta_cliente($idposiblerespuesta, $estado)
@@ -525,6 +554,8 @@ class PanelController extends Controller
         $nombre = $cliente->nombre_completo;
         $url = '#';
         $redesSociales = RedesSociales::where('id_empresa', session('empresa'))->get()->toArray();
+
+       
 
         $data = [
             'titulo' => $titulo,

@@ -21,8 +21,10 @@ public function datos_empresas(){
         $empresa = session('empresa');
 
 		$config_current = \App\Models\parametro::where('id','=',$empresa)->first();
+        $redes_sociales = \App\Models\RedesSociales::where('id_empresa','=',$empresa)->get();
+       // dd($redes_sociales->toArray());
 		// return view('config_company')->with('config',$config_current);
-        return inertia::render('panel/Parametros_de_Empresa', ['config' => $config_current]);
+        return inertia::render('panel/Parametros_de_Empresa', ['config' => $config_current, 'redes_sociales' => $redes_sociales]);
            // dd($config_current->toArray());
 	}
 
@@ -38,9 +40,33 @@ public function datos_empresas(){
  */
 public function store_data(Request $data)
 {
-   //dd("entro------");
+    //dd("entro------");
     // Get the company id from the session
+    //dd($data->toArray());
+    // $redes_sociales = json_decode($data->redes_sociales, true);
+    // dd($redes_sociales);
+
     $id = session('empresa');
+
+    //Datos de redes sociales
+    $redes_sociales = [
+        'facebook' => $data->facebook,
+        'instagram' => $data->instagram,
+        'web' => $data->web
+    ];
+
+    // dd($redes_sociales);
+
+    $currenEmpresa =  \App\Models\RedesSociales::where('id_empresa',$id)->get();
+
+    foreach ($currenEmpresa as $redSocial) {
+        // Verifica si la red social actual existe en el array $redes_sociales
+        if (array_key_exists($redSocial->nombre_redsocial, $redes_sociales)) {
+            // Actualiza el enlace de la red social en la base de datos
+            $redSocial->enlace = $redes_sociales[$redSocial->nombre_redsocial];
+            $redSocial->save();
+        }
+    }
 
     // Get the company
     $company = parametro::find($id);
@@ -96,11 +122,15 @@ public function store_data(Request $data)
 
     public function create_empresa(Request $request)
     {
+
+       // dd($request->toArray());
         // Validar el request
-        $request->validate([
-            'ruta_logo' => 'required',
-            // Agrega aquí las validaciones para los demás campos
-        ]);
+        // $request->validate([
+        //     'ruta_logo' => 'required',
+        //     // Agrega aquí las validaciones para los demás campos
+        // ]);
+
+
 
         // Decodificar la imagen
         $imagen = $request->ruta_logo;
@@ -118,9 +148,34 @@ public function store_data(Request $data)
         $data = $request->all();
         $data['ruta_logo'] = '/images/logos/' . $nombreImagen;
 
+        $redes_sociales = [
+            'facebook' => $request->facebook,
+            'instagram' => $request->instagram,
+            'web' => $request->web
+        ];
+
+       // dd($redes_sociales);
 
         // Crear la empresa
+        // Crear la empresa
         $empresa = parametro::create($data);
+
+        // Obtener el ID de la empresa recién creada
+        $id_empresa = $empresa->id;
+
+        // Ahora puedes usar $id_empresa para crear las redes sociales
+        foreach ($redes_sociales as $nombre => $enlace) {
+            \App\Models\RedesSociales::create([
+                'id_empresa' => $id_empresa,
+                'nombre_redsocial' => $nombre,
+                'enlace' => $enlace,
+                'plantilla' => 0,
+                // 'url_icono' => ... // Asegúrate de establecer esto si es necesario
+            ]);
+        }
+
+        // Crear las redes sociales
+
 
         return redirect()->back()->withSuccess('Se Creó la Empresa Exitosamente');
     }

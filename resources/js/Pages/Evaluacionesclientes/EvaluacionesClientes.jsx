@@ -1,6 +1,6 @@
 import React from "react";
 import Menu_Item from "../panel/Menu_Item";
-import { Table, Button } from "flowbite-react";
+import { Table, Button, Tooltip } from "flowbite-react";
 import { Link, router } from "@inertiajs/react";
 import { Rating } from "flowbite-react";
 const EvaluacionesClientes = ({
@@ -35,7 +35,7 @@ const EvaluacionesClientes = ({
                             <Table.HeadCell>Comentario</Table.HeadCell>
                             <Table.HeadCell>Fecha</Table.HeadCell>
                             <Table.HeadCell>
-                                
+
                             </Table.HeadCell>
                         </Table.Head>
                         <Table.Body className="divide-y">
@@ -74,6 +74,7 @@ const EvaluacionesClientes = ({
                                     </Table.Cell>
                                     <Table.Cell>{evaluacion.fecha}</Table.Cell>
                                     <Table.Cell>
+                                        <Tooltip content="Ver los Detatalles de la Evaluacion">
                                         <Button
                                             onClick={() => {
                                                 gestionar(
@@ -85,6 +86,7 @@ const EvaluacionesClientes = ({
                                         >
                                             Gestionar
                                         </Button>
+                                        </Tooltip>
                                     </Table.Cell>
                                 </Table.Row>
                             ))}

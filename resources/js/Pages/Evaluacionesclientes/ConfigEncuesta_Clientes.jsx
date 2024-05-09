@@ -2,8 +2,10 @@ import { React, useState } from "react";
 import Menu_Item from "../panel/Menu_Item";
 import ModalCrearPreguntas_ev_clientes from "./components/ModalCrearPreguntas_ev_clientes";
 import ModalCrearPosibleRazonClientes from "./components/ModalCrearPosibleRazonClientes";
+import ModalUpdateRazonEvClienntes from "./components/ModalUpdateRazonEvClienntes";
 import { Accordion, Alert, Button } from "flowbite-react";
 import { FaQuestionCircle, FaStar } from "react-icons/fa";
+import { LuPenSquare } from "react-icons/lu";
 import { router } from "@inertiajs/react";
 
 const ConfigEncuesta_Clientes = ({
@@ -102,9 +104,11 @@ const ConfigEncuesta_Clientes = ({
                         ) && (
                             <Alert color="red">
                                 <span className="font-medium">Info alert!</span>{" "}
-                                Completa el cuestionario debe existir al menos
-                                una posible razon en cada puntuacion completa
-                                las preguntas que estan en color amarillo
+                                Cada pregunta tiene cinco opciones de
+                                puntuación, del 1 al 5 ★, presentadas en
+                                acordeones separados cada pregunta despliega las
+                                puntuaciones. Puedes editar y crear razones
+                                específicas para cada calificación{" "}
                             </Alert>
                         )}
                 </div>
@@ -196,12 +200,17 @@ const ConfigEncuesta_Clientes = ({
                                                                                 )
                                                                             }
                                                                         />
-                                                                        <p className="ml-2 font-semibold text-blue-500 ">
+                                                                        <p className="ml-2 font-semibold text-blue-500 mx-2 ">
                                                                             {
                                                                                 respuesta.titulo_respuesta
                                                                             }
                                                                         </p>
-                                                                    </div>
+                                                                        <ModalUpdateRazonEvClienntes
+                                                                        preguntaTitulo={pregunta.titulo}
+                                                                        puntuacion={respuesta.puntuacion}
+                                                                        respuestaId ={respuesta.id}
+                                                                        respuesta_titulo={respuesta.titulo_respuesta}/>
+                                                                        </div>
                                                                 );
                                                             }
                                                         )}

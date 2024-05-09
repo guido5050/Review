@@ -118,6 +118,9 @@ class Evaluaciones_Clientes extends Controller
             // Validar los datos del request si es necesario
            // dd($request->toArray());
             // Crear un nuevo comentario
+
+
+
             ComentariosEvClientes::create([
                 'comentario' => $request->comentario,
                 'id_empleados' => $request->id_empleado,

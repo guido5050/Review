@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Button, Modal, TextInput } from "flowbite-react";
+import { Button, Modal, TextInput, Tooltip } from "flowbite-react";
 import { MdContentCopy, MdOutlineMarkEmailUnread } from "react-icons/md";
 import { Link } from "@inertiajs/react";
 import { Alert, Badge, Select, Label } from "flowbite-react";
@@ -74,14 +74,15 @@ const ModalResenas = ({
 
                     {email && (
                         <>
-                            <div className="flex flex-col gap-y-5">
+                            <div className="flex flex-col gap-y-5 ">
                                 <div className="mb-2 block">
                                     <Label
                                         htmlFor="countries"
                                         value="Selecciona una plantilla de correo:"
                                     />
                                 </div>
-                                <Select
+                                    <div className="">
+                                     <Select
                                     id="countries"
                                     required
                                     value={selectPlantilla}
@@ -92,6 +93,7 @@ const ModalResenas = ({
                                     {plantillas?.length > 0 ? (
                                         plantillas.map((plantilla, index) =>
                                             plantilla ? (
+
                                                 <option
                                                     key={index}
                                                     value={plantilla.id_correo}
@@ -102,20 +104,25 @@ const ModalResenas = ({
                                         )
                                     ) : (
                                         <option>
-                                            No se encontró plantillas de correo 
+                                            No se encontró plantillas de correo
                                         </option>
                                     )}
-                                </Select>
+                                    </Select>
+                                    </div>
+
                             </div>
                             {selectPlantilla ? (
+
+                              <Tooltip content="Ver el Preview de la plantilla de Correo Antes de Enviar el Correo">
                                 <Link
                                     href={`/preview.email/mail/${clienteId}/${selectPlantilla}`}
                                     method="get"
-                                    className="text-white inline-block bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                    className="text-white mt-5 inline-block bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                                     preserveState
                                 >
                                     Ver-Preview correo
                                 </Link>
+                                </Tooltip>
                             ) : (
                                <Link
                                href="/panela/config.mail"

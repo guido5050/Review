@@ -1,4 +1,5 @@
-import { Button, Textarea, Label, Modal, TextInput } from "flowbite-react";
+import { Button, Textarea, Label, Modal, TextInput, Tooltip } from "flowbite-react";
+
 import { useState } from "react";
 import { router } from "@inertiajs/react";
 
@@ -32,9 +33,11 @@ const ModalComentarioEncuesta = ({
     console.log(values);
     return (
         <>
+            <Tooltip content="Deja un comentario sobre la pregunta">
             <Button color="blue" onClick={() => setOpenModal(true)}>
                 Dejar Comentario
             </Button>
+            </Tooltip>
             <Modal show={openModal} size="xl" onClose={onCloseModal} popup>
                 <Modal.Header />
                 <Modal.Body>

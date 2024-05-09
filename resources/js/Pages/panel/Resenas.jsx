@@ -1,6 +1,6 @@
 import React from "react";
 import Menu_Item from "./Menu_Item";
-import { Table, Rating, Button } from "flowbite-react";
+import { Table, Rating, Button, Tooltip } from "flowbite-react";
 import { Link } from "@inertiajs/react";
 import { FaStar } from "react-icons/fa";
 import { TbEyeStar } from "react-icons/tb";
@@ -67,24 +67,29 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                                     <Table.Cell className="font-extrabold text-black">
                                         {estados[resena.estado] &&
                                         estados[resena.estado][0] ? (
+                                            
+                                           <Tooltip content={estados[resena.estado][0].descripcion}>
                                             <strong
                                                 className="whitespace-nowrap"
-                                                title={
-                                                    estados[resena.estado][0]
-                                                        .descripcion
-                                                }
+                                                // title={
+                                                //     estados[resena.estado][0]
+                                                //         .descripcion
+                                                // }
+                                                cursor="pointer"
                                             >
                                                 {
                                                     estados[resena.estado][0]
                                                         .estado
                                                 }
                                             </strong>
+                                        </Tooltip>
                                         ) : (
                                             "Estado no definido"
                                         )}
                                     </Table.Cell>
 
                                     <Table.Cell className="font-extrabold text-white ">
+                                        <Tooltip content="Ver los Detalles de la evaluacion">
                                         <Button
                                             color="blue"
                                             onClick={() => {
@@ -95,6 +100,8 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                                         >
                                             Gestionar
                                         </Button>
+                                        </Tooltip>
+
                                     </Table.Cell>
                                 </Table.Row>
                             ))}

@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { Link, router } from "@inertiajs/react";
-import { Table, Badge, TextInput, Select, Label } from "flowbite-react";
-import { BsCheckLg } from "react-icons/bs";
+import {
+    Table,
+    Badge,
+    TextInput,
+    Select,
+    Label,
+    Breadcrumb,
+    Tooltip,
+} from "flowbite-react";
 import { BiX } from "react-icons/bi";
 
 import {
@@ -128,17 +135,23 @@ const Clientes = ({
                                 onChange={handleSearchChange}
                             />
                         </div>
-                        <div className="flex items-center gap-x-1">
-                            <Label>Buscar por:</Label>
-                            <Select
-                                value={busquedaPor}
-                                onChange={handleSelectChange}
-                            >
-                                <option value="">Todos</option>
-                                <option value="correo">Con correo</option>
-                                <option value="sinCorreo">Sin correo</option>
-                            </Select>
-                        </div>
+                        <Tooltip content="Buscar Clientes Por: Todos, Con correo, Sin correo">
+                            <div className="flex items-center gap-x-1">
+                                <Label>Buscar por:</Label>
+                                <Select
+                                    value={busquedaPor}
+                                    onChange={handleSelectChange}
+                                    className="cursor-pointer"
+                                    cursor="pointer"
+                                >
+                                    <option value="">Todos</option>
+                                    <option value="correo">Con correo</option>
+                                    <option value="sinCorreo">
+                                        Sin correo
+                                    </option>
+                                </Select>
+                            </div>
+                        </Tooltip>
 
                         <div className="flex gap-3 ">
                             <Badge color="info" size="sm">
@@ -198,6 +211,7 @@ const Clientes = ({
                                         <Table.Cell>
                                             {encuesta === true &&
                                             estadoPreguntas === true ? (
+                                               <Tooltip content="Enviar Evaluacion al Cliente por medio de Correo Electronico!">
                                                 <BtnPrimary
                                                     className="bg-blue-600 hover:bg-blue-500 flex items-center"
                                                     onClick={() => {
@@ -218,6 +232,7 @@ const Clientes = ({
                                                 >
                                                     Enviar Evaluacion
                                                 </BtnPrimary>
+                                                </Tooltip>
                                             ) : (
                                                 <Link
                                                     title="Si ve este boton es por que no ha configurado la encuesta"

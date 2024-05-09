@@ -10,5 +10,6 @@ class RedesSociales extends Model
     use HasFactory;
     protected $table = 'redes_sociales';
     protected $primaryKey = 'id_redsocial';
-    protected $fillable = ['id_empresa','nombre_redsocial','enlace1','url_icono'];
+    protected $fillable = ['id_empresa','nombre_redsocial','enlace','url_icono', 'plantilla'];
 }
+

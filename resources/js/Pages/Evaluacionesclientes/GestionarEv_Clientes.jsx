@@ -1,7 +1,9 @@
 import React from "react";
 import Menu_Item from "../panel/Menu_Item";
 import ModalComentarioEncuesta from "./components/ModalComentarioEncuesta";
-import { Card, Table, Button } from "flowbite-react";
+import { Card, Table, Button, Tooltip, Breadcrumb } from "flowbite-react";
+import { HiHome } from "react-icons/hi";
+
 import { BsCalendar2Date } from "react-icons/bs";
 
 const GestionarEv_Clientes = ({
@@ -26,6 +28,16 @@ const GestionarEv_Clientes = ({
                 AppName={AppName}
             >
                 <div className="p-8 flex gap-y-2 justify-center mt-2 animate-fade-up animate-ease-in-out flex-col">
+                <Breadcrumb aria-label="Default breadcrumb example">
+                        <Breadcrumb.Item
+                            onClick={() => window.history.back()}
+                            icon={HiHome}
+                            className="cursor-pointer"
+                        >
+                            <p className="hover:text-blue-400" >{`Evaluaciones a clientes`}</p>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>Gestion de Evaluaciones a Clientes</Breadcrumb.Item>
+                    </Breadcrumb>
                     <Card>
                         <div className="flex  gap-x-4 justify-between">
                             <div className="flex flex-col gap-y-7  ">
@@ -33,6 +45,7 @@ const GestionarEv_Clientes = ({
                                 {/* por si toca poner un elemento a abjo lo deje flex-col */}
                                 <div className="flex gap-x-3   ">
                                     {evaluacion.puntuacion_global && (
+                                        <Tooltip content="Puntuacion Globla">
                                         <div className="bg-blue-600 rounded-lg w-[100px]">
                                             <p
                                                 className="font-extrabold text-[50px] p-3 text-center  rounded-lg cursor-pointer"
@@ -45,10 +58,12 @@ const GestionarEv_Clientes = ({
                                                 </strong>
                                             </p>
                                         </div>
+                                        </Tooltip>
                                     )}
 
                                     <div className="flex flex-col gap-y-1   ">
                                         <p className="text-black font-semibold">
+                                            <span>Evaluamos a:  </span>
                                             {
                                                 evaluacion.usuarios_clientes
                                                     .nombre_completo
@@ -66,7 +81,7 @@ const GestionarEv_Clientes = ({
                                 <div className="flex flex-col gap-y-4  ">
                                     <p>
                                         <span className="font-extrabold">
-                                            Adimin:{" "}
+                                            Adimin que realizo la evaluacion:{" "}
                                         </span>
                                         {
                                             evaluacion.usuarios_empleado
@@ -75,7 +90,7 @@ const GestionarEv_Clientes = ({
                                     </p>
                                     <p>
                                         <span className="font-extrabold">
-                                            Comentario:
+                                            Comentario del Admin:
                                         </span>{" "}
                                         {evaluacion.comentario}
                                     </p>

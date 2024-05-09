@@ -37,7 +37,7 @@ const ModalCrearPregunta = () => {
     return (
         <>
             <Button
-                className="mb-2 bg-blue-500 hover:bg-blue-700"
+                color="blue"
                 onClick={() => setOpenModal(true)}
             >
                 Crear Pregunta
