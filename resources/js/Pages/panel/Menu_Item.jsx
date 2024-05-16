@@ -9,6 +9,8 @@ import { Head } from "@inertiajs/react";
 import Footer2 from "./components/Footer2";
 import { RiUserSettingsLine } from "react-icons/ri";
 import { MdOutlineMailOutline } from "react-icons/md";
+import { FaRegUser } from "react-icons/fa6";
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -75,8 +77,19 @@ export default function Menu_Item({
                                 ></ModalCrearUsuarios>
                             )}
 
-                            <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-                                <div className="relative flex h-16 items-center justify-between">
+                            <div className="mx-auto max-w-7xl   ">
+
+                                <div className="relative flex h-16 items-center justify-between ">
+                                    <div className=" flex items-center gap-x-1 ml-[50px] md:ml-0 rounded-lg  md:mr-20">
+                                        <img
+                                            className="rounded-full"
+                                            src={logo}
+                                            width={"40px"}
+                                            height={"50px"}
+                                            alt=""
+                                        />
+                                        {/* <span>{razon_social}</span> */}
+                                    </div>
                                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                                         {/* Mobile menu button*/}
 
@@ -109,7 +122,7 @@ export default function Menu_Item({
                                         </div> */}
                                         <div className="sm:ml-6 hidden md:block ">
                                             <div className="flex space-x-3 items-center">
-                                                {navigation.map((item) => (
+                                                {navigation.map((item, index) => (
                                                     <Link
                                                         key={item.name}
                                                         href={item.href}
@@ -121,15 +134,14 @@ export default function Menu_Item({
                                                             )
                                                         } // Use onMouseDown instead of onClick
                                                         className={classNames(
-                                                            activeItem ===
-                                                                item.name
+                                                            activeItem === item.name
                                                                 ? " text-black bg-slate-200 border-b-2 border-black  hover:bg-slate-200 hover:text-black"
                                                                 : "text-gray-500 hover:text-black",
-                                                            "rounded-md px-3 py-2 text-sm font-medium flex items-center justify-center"
+                                                            "rounded-md px-3 py-2 text-sm font-medium flex items-center justify-center",
+                                                            index === 0 ? "border-2 border-black" : ""
                                                         )}
                                                         aria-current={
-                                                            activeItem ===
-                                                            item.name
+                                                            activeItem === item.name
                                                                 ? "page"
                                                                 : undefined
                                                         }
@@ -143,30 +155,9 @@ export default function Menu_Item({
                                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ">
                                         <h1 className="text-black font-extrabold flex items-center justify-center px-4 rounded-lg gap-1">
                                             {user.nombre_completo}
-                                            <FcBusinessman size={"20px"} />
+                                            <FaRegUser />
                                         </h1>
-                                        {/* Profile dropdown */}
-                                        {/* <div className="flex gap-x-3 p-2">
-                                            <h1 className="text-black  py-1 font-extrabold flex items-center justify-center rounded-lg px-4 gap-1">
-                                                {razon_social}{" "}
-                                                <img
-                                                    src={logo}
-                                                    alt=""
-                                                    className="w-[20px] rounded-xl"
-                                                />
-                                            </h1>
-                                            <h1 className="text-black font-extrabold flex items-center justify-center px-4 rounded-lg gap-1">
-                                                {user.nombre_completo}
-                                                <FcBusinessman size={"20px"} />
-                                            </h1>
-                                            <a
-                                                href="/logout"
-                                                className="text-blue-700  font-extrabold flex gap-1 items-center justify-center rounded-lg px-4"
-                                            >
-                                                cerrar sesion
-                                                <FiLogOut />
-                                            </a>
-                                        </div> */}
+
 
                                         <Menu
                                             as="div"
@@ -356,7 +347,7 @@ export default function Menu_Item({
                                             href={item.href}
                                             className={classNames(
                                                 item.current
-                                                    ? "bg-gray-900 text-white"
+                                                    ? "bg-gray-900 text-white border"
                                                     : "text-gray-300 hover:bg-gray-700 hover:text-white",
                                                 "block rounded-md px-3 py-2 text-base font-medium"
                                             )}
@@ -375,22 +366,6 @@ export default function Menu_Item({
                     )}
                 </Disclosure>
             </>
-            {/* <div>
-                <div className="flex gap-x-3 p-2 justify-end ">
-                   <h1 className="text-black  py-1 font-extrabold flex items-center justify-center rounded-lg px-4 gap-1">
-                        {razon_social}{" "}
-                        <img
-                            src={logo}
-                            alt=""
-                            className="w-[20px] rounded-xl"
-                        />
-                    </h1>
-                    <h1 className="text-black font-extrabold flex items-center justify-center px-4 rounded-lg gap-1">
-                        {user.nombre_completo}
-                        <FcBusinessman size={"20px"} />
-                    </h1>
-                </div>
-            </div> */}
             <main className="mb-auto">{children}</main>
             <footer>
                 <Footer2 />

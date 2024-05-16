@@ -132,9 +132,6 @@ Route::get('generarResena',[PanelController::class,'generarResena'])->name('gene
 
 
 Route::post('/show',[UserController::class,'showpreguntas'])->name('show'); //TODO:Mostrar preguntas(REVISAR)
-
-
 Route::post('StorePreguntas',[UserController::class,'StorePreguntas'])->name('StorePreguntas');
-//Route::post('/',[UserController::class,'Preguntas'])->name('preguntas');
 Route::post('storecomments',[UserController::class,'storecomments'])->name('storecomments');
 //require __DIR__.'/auth.php';

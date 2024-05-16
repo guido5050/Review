@@ -44,7 +44,7 @@ const ModalResenasComentarios = ({ idPregunta, idresena, user }) => {
     return (
         <>
             <Tooltip content="Deja un comentario sobre la pregunta" >
-            <Button color="blue" size={"sm"} onClick={() => setOpenModal(true) }>
+            <Button color="blue" size={"sm"} onClick={() => setOpenModal(true)  } className="whitespace-nowrap">
             Dejar Comentario
             </Button>
             </Tooltip>

@@ -5,8 +5,20 @@ import { Link } from "@inertiajs/react";
 import { FaStar } from "react-icons/fa";
 import { TbEyeStar } from "react-icons/tb";
 import { router } from "@inertiajs/react";
+import { Pagination } from "flowbite-react";
+import { useState } from "react";
 
 const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
+    console.log(resenas);
+    const [currentPage, setCurrentPage] = useState(resenas.current_page);
+    const onPageChange = (page) => {
+        console.log(page);
+        router.visit(`http://127.0.0.1:8000/panela/resenas?page=${page}`, {
+            preserveState: true,
+        });
+        setCurrentPage(page);
+    };
+
     return (
         <>
             <Menu_Item
@@ -15,8 +27,19 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                 logo={logo}
                 AppName={AppName}
             >
-                <div className="overflow-x-auto animate-fade-down animate-ease-out p-8">
-                    <Table>
+                <div className=" animate-fade-down animate-ease-out p-8">
+                    <div>
+                        <div className="flex overflow-x-auto sm:justify-end justify-center ">
+                            <Pagination
+                                currentPage={resenas.current_page}
+                                totalPages={resenas.last_page}
+                                onPageChange={onPageChange}
+                                showIcons
+                            />
+                        </div>
+                    </div>
+                    <div className="overflow-x-auto">
+                    <Table >
                         <Table.Head>
                             <Table.HeadCell>ID#</Table.HeadCell>
                             <Table.HeadCell>Ref</Table.HeadCell>
@@ -38,26 +61,36 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                                     </Table.Cell>
                                     <Table.Cell>{resena.id_reserva}</Table.Cell>
                                     <Table.Cell>
-                                        {resena.usuarios_clientes
-                                            ? resena.usuarios_clientes
-                                                  .nombre_completo
-                                            : "No definido"}
+                                        {resena.usuarios_clientes ? (
+                                            <p className="whitespace-nowrap">
+                                                {
+                                                    resena.usuarios_clientes
+                                                        .nombre_completo
+                                                }
+                                            </p>
+                                        ) : (
+                                            "No definido"
+                                        )}
                                     </Table.Cell>
                                     {/* <Table.Cell className="font-extrabold flex items-center gap-x-2">
                                         <FaStar size={"25px"} />
                                     </Table.Cell> */}
-                                    <Table.Cell className="font-extrabold text-black whitespace-nowrap ">
+                                    <Table.Cell className="font-extrabold text-black">
                                         <Rating>
                                             <Rating.Star />
                                             <p className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                {resena.Puntuacion_global
-                                                    ? resena.Puntuacion_global
-                                                    : "no puntuacion"}
+                                                {resena.Puntuacion_global ? (
+                                                    resena.Puntuacion_global
+                                                ) : (
+                                                    <span className="whitespace-nowrap">
+                                                        no puntuacion
+                                                    </span>
+                                                )}
                                             </p>
                                         </Rating>
                                     </Table.Cell>
-                                    <Table.Cell className="font-extrabold text-black whitespace-normal">
-                                        <p className="w-64 overflow-hidden line-clamp-2">
+                                    <Table.Cell className="font-extrabold text-black whitespace-nowrap">
+                                        <p>
                                             {resena.comentario
                                                 ? resena.comentario
                                                 : "no-comentario"}
@@ -67,22 +100,27 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                                     <Table.Cell className="font-extrabold text-black">
                                         {estados[resena.estado] &&
                                         estados[resena.estado][0] ? (
-                                            
-                                           <Tooltip content={estados[resena.estado][0].descripcion}>
-                                            <strong
-                                                className="whitespace-nowrap"
-                                                // title={
-                                                //     estados[resena.estado][0]
-                                                //         .descripcion
-                                                // }
-                                                cursor="pointer"
-                                            >
-                                                {
+                                            <Tooltip
+                                                content={
                                                     estados[resena.estado][0]
-                                                        .estado
+                                                        .descripcion
                                                 }
-                                            </strong>
-                                        </Tooltip>
+                                            >
+                                                <strong
+                                                    className="whitespace-nowrap"
+                                                    // title={
+                                                    //     estados[resena.estado][0]
+                                                    //         .descripcion
+                                                    // }
+                                                    cursor="pointer"
+                                                >
+                                                    {
+                                                        estados[
+                                                            resena.estado
+                                                        ][0].estado
+                                                    }
+                                                </strong>
+                                            </Tooltip>
                                         ) : (
                                             "Estado no definido"
                                         )}
@@ -90,25 +128,26 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
 
                                     <Table.Cell className="font-extrabold text-white ">
                                         <Tooltip content="Ver los Detalles de la evaluacion">
-                                        <Button
-                                            color="blue"
-                                            onClick={() => {
-                                                router.visit(
-                                                    `/panela/resenas/${resena.id_usuario}/${resena.id_resena}`
-                                                );
-                                            }}
-                                        >
-                                            Gestionar
-                                        </Button>
+                                            <Button
+                                                color="blue"
+                                                onClick={() => {
+                                                    router.visit(
+                                                        `/panela/resenas/${resena.id_usuario}/${resena.id_resena}`
+                                                    );
+                                                }}
+                                            >
+                                                Gestionar
+                                            </Button>
                                         </Tooltip>
-
                                     </Table.Cell>
                                 </Table.Row>
                             ))}
                         </Table.Body>
                     </Table>
+                    </div>
+
                 </div>
-                <div className="flex overflow-x-auto sm:justify-center mb-7">
+                {/* <div className="flex overflow-x-auto sm:justify-center mb-7">
                     {resenas.prev_page_url && (
                         <Link
                             href={resenas.prev_page_url}
@@ -125,7 +164,7 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                             Página siguiente
                         </Link>
                     )}
-                </div>
+                </div> */}
             </Menu_Item>
         </>
     );

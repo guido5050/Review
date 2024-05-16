@@ -51,7 +51,7 @@ const ConfigPlantilla = ({ auth, logo, razon_social, plantillas }) => {
                     </Alert>
                 )}
 
-                <div className="flex items-center gap-x-1 justify-center p-3">
+                <div className="flex items-center gap-x-1 justify-center p-3 ">
                     <Badge color="gray">
                         <h1 className="font font-extrabold text-xl">
                             Configuracion de Email{" "}
@@ -59,7 +59,7 @@ const ConfigPlantilla = ({ auth, logo, razon_social, plantillas }) => {
                     </Badge>
                     <RiMailSettingsLine size={"20px"} />
                 </div>
-                <div className="p-6">
+                <div className="md:p-6 p-3">
                     <div className="max-w-md">
                         <div className="mb-2 block">
                             <Label
@@ -70,6 +70,8 @@ const ConfigPlantilla = ({ auth, logo, razon_social, plantillas }) => {
                         </div>
                         <Select
                             id="countries"
+
+
                             className="font-extrabold"
                             required
                             value={selectedId}

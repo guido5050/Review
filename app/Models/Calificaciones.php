@@ -17,6 +17,7 @@ class Calificaciones extends Model
         "id_resena",
         "id_preguntas",
         "puntuacion",
+        "id_empresa"
     ];
 
 

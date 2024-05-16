@@ -27,43 +27,45 @@ const GestionarEv_Clientes = ({
                 logo={logo}
                 AppName={AppName}
             >
-                <div className="p-8 flex gap-y-2 justify-center mt-2 animate-fade-up animate-ease-in-out flex-col">
-                <Breadcrumb aria-label="Default breadcrumb example">
+                <div className="md:p-8 p-2 flex gap-y-2 justify-center mt-2 animate-fade-up animate-ease-in-out flex-col ">
+                    <Breadcrumb aria-label="Default breadcrumb example">
                         <Breadcrumb.Item
                             onClick={() => window.history.back()}
                             icon={HiHome}
                             className="cursor-pointer"
                         >
-                            <p className="hover:text-blue-400" >{`Evaluaciones a clientes`}</p>
+                            <p className="hover:text-blue-400">{`Evaluaciones a clientes`}</p>
                         </Breadcrumb.Item>
-                        <Breadcrumb.Item>Gestion de Evaluaciones a Clientes</Breadcrumb.Item>
+                        <Breadcrumb.Item>
+                            Gestion de Evaluaciones a Clientes
+                        </Breadcrumb.Item>
                     </Breadcrumb>
                     <Card>
-                        <div className="flex  gap-x-4 justify-between">
+                        <div className="flex  gap-x-4 md:justify-between flex-col md:flex-row ">
                             <div className="flex flex-col gap-y-7  ">
                                 {" "}
                                 {/* por si toca poner un elemento a abjo lo deje flex-col */}
                                 <div className="flex gap-x-3   ">
                                     {evaluacion.puntuacion_global && (
                                         <Tooltip content="Puntuacion Globla">
-                                        <div className="bg-blue-600 rounded-lg w-[100px]">
-                                            <p
-                                                className="font-extrabold text-[50px] p-3 text-center  rounded-lg cursor-pointer"
-                                                title="puntuacion del cliente al finalizar la reseña"
-                                            >
-                                                <strong className="text-white font-extrabold ">
-                                                    {
-                                                        evaluacion.puntuacion_global
-                                                    }
-                                                </strong>
-                                            </p>
-                                        </div>
+                                            <div className="bg-blue-600 rounded-lg w-[100px]">
+                                                <p
+                                                    className="font-extrabold text-[50px] p-3 text-center  rounded-lg cursor-pointer"
+                                                    title="puntuacion del cliente al finalizar la reseña"
+                                                >
+                                                    <strong className="text-white font-extrabold ">
+                                                        {
+                                                            evaluacion.puntuacion_global
+                                                        }
+                                                    </strong>
+                                                </p>
+                                            </div>
                                         </Tooltip>
                                     )}
 
                                     <div className="flex flex-col gap-y-1   ">
                                         <p className="text-black font-semibold">
-                                            <span>Evaluamos a:  </span>
+                                            <span>Evaluamos a: </span>
                                             {
                                                 evaluacion.usuarios_clientes
                                                     .nombre_completo
@@ -108,7 +110,7 @@ const GestionarEv_Clientes = ({
                         </div>
                         <hr className="border-t border-gray-200 my-4" />{" "}
                     </Card>
-                    <div>
+                    <div className="overflow-x-auto">
                         <Table>
                             <Table.Head>
                                 <Table.HeadCell>preguntas</Table.HeadCell>
@@ -123,7 +125,9 @@ const GestionarEv_Clientes = ({
                                         className="bg-white dark:border-gray-700 dark:bg-gray-800"
                                     >
                                         <Table.Cell>
-                                            {pregunta.titulo}
+                                            <p className="whitespace-nowrap">
+                                                {pregunta.titulo}
+                                            </p>
                                         </Table.Cell>
                                         <Table.Cell>
                                             {respuestas.filter(
@@ -139,7 +143,7 @@ const GestionarEv_Clientes = ({
                                                             .id ===
                                                         pregunta.id ? (
                                                             <div key={index}>
-                                                                <p>
+                                                                <p className="text-sm whitespace-nowrap">
                                                                     {
                                                                         respuesta.nombre_respuesta
                                                                     }
@@ -148,7 +152,7 @@ const GestionarEv_Clientes = ({
                                                         ) : null
                                                 )
                                             ) : (
-                                                <p>
+                                                <p className="whitespace-nowrap">
                                                     No hay respuestas para esta
                                                     pregunta.
                                                 </p>
@@ -164,51 +168,49 @@ const GestionarEv_Clientes = ({
                                         </Table.Cell>
                                         <Table.Cell>
                                             <div className="border-b-yellow-300 overflow-auto max-h-[150px]">
-                                            {comentarios.map(
-                                                (comentario, index) =>
-                                                    comentario.id_preguntas ===
-                                                        pregunta.id && (
+                                                {comentarios.map(
+                                                    (comentario, index) =>
+                                                        comentario.id_preguntas ===
+                                                            pregunta.id && (
                                                             <Card
-                                                            className="sm mb-4  flex flex-col text-[12px] "
-                                                            key={index}
-                                                        >
-                                                            <div className="flex flex-col ">
-                                                                <div className="flex justify-between items-cente mb-3 ">
-                                                                    <div className="flex items-center gap-x-2 mb-2 sm:mb-0">
+                                                                className="sm mb-4  flex flex-col text-[12px] "
+                                                                key={index}
+                                                            >
+                                                                <div className="flex flex-col ">
+                                                                    <div className="flex md:justify-between flex-col  items-cente mb-3 ">
+                                                                        <div className="flex items-center gap-x-2 mb-2 sm:mb-0">
+                                                                            <p className="overflow-ellipsis overflow-hidden text-[12px]">
+                                                                                {
+                                                                                    comentario.Nombre_Admin
+                                                                                }
+                                                                            </p>
+                                                                        </div>
+                                                                        <div className="flex items-center gap-x-2">
+                                                                            <BsCalendar2Date
+                                                                                size={
+                                                                                    "12px"
+                                                                                }
+                                                                            />
+                                                                            <p className="text-sm">
+                                                                                {new Date(
+                                                                                    comentario.fecha
+                                                                                ).toLocaleDateString()}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
 
-                                                                        <p className="overflow-ellipsis overflow-hidden text-[12px]">
+                                                                    <div className="flex flex-col items-center justify-between">
+                                                                        <p className="font-extrabold overflow-ellipsis overflow-hidden leading-tight">
                                                                             {
-                                                                                comentario.Nombre_Admin
+                                                                                comentario.comentario
                                                                             }
                                                                         </p>
                                                                     </div>
-                                                                    <div className="flex items-center gap-x-2">
-                                                                        <BsCalendar2Date
-                                                                            size={
-                                                                                "12px"
-                                                                            }
-                                                                        />
-                                                                        <p className="text-sm">
-                                                                            {new Date(
-                                                                                comentario.fecha
-                                                                            ).toLocaleDateString()}
-                                                                        </p>
-                                                                    </div>
                                                                 </div>
-
-                                                                <div className="flex flex-col items-center justify-between">
-                                                                    <p className="font-extrabold overflow-ellipsis overflow-hidden leading-tight">
-                                                                        {
-                                                                            comentario.comentario
-                                                                        }
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </Card>
-                                                    )
-                                            )}
+                                                            </Card>
+                                                        )
+                                                )}
                                             </div>
-
                                         </Table.Cell>
                                     </Table.Row>
                                 ))}

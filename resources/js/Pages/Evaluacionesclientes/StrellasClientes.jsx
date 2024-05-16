@@ -36,7 +36,7 @@ const StrellasClientes = ({
               }, {})
             : {}
     );
-
+    console.log(preguntas);
     // console.log(respuestaSeleccionada);
     // console.log(historialRespuestas);
     // ... Resto del código ...
@@ -125,6 +125,7 @@ const StrellasClientes = ({
         setTexto("Selecciona una calificación. 📌");
         setIndicePregunta(indicePregunta + 1);
     };
+
     const onClickVolver = () => {
         //recuperar estado del boton siguiennte
         setBtn(true);
@@ -132,14 +133,8 @@ const StrellasClientes = ({
         setBtn(false);
         posiblesRespuestas_.length = 0;
         setTexto("Selecciona una calificación. 📌");
-
         // Elimina el estado de btnActive de la pregunta anterior del historial
-        //setHistorialBtnActive(historialBtnActive.slice(0, -1));
-
-        // Aplana el array historialRespuestas
-        const historialRespuestasPlano = historialRespuestas.flat();
-
-        setHistorialRespuestas(historialRespuestasPlano.slice(0, -1));
+        setHistorialRespuestas(historialRespuestas => historialRespuestas.slice(0, -1));
         // Crea una copia de historialPuntajes y elimina la última entrada
         const historialPuntajesCopia = { ...historialPuntajes };
 
@@ -149,20 +144,11 @@ const StrellasClientes = ({
         setHistorialPuntajes(historialPuntajesCopia);
 
         setIndicePregunta(indicePregunta - 1);
-        // const respuestaAnterior =
-        // Recupera la respuesta y el puntaje de la pregunta anterior del historial
-        //     historialRespuestasPlano[historialRespuestasPlano.length - 1];
-        // const puntajeAnterior = historialPuntajes[historialPuntajes.length - 1];
-
-        // Restaura la respuesta y el puntaje de la pregunta anterior
-        // setRespuestaSeleccionada(respuestaAnterior);
-        // setCurrentScore(puntajeAnterior);
-
-        //Elimina la respuesta y el puntaje de la pregunta anterior del historial
     };
+
+    console.log(historialRespuestas);
+
     const SaveEncuesta = () => {
-        console.log("guardar encuesta");
-        console.log(idEvaluaciones);
         router.post("/panela/estrellasCliente/save", {
             historialRespuestas,
             historialPuntajes,
@@ -170,6 +156,7 @@ const StrellasClientes = ({
             comentario,
         });
     };
+
 
     // Calcula el porcentaje de progreso
     const progress = ((indicePregunta + 1) / posiblesrespuestas.length) * 100;
@@ -200,7 +187,7 @@ const StrellasClientes = ({
                     </div>
                 </>
             ) : (
-                <div className="flex flex-col h-[calc(100vh-70px)] justify-between px-4">
+                <div className="flex flex-col h-[calc(100vh-70px)] justify-between px-4 ">
                     <div>
                         <div className="flex flex-col gap-y-4  mt-24 text-center items-center animate-fade-down animate-ease-in">
                             {indicePregunta < posiblesrespuestas.length && (

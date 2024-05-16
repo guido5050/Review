@@ -5,7 +5,7 @@ import {
     Label,
     Modal,
     TextInput,
-    Tooltip
+    Tooltip,
 } from "flowbite-react";
 import { HiHome } from "react-icons/hi";
 
@@ -58,12 +58,12 @@ const ModalCrearClientes = () => {
     return (
         <>
             <Tooltip content="Agregar Cliente con sus Datos">
-            <BtnPrimary
-                onClick={() => setOpenModal(true)}
-                className={"bg-blue-700"}
-            >
-                Agregar Cliente
-            </BtnPrimary>
+                <BtnPrimary
+                    onClick={() => setOpenModal(true)}
+                    className={"bg-blue-700"}
+                >
+                    <span className="whitespace-nowrap">Agregar Cliente</span>
+                </BtnPrimary>
             </Tooltip>
             <Modal show={openModal} size="xl" popup onClose={onCloseModal}>
                 <Modal.Header />

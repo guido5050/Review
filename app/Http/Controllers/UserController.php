@@ -70,84 +70,63 @@ class UserController extends Controller
 
     //    return redirect()->route('review'); //
     //  }//
-    public function StorePreguntas(Request $request){ //TODO: Guardar las posibles respuestas por el cliente
+    public function StorePreguntas(Request $request){ //TODO: Guardar los datos de la Resena en evaluaciones a la empresa
         // Verifica si el array es multidimensional
          // dd($request->toArray());
+         $historialPuntajes = $request->get('historialPuntajes');
+         $historialRespuestas = $request->get('historialRespuestas');
+         $idResena = $request->get('idResena');
+         $comentatio = $request->get('comentario');
 
-        if (isset($request[0])) {
-            // Maneja el caso multidimensional
-           //dd("arreglo multi dimensional");
-           $id_resena = $request[0]['id_Resenita'];
-           $id_preguntas = $request[0]['id_preguntas'];
-           $puntuacion = $request[0]['puntuacion'];
+//        dd($historialPuntajes, $historialRespuestas, $idResena, $comentatio);
 
-         //  dd($id_resena);
 
-            $imprimir=Calificaciones::updateOrCreate([
-                'id_resena' => $id_resena,
-                'id_preguntas' => $id_preguntas,
+        foreach ($historialPuntajes as $idPregunta => $puntuacion) {
+            Calificaciones::create([
+                'id_resena' => $idResena,
+                'id_preguntas' => $idPregunta,
                 'puntuacion' => $puntuacion,
+                'id_empresa' => session()->get('empresa'),
             ]);
-
-            foreach ($request->toArray() as $data) {
-                $id_posiblesRespuestas = $data['id_posiblesRespuestas'];
-                $id_preguntas = $data['id_preguntas'];
-                $nombre_pre_repu = $data['titulo_respuesta'];
-                $puntuacion = $data['puntuacion'];
-                $pregunta =  $data['pregunta']['titulo'];
-                $id_reseni2=$id_resena;
-
-                PreguntasClientes::firstOrCreate([
-                    'id_posiblesRespuestas' => $id_posiblesRespuestas,
-                    'id_preguntas' => $id_preguntas,
-                    'NombreRespuesta' => $nombre_pre_repu,
-                    'puntuacion' => $puntuacion,
-                    'pregunta' => $pregunta,
-                    'id_resena' => $id_reseni2,
-                ]);
-            }
-
-            $estado =Resena::find($id_resena);
-
-            $estado->estado = 2; //Estado 2 es que se esta contestando las preguntas
-
-            $estado->save();
-
-        } else {
-            // Maneja el caso unidimensional
-           // dd('arreglo unidimensional');
-
-           $id_resena = $request['id_Resenita'];
-           $id_preguntas = $request['id_preguntas'];
-           $puntuacion = $request['puntuacion'];
-
-            //dd($id_resena );
-
-            $imprimir=Calificaciones::firstOrCreate([
-                'id_resena' => $id_resena,
-                'id_preguntas' => $id_preguntas,
-                'puntuacion' => $puntuacion,
-            ]);
-            //En el arreglo unidimencional
-           $data= PreguntasClientes::firstOrCreate([
-                'id_posiblesRespuestas' => null,
-                'id_preguntas' => $id_preguntas,
-                'NombreRespuesta' => null,
-                'puntuacion' => $puntuacion,
-                'pregunta' => null,
-                'id_resena' => $id_resena,
-            ]);
-
-           // dd($data->toArray());
-
-           $estado =Resena::find($id_resena);
-
-           $estado->estado = 2; //Estado 2 es que se esta contestando las preguntas
-           $estado->save();
-
         }
 
-        return redirect()->route('showStars');
+        if ($historialRespuestas !== null) {
+            foreach ($historialRespuestas as $respuestas) {
+                foreach ($respuestas as $respuesta) {
+                    if ($respuesta !== null) {
+                        $pregunta= $respuesta['pregunta']['titulo'];
+                        $id_PosibleRespuestas = $respuesta['id_posiblesRespuestas'];
+                        $nombre_respuesta = $respuesta['titulo_respuesta'];
+                        $id_preguntas=$respuesta['pregunta']['id_preguntas'];
+                        $puntuacion = $respuesta['puntuacion'];
+
+                        PreguntasClientes::create([
+                            'id_resena' => $idResena,
+                            'id_preguntas' => $id_preguntas,
+                            'pregunta' => $pregunta,
+                            'id_posiblesRespuestas' => $id_PosibleRespuestas,
+                            'NombreRespuesta' => $nombre_respuesta,
+                            'puntuacion' => $puntuacion,
+                            // Asegúrate de agregar aquí cualquier otro campo que necesites llenar
+                        ]);
+                    }
+                }
+            }
+        }
+
+        $promedio = Calificaciones::where('id_resena', $idResena)
+            ->avg('puntuacion') ?? 0;
+        $promedio = $promedio ? round($promedio, 1) : 0; // Formateamos a un decimal
+
+        $resena = Resena::find($idResena);
+        $resena->Puntuacion_global = $promedio;
+        $resena->estado = 1; //Estado 1 que ha completado la encuesta
+        $resena->comentario = $comentatio;
+        $resena->fecha = date('Y-m-d'); // Guardar la fecha actual en formato año-mes-día
+        $resena->save();
+
+
+        return inertia('components/Final');
     }
      public function storecomments(Request $request) {
 
@@ -192,7 +171,7 @@ class UserController extends Controller
             ->where('estado', true)
             ->with('pregunta') // Cargar la relación
             ->get();
-     //dd($respuesta->toArray());
+    // dd($respuesta->toArray());
  // dd($respuesta->toArray());
 
 $wx2 = 0;

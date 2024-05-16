@@ -40,9 +40,6 @@ const GestionarResenas = ({
 }) => {
     // Transforma respuestas en un objeto donde cada clave es un título de pregunta
     // y cada valor es un objeto que contiene un array de respuestas y la puntuación total para esa pregunta
-    console.log(userid);
-    console.log(idresena);
-    console.log(comentarios);
 
     const respuestasAgrupadas = Object.values(respuestas)
         .flat()
@@ -74,20 +71,32 @@ const GestionarResenas = ({
     return (
         <>
             <Menu_Item user={auth.user} logo={logo} razon_social={razon_social}>
-                <div className="p-8 flex gap-y-2 justify-center mt-2 animate-fade-up animate-ease-in-out flex-col">
-                    <Breadcrumb aria-label="Default breadcrumb example">
+                <div className="md:p-8 flex gap-y-2 justify-center mt-2 animate-fade-up animate-ease-in-out flex-col">
+                    <Breadcrumb aria-label="Default breadcrumb example overflow-x-auto  ">
                         <Breadcrumb.Item
                             onClick={() => window.history.back()}
                             icon={HiHome}
                             className="cursor-pointer"
                         >
-                            <p className="hover:text-blue-400" >{`Evaluaciones a: ${razon_social}`}</p>
+                            <p className="hover:text-blue-400 text-sm md:inline">
+                                <span className="whitespace-nowrap">{`Evaluaciones a:`}</span>
+                                <span className="md:hidden">
+                                    <br />
+                                </span>
+                                <span className="whitespace-nowrap">
+                                    {razon_social}
+                                </span>
+                            </p>
                         </Breadcrumb.Item>
-                        <Breadcrumb.Item>Gestion de Evaluaciones a {razon_social}</Breadcrumb.Item>
+                        <Breadcrumb.Item>
+                            <span className="whitespace-normal text-sm">
+                                Gestion de Evaluaciones a : {razon_social}
+                            </span>
+                        </Breadcrumb.Item>
                     </Breadcrumb>
                     <Card>
-                        <div className=" flex  gap-x-4 justify-between   ">
-                            <div className="flex flex-col gap-y-4 ">
+                        <div className=" flex  md:gap-x-4 md:justify-between flex-col md:flex-row  gap-y-4  ">
+                            <div className="flex flex-col  gap-y-4 ">
                                 {" "}
                                 {/* por si toca poner un elemento a abjo lo deje flex-col */}
                                 <div className="flex gap-x-3 items-center ">
@@ -166,7 +175,7 @@ const GestionarResenas = ({
                         </div>
                     </Card>
 
-                    <div>
+                    <div className="overflow-x-auto">
                         <Table className="text-lg">
                             <Table.Head>
                                 <Table.HeadCell>Pregunta</Table.HeadCell>
@@ -266,11 +275,11 @@ const GestionarResenas = ({
                                                                 index
                                                             ) => (
                                                                 <Card
-                                                                    className="sm mb-4  flex flex-col text-[12px]"
+                                                                    className="sm mb-4  flex flex-col text-[12px] "
                                                                     key={index}
                                                                 >
                                                                     <div className="flex flex-col ">
-                                                                        <div className="flex justify-between items-cente mb-3 ">
+                                                                        <div className="flex md:justify-between flex-col md:flex-row items-cente mb-3 ">
                                                                             <div className="flex items-center gap-x-2 mb-2 sm:mb-0">
                                                                                 <FaRegUser
                                                                                     size={

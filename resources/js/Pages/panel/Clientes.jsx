@@ -24,6 +24,7 @@ import { TbMailUp } from "react-icons/tb";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
 import ModalCrearClientes from "./ui/ModalCrearClientes";
+import { Pagination } from "flowbite-react";
 
 const Clientes = ({
     client,
@@ -38,7 +39,7 @@ const Clientes = ({
     /**
      * TODO: Client es la respuesta paginada del controlador PanelController ´clientes()´
      */
-    console.log(estadoPreguntas);
+    console.log(client);
     const [modalOpen, setModalOpen] = useState(false);
     const [clienteId, setClienteId] = useState(null);
     const [nombreCliente, setNombreCliente] = useState(null);
@@ -67,14 +68,24 @@ const Clientes = ({
             { preserveState: true }
         );
     };
+    const [currentPage, setCurrentPage] = useState(1);
 
+    const onPageChange = (page) => {
+        setCurrentPage(page);
+        router.visit(
+            `/panela/clientes?page=${page}&busqueda=${busqueda}&busquedaPor=${busquedaPor}`,
+            { preserveState: true }
+        );
+    };
     console.log(client);
     if (!client) return "Cargando...";
 
     return (
         <>
             <Menu_Item user={auth.user} logo={logo} razon_social={razon_social}>
-                <div className="flex font-extrabold gap-x-3 flex-col p-10">
+                <div className=" overflow-x-auto  flex font-extrabold gap-x-3 flex-col md:p-10 ">
+                    {" "}
+                    {/**Div principal */}
                     {modalOpen && (
                         <ModalResenas
                             email={email}
@@ -89,7 +100,7 @@ const Clientes = ({
                             nombreCliente={nombreCliente}
                         />
                     )}
-                    <div className="flex overflow-x-auto sm:justify-center mb-7 ">
+                    {/* <div className="flex overflow-x-auto sm:justify-center mb-7  ">
                         {client.prev_page_url && (
                             <Link
                                 href={`${client.prev_page_url}${
@@ -119,13 +130,35 @@ const Clientes = ({
                                 <MdKeyboardDoubleArrowRight />
                             </Link>
                         )}
-                    </div>
+                    </div> */}
+                    <div className=" flex flex-col md:flex-row    justify-between items-center p-1  ">
+                        <div className=" flex p-2  md:gap-x-10">
+                            <div>
+                                {modalCrearClientes && <ModalCrearClientes />}
+                            </div>
 
-                    <div className=" flex  justify-between items-center p-5  ">
-                        <div>
-                            {modalCrearClientes && <ModalCrearClientes />}
+                            <Tooltip content="Buscar Clientes Por: Todos, Con correo, Sin correo">
+                                <div className="flex items-center gap-x-1">
+                                    <Label>Buscar por:</Label>
+                                    <Select
+                                        value={busquedaPor}
+                                        onChange={handleSelectChange}
+                                        className="cursor-pointer"
+                                        cursor="pointer"
+                                    >
+                                        <option value="">Todos</option>
+                                        <option value="correo">
+                                            Con correo
+                                        </option>
+                                        <option value="sinCorreo">
+                                            Sin correo
+                                        </option>
+                                    </Select>
+                                </div>
+                            </Tooltip>
                         </div>
-                        <div className="relative">
+
+                        <div className="relative m-4">
                             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                             <input
                                 type="text"
@@ -135,38 +168,42 @@ const Clientes = ({
                                 onChange={handleSearchChange}
                             />
                         </div>
-                        <Tooltip content="Buscar Clientes Por: Todos, Con correo, Sin correo">
-                            <div className="flex items-center gap-x-1">
-                                <Label>Buscar por:</Label>
-                                <Select
-                                    value={busquedaPor}
-                                    onChange={handleSelectChange}
-                                    className="cursor-pointer"
-                                    cursor="pointer"
-                                >
-                                    <option value="">Todos</option>
-                                    <option value="correo">Con correo</option>
-                                    <option value="sinCorreo">
-                                        Sin correo
-                                    </option>
-                                </Select>
-                            </div>
-                        </Tooltip>
-
-                        <div className="flex gap-3 ">
-                            <Badge color="info" size="sm">
+                        <div className="flex  sm:flex-row gap-3">
+                            <Badge
+                                color="info"
+                                size="sm"
+                                className="text-xs sm:text-sm"
+                            >
                                 <p>Página actual: {client.current_page}</p>
                             </Badge>
-                            <Badge color="success" size="sm">
+                            <Badge
+                                color="success"
+                                size="sm"
+                                className="text-xs sm:text-sm"
+                            >
                                 <p>Total de páginas: {client.last_page}</p>
                             </Badge>
-
-                            <Badge color="indigo" size="sm">
+                            <Badge
+                                color="indigo"
+                                size="sm"
+                                className="text-xs sm:text-sm"
+                            >
                                 <p>Total de clientes: {client.total}</p>
                             </Badge>
                         </div>
                     </div>
-                    <div className="overflow-x-auto animate-fade-down animate-ease-out">
+                    <div className="flex  md:justify-end justify-center">
+                        <div className="flex overflow-x-auto sm:justify-start my-2">
+                            <Pagination
+                                size="sm"
+                                currentPage={client.current_page}
+                                totalPages={client.last_page}
+                                onPageChange={onPageChange}
+                                showIcons
+                            />
+                        </div>
+                    </div>
+                    <div className=" animate-fade-down animate-ease-out overflow-x-auto">
                         <Table>
                             <Table.Head>
                                 <Table.HeadCell>Nombre completo</Table.HeadCell>
@@ -197,7 +234,9 @@ const Clientes = ({
                                                 cliente.email
                                             ) : (
                                                 <>
-                                                    No email
+                                                    <span className="whitespace-nowrap">
+                                                        No email
+                                                    </span>
                                                     <BiX size="20px" />
                                                 </>
                                             )}
@@ -211,27 +250,32 @@ const Clientes = ({
                                         <Table.Cell>
                                             {encuesta === true &&
                                             estadoPreguntas === true ? (
-                                               <Tooltip content="Enviar Evaluacion al Cliente por medio de Correo Electronico!">
-                                                <BtnPrimary
-                                                    className="bg-blue-600 hover:bg-blue-500 flex items-center"
-                                                    onClick={() => {
-                                                        setModalOpen(true);
-                                                        setClienteId(
-                                                            cliente.id_cliente
-                                                        );
-                                                        setEmail(cliente.email);
-                                                        setNombreCliente(
-                                                            cliente.nombre_completo
-                                                        );
-                                                    }}
-                                                    span={
-                                                        <TbMailUp
-                                                            size={"20px"}
-                                                        />
-                                                    }
-                                                >
-                                                    Enviar Evaluacion
-                                                </BtnPrimary>
+                                                <Tooltip content="Enviar Evaluacion al Cliente por medio de Correo Electronico!">
+                                                    <BtnPrimary
+                                                        className="bg-blue-600 hover:bg-blue-500 flex items-center justify-center sm:text-sm "
+                                                        onClick={() => {
+                                                            setModalOpen(true);
+                                                            setClienteId(
+                                                                cliente.id_cliente
+                                                            );
+                                                            setEmail(
+                                                                cliente.email
+                                                            );
+                                                            setNombreCliente(
+                                                                cliente.nombre_completo
+                                                            );
+                                                        }}
+                                                        span={
+                                                            <TbMailUp
+                                                                size={"20px"}
+                                                                className="mr-1" // Añade un margen a la derecha del icono
+                                                            />
+                                                        }
+                                                    >
+                                                        <span className="whitespace-nowrap">
+                                                            Enviar Evaluacion
+                                                        </span>
+                                                    </BtnPrimary>
                                                 </Tooltip>
                                             ) : (
                                                 <Link
@@ -248,7 +292,9 @@ const Clientes = ({
                                                 href={`/panela/evaluaciones_clientes/${cliente.id_cliente}`}
                                                 className="text-white inline-block bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                                             >
-                                                Evaluar cliente
+                                                <span className="whitespace-nowrap">
+                                                    Evaluar cliente
+                                                </span>
                                             </Link>
                                         </Table.Cell>
                                     </Table.Row>

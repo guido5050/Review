@@ -27,12 +27,12 @@ const Strellas_clientes = ({ texto, textos, handleStarClick, currentScore }) => 
                     </button>
                 ))}
                 </div>
-                
+
 
 
                 <div className="flex justify-start ">
 
-                <h1 className={`font-extrabold mt-2 px-1 text-gray-500     ${currentScore==0?'animate-pulse animate-ease-linear': ''}   `}>{texto}</h1>
+                <h1 className={`font-extrabold  px-1 text-gray-500     ${currentScore==0?'animate-pulse animate-ease-linear': ''}   `}>{texto}</h1>
                 </div>
 
             </div>

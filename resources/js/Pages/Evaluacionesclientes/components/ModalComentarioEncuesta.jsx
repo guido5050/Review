@@ -34,7 +34,7 @@ const ModalComentarioEncuesta = ({
     return (
         <>
             <Tooltip content="Deja un comentario sobre la pregunta">
-            <Button color="blue" onClick={() => setOpenModal(true)}>
+            <Button color="blue" onClick={() => setOpenModal(true)} className="whitespace-nowrap">
                 Dejar Comentario
             </Button>
             </Tooltip>
