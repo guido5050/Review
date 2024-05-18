@@ -13,12 +13,14 @@ const GestionarEv_Clientes = ({
     AppName,
     evaluacion,
     preguntas,
+    calificaciones,
     respuestas,
     comentarios,
 }) => {
-    // console.log(preguntas);
+    console.log(preguntas);
     //  console.log(respuestas);
     // console.log(comentarios);
+    console.log(calificaciones);
     return (
         <>
             <Menu_Item
@@ -115,6 +117,8 @@ const GestionarEv_Clientes = ({
                             <Table.Head>
                                 <Table.HeadCell>preguntas</Table.HeadCell>
                                 <Table.HeadCell>Respuestas</Table.HeadCell>
+                                <Table.HeadCell>Puntuacion</Table.HeadCell>
+
                                 <Table.HeadCell></Table.HeadCell>
                                 <Table.HeadCell>comentarios</Table.HeadCell>
                             </Table.Head>
@@ -146,7 +150,9 @@ const GestionarEv_Clientes = ({
                                                                 <p className="text-sm whitespace-nowrap">
                                                                     {
                                                                         respuesta.nombre_respuesta
+
                                                                     }
+
                                                                 </p>
                                                             </div>
                                                         ) : null
@@ -159,7 +165,14 @@ const GestionarEv_Clientes = ({
                                             )}
                                         </Table.Cell>
                                         <Table.Cell>
-                                            <ModalComentarioEncuesta
+                                            <p className="text-sm whitespace-nowrap">
+                                                {
+                                                    (calificaciones.find(calificacion => calificacion.id_pregunta_ev === pregunta.id)).puntuacion
+                                                }
+                                            </p>
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                        <ModalComentarioEncuesta
                                                 preguntaTitulo={pregunta.titulo}
                                                 id_evaluacion={evaluacion.id}
                                                 id_preguntas={pregunta.id}

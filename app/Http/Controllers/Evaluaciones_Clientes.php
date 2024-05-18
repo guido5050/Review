@@ -37,6 +37,10 @@ class Evaluaciones_Clientes extends Controller
         $respuestas = respuesta_ev_clientes::with('preguntasEvaluacionesClientes')->
         where('id_evaluacion', $IdEvaluacion)->get();
 
+        $calificaciones = CalificacionesEva_clientes::where('id_evaluacion', $IdEvaluacion)->get();
+
+        //dd($calificaciones->toArray());
+
         $comentarios = ComentariosEvClientes::where('id_evaluacion', $IdEvaluacion)->get();
         // dd($comentarios->toArray());
 
@@ -44,8 +48,10 @@ class Evaluaciones_Clientes extends Controller
         return Inertia::render('Evaluacionesclientes/GestionarEv_Clientes',
          ['evaluacion' => $evaluacion,
           'preguntas'=>$preguntas,
-           'respuestas' => $respuestas,
-           'comentarios' => $comentarios]);
+          'respuestas' => $respuestas,
+          'comentarios' => $comentarios,
+          'calificaciones' => $calificaciones,
+        ]);
     }
 
     public function Evaluacion_clientes_show($id)

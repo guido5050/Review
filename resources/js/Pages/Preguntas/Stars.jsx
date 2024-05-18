@@ -26,7 +26,7 @@ export default function Stars({ limpieza, preguntas, idresena, logo }) {
     const [tituloPreguntaActual, setTituloPreguntaActual] = useState("");
     const [idPreguntaActual, setIdPreguntaActual] = useState("");
     const [comentario, setComentario] = useState("");
-
+    const [btnSiguiente, setBtnSiguiente] = useState(false);
     const [historialPuntajes, setHistorialPuntajes] = useState(
         posiblesrespuestas
             ? posiblesrespuestas.reduce((acc, pregunta) => {
@@ -36,9 +36,7 @@ export default function Stars({ limpieza, preguntas, idresena, logo }) {
             : {}
     ); //Asi construi el objeto historialPuntajes
 
-    console.log(historialPuntajes);
-    console.log(historialRespuestas);
-    console.log(currentScore);
+
 
     useEffect(() => {
         if (
@@ -51,7 +49,22 @@ export default function Stars({ limpieza, preguntas, idresena, logo }) {
                 posiblesrespuestas[indicePregunta].id_preguntas
             );
         }
+
+
     }, [indicePregunta]);
+
+    useEffect(() => {
+        console.log(respuestaSeleccionada);
+        if (respuestaSeleccionada.length > 0) {
+            // El arreglo no está vacío
+            setBtnSiguiente(true);
+            console.log("Boton activo");
+        } else {
+            // El arreglo está vacío
+            setBtnSiguiente(false);
+            console.log("Boton inactivo");
+        }
+    },[respuestaSeleccionada]);
 
     const handleStarClick = (index, idresena) => {
         const newScore = index + 1 === currentScore ? index : index + 1;
@@ -77,6 +90,7 @@ export default function Stars({ limpieza, preguntas, idresena, logo }) {
 
     const onClick = () => {
         //boton siguiente
+        setBtnSiguiente(false);
         if (limpieza !== undefined) {
             limpieza.length = 0;
         }
@@ -103,6 +117,12 @@ export default function Stars({ limpieza, preguntas, idresena, logo }) {
     };
     const onClickVolver = () => {
         //recuperar estado del boton siguiennte
+        if(btnSiguiente === true){
+            setBtnSiguiente(false);
+        }else{
+            setBtnSiguiente(true);
+        }
+
         setBtn(true);
         setCurrentScore(0);
         setBtn(false);
@@ -130,6 +150,7 @@ export default function Stars({ limpieza, preguntas, idresena, logo }) {
         setIndicePregunta(indicePregunta - 1);
     };
     const manejarClick = (respuesta) => {
+        //Estado del boton
         if (
             respuestaSeleccionada.some(
                 (res) =>
@@ -162,7 +183,7 @@ export default function Stars({ limpieza, preguntas, idresena, logo }) {
             comentario,
         });
     };
-    console.log(comentario);
+    console.log(btnSiguiente);
     //TODO: Calculando la Progress Bar
 
 
@@ -195,7 +216,7 @@ export default function Stars({ limpieza, preguntas, idresena, logo }) {
                     </div>
                     <div className="w-full p-2 text-[25px] sm:text-[30px] md:text-[35px] lg:text-[40px] xl:text-[45px] 2xl:text-[50px]">
                         {indicePregunta >= posiblesrespuestas.length && (
-                            <TextAre a setComentario={setComentario} />
+                            <TextArea setComentario={setComentario} />
                         )}
                         <div className="mt-5 mb-5 p-3 animate-shake flex justify-center  ">
                             {limpieza && limpieza.length > 0 ? (
@@ -280,11 +301,12 @@ export default function Stars({ limpieza, preguntas, idresena, logo }) {
                                     : onClick
                             }
                             disabled={
-                                currentScore === 0 &&
+
                                 indicePregunta < posiblesrespuestas.length
+                                && btnSiguiente === false
                             }
                             className={`mt-auto ${
-                                currentScore === 0 &&
+                                btnSiguiente === false &&
                                 indicePregunta < posiblesrespuestas.length
                                     ? "opacity-50 cursor-not-allowed"
                                     : "opacity-100 cursor-pointer"

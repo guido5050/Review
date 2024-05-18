@@ -452,7 +452,7 @@ class PanelController extends Controller
                             ->groupBy('id_preguntas');
 
 
-       // dd($preguntasClientes->toArray());
+       //dd($preguntasClientes->toArray());
 
         // Ahora puedes pasar estas preguntas y la reseña a tu vista
         return Inertia::render('panel/GestionarResenas',
@@ -555,7 +555,7 @@ class PanelController extends Controller
         $url = '#';
         $redesSociales = RedesSociales::where('id_empresa', session('empresa'))->get()->toArray();
 
-       
+
 
         $data = [
             'titulo' => $titulo,

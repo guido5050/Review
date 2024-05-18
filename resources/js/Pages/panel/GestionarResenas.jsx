@@ -56,6 +56,7 @@ const GestionarResenas = ({
                 respuesta.puntuacion; //Saco la puntuacion individual por cada pregunta;
             return acc;
         }, {});
+        console.log(respuestas);
     const AprobarResena = () => {
         router.post(
             "/panela/resenas/publicar",
