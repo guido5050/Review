@@ -167,7 +167,7 @@ const GestionarEv_Clientes = ({
                                         <Table.Cell>
                                             <p className="text-sm whitespace-nowrap">
                                                 {
-                                                    (calificaciones.find(calificacion => calificacion.id_pregunta_ev === pregunta.id)).puntuacion
+                                                    (calificaciones.find(calificacion => calificacion.id_pregunta_ev === pregunta.id) || { puntuacion: 'No puntuación' }).puntuacion
                                                 }
                                             </p>
                                         </Table.Cell>

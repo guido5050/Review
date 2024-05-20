@@ -21,4 +21,7 @@ class Roles extends Model
     // {
     //     return $this->hasMany(usuarios_empleado::class, 'cargo');
     // }
+    public function empleados(){
+        return $this->belongsTomany(usuarios_empleado::class, 'empleados_roles', 'role_id', 'id_empleados');
+     }
 }

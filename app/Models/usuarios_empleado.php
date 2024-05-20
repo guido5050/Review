@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Roles;
+use App\Models\parametro;
 
 class usuarios_empleado extends Authenticatable
 {
@@ -41,6 +43,15 @@ class usuarios_empleado extends Authenticatable
     public function resenasAprobadas(): HasMany
     {
         return $this->hasMany(Resena::class, 'id_moderador', 'id_empleado');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Roles::class, 'empleados_roles', 'id_empleados', 'role_id');
+    }
+    public function parametros()
+    {
+        return $this->belongsToMany(parametro::class, 'empleados_parametros', 'id_empleado', 'parametro_id');
     }
 }
 

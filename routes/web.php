@@ -115,7 +115,7 @@ Route::middleware('auth:empleados')->group(function () {
 
     Route::get('/login', [logincontrollerumpleados::class,'show'])->name('login');
 
-	Route::post('/logine',[logincontrollerumpleados::class,'aut_user'])->name('in_log');
+	Route::post('/logine',[logincontrollerumpleados::class,'aut_user'])->name('in_log'); //METODO QUE HACE LOGIN en la APP mismo donde se definen las variables de sesion
 
 	Route::get('/logout',[logincontrollerumpleados::class,'logout'])->name('logout');
 
