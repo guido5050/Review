@@ -16,6 +16,7 @@ const GestionarEv_Clientes = ({
     calificaciones,
     respuestas,
     comentarios,
+    empresas,
 }) => {
     console.log(preguntas);
     //  console.log(respuestas);
@@ -28,6 +29,7 @@ const GestionarEv_Clientes = ({
                 razon_social={razon_social}
                 logo={logo}
                 AppName={AppName}
+                empresas={empresas}
             >
                 <div className="md:p-8 p-2 flex gap-y-2 justify-center mt-2 animate-fade-up animate-ease-in-out flex-col ">
                     <Breadcrumb aria-label="Default breadcrumb example">

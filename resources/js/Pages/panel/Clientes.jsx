@@ -35,6 +35,7 @@ const Clientes = ({
     razon_social,
     plantillas,
     empresaId,
+    empresas
 }) => {
     /**
      * TODO: Client es la respuesta paginada del controlador PanelController ´clientes()´
@@ -82,7 +83,7 @@ const Clientes = ({
 
     return (
         <>
-            <Menu_Item user={auth.user} logo={logo} razon_social={razon_social}>
+            <Menu_Item user={auth.user} logo={logo} razon_social={razon_social} empresas={empresas}>
                 <div className=" overflow-x-auto  flex font-extrabold gap-x-3 flex-col md:p-10 ">
                     {" "}
                     {/**Div principal */}

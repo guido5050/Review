@@ -8,7 +8,7 @@ import { router } from "@inertiajs/react";
 import { Pagination } from "flowbite-react";
 import { useState } from "react";
 
-const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
+const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados, empresas }) => {
     console.log(resenas);
     const [currentPage, setCurrentPage] = useState(resenas.current_page);
     const onPageChange = (page) => {
@@ -26,6 +26,7 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados }) => {
                 razon_social={razon_social}
                 logo={logo}
                 AppName={AppName}
+                empresas={empresas}
             >
                 <div className=" animate-fade-down animate-ease-out p-8">
                     <div>

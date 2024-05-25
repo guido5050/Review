@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Roles;
 use App\Models\parametro;
+use App\Models\Acceso;
 
 class usuarios_empleado extends Authenticatable
 {
@@ -45,13 +46,19 @@ class usuarios_empleado extends Authenticatable
         return $this->hasMany(Resena::class, 'id_moderador', 'id_empleado');
     }
 
-    public function roles()
-    {
-        return $this->belongsToMany(Roles::class, 'empleados_roles', 'id_empleados', 'role_id');
-    }
+    //Un usuario puede tener un solo rol como máximo
+    // public function roles()
+    // {
+    //     return $this->belongsToMany(Roles::class, 'empleados_roles', 'id_empleados', 'role_id');
+    // }
     public function parametros()
     {
         return $this->belongsToMany(parametro::class, 'empleados_parametros', 'id_empleado', 'parametro_id');
+    }
+    public function accesos()
+    {
+        return $this->belongsToMany(Acceso::class, 'user_accesos', 'id_empleado', 'id_vista')
+                    ->withPivot('id_parametro');
     }
 }
 

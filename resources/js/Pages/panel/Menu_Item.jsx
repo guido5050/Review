@@ -1,16 +1,15 @@
 import { router, Link } from "@inertiajs/react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState, useEffect } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
-import { FcBusinessman } from "react-icons/fc";
 import { FiLogOut } from "react-icons/fi";
 import { Head } from "@inertiajs/react";
 import Footer2 from "./components/Footer2";
 import { RiUserSettingsLine } from "react-icons/ri";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa6";
-
+import Dropdownx from "./ui/Dropdown";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -22,6 +21,7 @@ export default function Menu_Item({
     logo,
     razon_social,
     AppName,
+    empresas,
 }) {
     const navigation = [
         {
@@ -43,8 +43,7 @@ export default function Menu_Item({
         },
     ];
 
-    // console.log(logo);
-
+    //console.log(empresas);
     //const [ModalEmail, setModalEmail] = useState(false);
     const [modal, setModal] = useState(false);
     const [activeItem, setActiveItem] = useState(
@@ -55,8 +54,6 @@ export default function Menu_Item({
     useEffect(() => {
         localStorage.setItem("activeItem", activeItem);
     }, [activeItem]);
-
-    console.log(agregarusuario);
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -78,7 +75,6 @@ export default function Menu_Item({
                             )}
 
                             <div className="mx-auto max-w-7xl   ">
-
                                 <div className="relative flex h-16 items-center justify-between ">
                                     <div className=" flex items-center gap-x-1 ml-[50px] md:ml-0 rounded-lg  md:mr-20">
                                         <img
@@ -122,33 +118,39 @@ export default function Menu_Item({
                                         </div> */}
                                         <div className="sm:ml-6 hidden md:block ">
                                             <div className="flex space-x-3 items-center">
-                                                {navigation.map((item, index) => (
-                                                    <Link
-                                                        key={item.name}
-                                                        href={item.href}
-                                                        method={item.method}
-                                                        preserveState
-                                                        onMouseDown={() =>
-                                                            setActiveItem(
+                                                {navigation.map(
+                                                    (item, index) => (
+                                                        <Link
+                                                            key={item.name}
+                                                            href={item.href}
+                                                            method={item.method}
+                                                            preserveState
+                                                            onMouseDown={() =>
+                                                                setActiveItem(
+                                                                    item.name
+                                                                )
+                                                            } // Use onMouseDown instead of onClick
+                                                            className={classNames(
+                                                                activeItem ===
+                                                                    item.name
+                                                                    ? " text-black bg-slate-200 border-b-2 border-black  hover:bg-slate-200 hover:text-black"
+                                                                    : "text-gray-500 hover:text-black",
+                                                                "rounded-md px-3 py-2 text-sm font-medium flex items-center justify-center",
+                                                                index === 0
+                                                                    ? "border-2 border-black"
+                                                                    : ""
+                                                            )}
+                                                            aria-current={
+                                                                activeItem ===
                                                                 item.name
-                                                            )
-                                                        } // Use onMouseDown instead of onClick
-                                                        className={classNames(
-                                                            activeItem === item.name
-                                                                ? " text-black bg-slate-200 border-b-2 border-black  hover:bg-slate-200 hover:text-black"
-                                                                : "text-gray-500 hover:text-black",
-                                                            "rounded-md px-3 py-2 text-sm font-medium flex items-center justify-center",
-                                                            index === 0 ? "border-2 border-black" : ""
-                                                        )}
-                                                        aria-current={
-                                                            activeItem === item.name
-                                                                ? "page"
-                                                                : undefined
-                                                        }
-                                                    >
-                                                        {item.name}
-                                                    </Link>
-                                                ))}
+                                                                    ? "page"
+                                                                    : undefined
+                                                            }
+                                                        >
+                                                            {item.name}
+                                                        </Link>
+                                                    )
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -157,7 +159,9 @@ export default function Menu_Item({
                                             {user.nombre_completo}
                                             <FaRegUser />
                                         </h1>
-
+                                        <div className=" flex items-center justify-center">
+                                            <Dropdownx empresas={empresas} />
+                                        </div>
 
                                         <Menu
                                             as="div"

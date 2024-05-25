@@ -15,6 +15,9 @@ use App\Models\usuarios_empleado;
 use App\Models\parametro;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Session;
+use App\Models\Acceso;
+use App\Models\Roles;
+
 
 
 
@@ -58,35 +61,42 @@ class logincontrollerumpleados extends Controller
         }
     }
 
-    public function register(request $data) { //TODO: Metodo que registra un nuevo usuario(EMPLEAOD)
+    public function register(request $data) { //TODO: Metodo que registra un nuevo usuario(EMPLEADO)
         //
 
-    //dd($data->toArray());
-        //phone_number
+      // dd($data->toArray());
+        $empresa=Session::get('empresa');
+        $empresas = $data->get('empresas');
 
-        $rules = [
-            'nombre_completo' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:usuarios_empleados,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'usuario' => ['unique:usuarios_empleados,usuario'],
-            'num_identificacion' => ['required','max:50'],
-            'num_telefono' => ['required'],
-            'cargo' => ['required','max:200'],
-        ];
+    $dataEmpleado =[
+        'nombre_completo' =>  $nombre_completo = $data['empleado']['nombre_completo'],
+        'email' =>   $email = $data['empleado']['email'],
+        'usuario'=>    $usuario = $data['empleado']['usuario'],
+        'contrasena' =>  bcrypt($data['empleado']['password']),
+        'num_identificacion'=>   $num_identificacion = $data['empleado']['num_identificacion'],
+        'num_telefono'=>  $num_telefono = $data['empleado']['num_telefono'],
+        'cargo'=>  $cargo = $data['empleado']['cargo'],
+        'activo' =>   $activo = $data['activo'] === 'si' ? 1 : 0,
+    ];
+    
+       // dd($dataEmpleado);
+         $usuario = usuarios_empleado::create($dataEmpleado);
+        /**
+         * -Sacar el id del usuario ya creado
+         * -Saca la consulta de las vistas que estan disponibles para el usuario por el cargo
+         */
+        $cargo = Roles::find($dataEmpleado['cargo']);
+        $vistas = $cargo->accesos;
+       // dd($vistas->toArray());
 
-        //$validatedData = $data->validate($rules, $customMessages);
+        foreach ($vistas as $vista) {
+            $usuario->accesos()->attach($vista->id, ['id_parametro' => $empresa]);
+        }
 
-        $data['usuario'] = $data['email'];
-        $data['activo'] = $data['activo'] === 'si' ? 1 : 0; // ternario en php
-        $data['contrasena'] = $data['password'];
-        $data['cargo'] =$data['cargo'];
-        $data['contrasena'] = bcrypt($data['contrasena']);
-        $usuario = usuarios_empleado::create($data->all());
-        //$usuario = usuarios_cliente::create($data->all());
-       // auth::guard('empleados')->logout();
-        $username = $data['usuario'];
+        foreach($empresas as $empresa){
+            $usuario->parametros()->attach($empresa['id']);
+        }
 
-        //return redirect()->route('usuarios');
 
         return to_route('usuarios');
 
@@ -99,6 +109,9 @@ class logincontrollerumpleados extends Controller
 
     public function aut_user(request $data) {
 
+        /**
+         * Este metodo se encarga de hacer login y de guardar las variables de sesion
+         */
         //dd($data->toArray());
 
         $rules = [
@@ -119,17 +132,40 @@ class logincontrollerumpleados extends Controller
         $xyz = auth::guard('empleados')->attempt(['usuario' => $data->username, 'password' => $data->password],$data->remember);
 		//dd($xyz);
         if ($xyz) {
-            // Guarda el valor de 'empresa' en la sesión
-            Session::put('empresa', $data->empresa);
-            $empresa = Session::get('empresa');
 
-            $parametros = parametro::where('id', Session::get('empresa'))->select('ruta_logo', 'razon_social','correo')->first();
-            Session::put('logo_ruta', $parametros->ruta_logo);
-            Session::put('razon_social', $parametros->razon_social);
-            Session::put('email_empresa', $parametros->correo);
-            Session::save();  // dd($empresa);
-            $logo = Session::get('logo_ruta');
-            $razon_social = Session::get('razon_social');
+
+            $empleado = usuarios_empleado::with('parametros')->where('usuario','=',$data['username'])->first();
+
+            if ($empleado->parametros->isEmpty()) {
+                auth::guard('empleados')->logout();
+
+                return back()->withErrors(['empresa'=>' Este Usuario No Tiene Ninguna Empresa Asignada,
+                Por Favor Ponerse en Contacto con el Administrador o Proveedor del Servicio ']);
+
+            }else{
+                $parametroIds = $empleado->parametros->map(function ($parametro) {
+                    return [
+                        'id' => $parametro->id,
+                        'razon_social' => $parametro->razon_social,
+                        'ruta_logo' => $parametro->ruta_logo,
+                    ];
+                })->toArray();
+
+                Session::put('empresas', $parametroIds);
+                $empresas = Session::get('empresas');
+                Session::put('empresa', $empresas[0]['id']); //$data->empresa); antes venia de la vista
+                $empresa = Session::get('empresa');
+
+                $parametros = parametro::where('id', Session::get('empresa'))->select('ruta_logo', 'razon_social','correo')->first();
+                Session::put('logo_ruta', $parametros->ruta_logo);
+                Session::put('razon_social', $parametros->razon_social);
+                Session::put('email_empresa', $parametros->correo);
+                Session::save();  // dd($empresa);
+                $logo = Session::get('logo_ruta');
+                $razon_social = Session::get('razon_social');
+            }
+
+
 
 
             $usuario_estado_valid = usuarios_empleado::where('usuario','=',$data['username'])->pluck('activo')->first();

@@ -9,6 +9,7 @@ const EvaluacionesClientes = ({
     logo,
     AppName,
     evaluaciones,
+    empresas,
 }) => {
     console.log(evaluaciones);
     const [currentPage, setCurrentPage] = useState(1);
@@ -31,6 +32,7 @@ const EvaluacionesClientes = ({
                 razon_social={razon_social}
                 logo={logo}
                 AppName={AppName}
+                empresas={empresas}
             >
                 <div className="overflow-x-auto animate-fade-down animate-ease-out p-8">
                     <div className="flex md:justify-end  justify-center">

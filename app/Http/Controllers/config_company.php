@@ -28,6 +28,8 @@ public function datos_empresas(){
            // dd($config_current->toArray());
 	}
 
+    
+
 
     /**
      * TODO: Metodo que actualiza la información de la empresa

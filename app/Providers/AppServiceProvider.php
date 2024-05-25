@@ -33,6 +33,9 @@ class AppServiceProvider extends ServiceProvider
     'AppName' => function () {
         return config('app.name');
     },
+    'empresas' => function() {
+        return session('empresas');
+    }
 ]);
     }
 }

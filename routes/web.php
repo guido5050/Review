@@ -10,6 +10,7 @@ use App\Http\Controllers\config_company;
 use App\Http\Controllers\logincontrollerumpleados;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\Evaluaciones_Clientes;
+use App\Http\Controllers\AccesoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,10 +58,12 @@ Route::group([ 'middleware' => 'auth:empleados'], function () {
 
 
 
-Route::prefix('panela/resenas/')->group(function () {
+
+Route::middleware('auth:empleados')->prefix('panela/resenas/')->group(function () {
     Route::get('{userClienteId}/{Idresena}', [PanelController::class,'gestionar']);
     Route::post('comentario', [PanelController::class,'comentarios_admin']); //ComentariosGuardados por el admin de resenas
     Route::post('publicar', [PanelController::class,'publicar_resena'])->name('publicar.resena'); //Publicar resena(Aprobar)
+    Route::post('Session', [PanelController::class,'Session'])->name('Session'); //Cambia la Session de usuario de las empresas que tiene asignadas
 });
 
 
@@ -82,11 +85,13 @@ Route::middleware('auth:empleados')->group(function () {
     Route::post('/panela/estrellasCliente/save',[Evaluaciones_Clientes::class,'saveposiblesrespuestas'])->name('saveposiblesrespuestas');
 });
 
-
-
-
-
-
+//TODO:Rutas de Accesos de Usuarios
+Route::prefix('panela/usuarios/accesos/{usuario_id}')->group(function () {
+    Route::get('/', [AccesoController::class, 'index'])->name('accesos');
+    Route::post('/create', [AccesoController::class, 'create_accesos'])->name('create_accesos');
+    Route::post('/update', [AccesoController::class, 'update_accesos'])->name('update_accesos');
+    Route::delete('/{id}', [AccesoController::class, 'delete_accesos'])->name('delete_accesos');
+})->middleware('auth:empleados');
 
 
 

@@ -7,7 +7,7 @@ import { Badge } from "flowbite-react";
 import { HiInformationCircle } from "react-icons/hi";
 import { Alert } from "flowbite-react";
 
-const ConfigPlantilla = ({ auth, logo, razon_social, plantillas }) => {
+const ConfigPlantilla = ({ auth, logo, razon_social, plantillas, empresas }) => {
     const [alertcreate, setAlertcreate] = useState(false);
     const [alertupdate, setAlertupdate] = useState(false);
 
@@ -25,7 +25,7 @@ const ConfigPlantilla = ({ auth, logo, razon_social, plantillas }) => {
 
     return (
         <>
-            <Menu_Item user={auth.user} logo={logo} razon_social={razon_social}>
+            <Menu_Item user={auth.user} logo={logo} razon_social={razon_social} empresas={empresas}>
                 {alertcreate && (
                     <Alert
                         color="success"

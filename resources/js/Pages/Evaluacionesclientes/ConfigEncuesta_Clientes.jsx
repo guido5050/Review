@@ -14,6 +14,7 @@ const ConfigEncuesta_Clientes = ({
     razon_social,
     AppName,
     preguntas,
+    empresas,
 }) => {
     console.log(preguntas);
     const [modal, setModal] = useState(false);
@@ -82,6 +83,7 @@ const ConfigEncuesta_Clientes = ({
             logo={logo}
             razon_social={razon_social}
             AppName={AppName}
+            empresas={empresas}
         >
             <div className="p-6 animate-fade-down animate-ease-out ">
                 <div className="mb-2">

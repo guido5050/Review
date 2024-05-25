@@ -1,4 +1,4 @@
-import { Select, Label, Modal, TextInput } from "flowbite-react";
+import { Select, Label, Modal, TextInput, Checkbox } from "flowbite-react";
 import { useState } from "react";
 import BtnPrimary from "./BtnPrimary";
 import { router } from "@inertiajs/react";
@@ -8,14 +8,14 @@ const ModalCrearUsuarios = ({
     setModal_CrearUsuarios,
     cargo,
     setAlertcreate,
+    empresas,
 }) => {
     const [openModal, setOpenModal] = useState(modal_crearusuarios);
-    console.log(cargo);
-    
+    const [empresasx_, setEmpresas] = useState([]);
+
     function onCloseModal() {
         setOpenModal(false);
         setModal_CrearUsuarios(false);
-        setEmail("");
     }
 
     const [value, setValues] = useState({
@@ -41,17 +41,41 @@ const ModalCrearUsuarios = ({
 
     function handleSubmit(e) {
         e.preventDefault();
-        setModal_CrearUsuarios(false);
-        router.post("/register.store", value, {
+        console.log(empresasx_);
+        //mm
+        router.post("/register.store", {empleado: value, empresas: empresasx_}, {
             onSuccess: () => {
+                setModal_CrearUsuarios(false);
                 setAlertcreate(true);
                 setTimeout(() => {
                     setAlertcreate(false);
-                },2500);
+                }, 2500);
             },
         });
         //router.visit("/panela/usuarios");
     }
+
+    const handleChangeEmpresa = (idEmpresa) => {
+        const empresaCurrent = empresas.find(
+            (empresa) => empresa.id === idEmpresa
+        );
+
+        let empresaExistente = empresasx_.find(
+            (empresa_x) => empresa_x.id === empresaCurrent.id
+        );
+
+        if (empresaExistente) {
+            let index = empresasx_.indexOf(empresaExistente);
+
+            empresasx_.splice(index, 1);
+
+            console.log(empresasx_);
+        } else {
+            setEmpresas([...empresasx_, empresaCurrent]);
+        }
+    };
+
+
 
     return (
         <>
@@ -95,11 +119,11 @@ const ModalCrearUsuarios = ({
                             </div>
                             <div>
                                 <div className="mb-2 block">
-                                    <Label htmlFor="usuario" value="Usuario" />
+                                    <Label htmlFor="usuario" value="Usuario: Con este Usuario Iniciara Sesion(loigin)❗️" />
                                 </div>
                                 <TextInput
                                     id="usuario"
-                                    placeholder="usuario"
+                                    placeholder=""
                                     onChange={handleChange}
                                     type="text"
                                     required
@@ -119,6 +143,8 @@ const ModalCrearUsuarios = ({
                                     required
                                 />
                             </div>
+
+
                             <div className="flex gap-x-10 ">
                                 <div className="w-1/2">
                                     <div className="mb-2 block">
@@ -189,7 +215,37 @@ const ModalCrearUsuarios = ({
                                     </Select>
                                 </div>
                             </div>
-
+                            <div className=" flex flex-col  gap-2">
+                                <Label
+                                    htmlFor="empresas"
+                                    value="Asignar Empresas"
+                                />
+                                <div className="grid p-3 grid-flow-row grid-cols-1 md:grid-cols-3 gap-5 max-h-70 overflow-x-auto">
+                                    {empresas.map((empresa) => (
+                                        <div
+                                            key={empresa.id}
+                                            className="flex items-center gap-2"
+                                        >
+                                            <Checkbox
+                                                id={empresa.id}
+                                                onClick={() => {
+                                                    handleChangeEmpresa(
+                                                        empresa.id
+                                                    );
+                                                }}
+                                            />
+                                            <Label
+                                                htmlFor={empresa.id}
+                                                className="flex"
+                                            >
+                                                <span>
+                                                    {empresa.razon_social}
+                                                </span>
+                                            </Label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                             <div className="flex justify-between"></div>
                             <div className="w-full">
                                 <BtnPrimary
@@ -200,6 +256,7 @@ const ModalCrearUsuarios = ({
                                 </BtnPrimary>
                             </div>
                         </div>
+
                     </Modal.Body>
                 </form>
             </Modal>

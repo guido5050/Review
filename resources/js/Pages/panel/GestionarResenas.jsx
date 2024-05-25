@@ -37,6 +37,7 @@ const GestionarResenas = ({
     reserva,
     fecha,
     moderador,
+    empresas,
 }) => {
     // Transforma respuestas en un objeto donde cada clave es un título de pregunta
     // y cada valor es un objeto que contiene un array de respuestas y la puntuación total para esa pregunta
@@ -71,7 +72,7 @@ const GestionarResenas = ({
 
     return (
         <>
-            <Menu_Item user={auth.user} logo={logo} razon_social={razon_social}>
+            <Menu_Item user={auth.user} logo={logo} razon_social={razon_social} empresas={empresas}>
                 <div className="md:p-8 flex gap-y-2 justify-center mt-2 animate-fade-up animate-ease-in-out flex-col">
                     <Breadcrumb aria-label="Default breadcrumb example overflow-x-auto  ">
                         <Breadcrumb.Item

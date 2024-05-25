@@ -18,6 +18,7 @@ const ConfigEncuesta = ({
     AppName,
     preguntas,
     estadoEncuesta,
+    empresas,
 }) => {
     console.log(preguntas);
     const [openModal, setOpenModal] = useState(false);
@@ -75,6 +76,7 @@ const ConfigEncuesta = ({
             razon_social={razon_social}
             logo={logo}
             AppName={AppName}
+            empresas={empresas}
         >
             <div className="p-6 animate-fade-down animate-ease-out ">
                 <div className="flex items-center justify-start gap-x-2 ">

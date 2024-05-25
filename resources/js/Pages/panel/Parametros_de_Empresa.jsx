@@ -20,6 +20,7 @@ const Parametros_de_Empresa = ({
     logo,
     razon_social,
     redes_sociales,
+    empresas,
 }) => {
     const [image, setImage] = useState(null);
 
@@ -93,7 +94,7 @@ const Parametros_de_Empresa = ({
     // Resto del código...
     return (
         <>
-            <Meni_Item user={auth.user} logo={logo} razon_social={razon_social}>
+            <Meni_Item user={auth.user} logo={logo} razon_social={razon_social} empresas={empresas}>
                 <div className="flex items-center justify-center mt-3">
                     <ModalCrearEmpresa />
                 </div>

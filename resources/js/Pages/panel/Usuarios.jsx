@@ -9,9 +9,18 @@ import BtnPanel from "./ui/BtnPanel";
 import ModalAlert from "./ui/ModalAlert";
 import ModalCrearUsuarios from "./ui/ModalCrearUsuarios";
 import ModalCrearRoles from "./ui/ModalCrearRoles";
-import { Alert } from "flowbite-react";
+import { Alert, Button } from "flowbite-react";
+import Tabsx from "./ui/Tabs";
 
-const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
+const Usuarios = ({
+    users,
+    auth,
+    cargo,
+    logo,
+    razon_social,
+    AppName,
+    empresas,
+}) => {
     const [alertupdate, setAlertupdate] = useState(false);
     const [alertcreate, setAlertcreate] = useState(false);
     const [alertupdaterol, setAlertupdaterol] = useState(false);
@@ -24,6 +33,7 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
             id_empleados: user.id_empleados,
             nombre_completo: user.nombre_completo,
             email: user.email,
+            usuario: user.usuario,
             num_telefono: user.num_telefono,
             num_identificacion: user.num_identificacion,
             activo: user.activo,
@@ -111,6 +121,7 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
     {
         /**Este codigo se puede mejorar metiendo la logica de los dos formularios en componented diferentes.... */
     }
+
     return (
         <>
             <Menu_Item
@@ -118,6 +129,7 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
                 logo={logo}
                 razon_social={razon_social}
                 AppName={AppName}
+                empresas={empresas}
             >
                 {alertupdate && (
                     <Alert
@@ -133,8 +145,8 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
                         color="success"
                         className="animate-fade-left animate-ease-in-out "
                     >
-                        <span className="font-medium">Informacion!</span>{" "}
-                        Roles actualizados.
+                        <span className="font-medium">Informacion!</span> Roles
+                        actualizados.
                     </Alert>
                 )}
                 {alertcreate && (
@@ -159,6 +171,7 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
                 {modal_crearusuarios && (
                     <ModalCrearUsuarios
                         cargo={cargo}
+                        empresas={empresas}
                         setModal_CrearUsuarios={setModal_CrearUsuarios}
                         modal_crearusuarios={modal_crearusuarios}
                         setAlertcreate={setAlertcreate}
@@ -209,6 +222,9 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
                                 >
                                     Correo
                                 </th>
+                                <th scope="col" className="px-6 py-3 text-xl  font-extrabold">
+                                    Usuario
+                                </th>
                                 <th
                                     scope="col"
                                     className="px-6 py-3 text-xl  font-extrabold"
@@ -232,6 +248,12 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
                                     className="px-6 py-3 text-xl  font-extrabold"
                                 >
                                     Activo
+                                </th>
+                                <th
+                                    scope="col"
+                                    className="px-6 py-3 text-xl  font-extrabold"
+                                >
+                                    Accesos
                                 </th>
                                 {/* Agrega más encabezados según la estructura de tu modelo de usuario */}
                             </tr>
@@ -271,6 +293,23 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
                                             }
                                             className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                                         />
+                                    </td>
+                                    <td  className="px-6 py-2 font-medium text-gray-900">
+                                        <input
+                                        type="text"
+                                        id="usuario"
+                                        defaultValue={user.usuario}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                e,
+                                                user.id_empleados,
+                                                "usuario"
+                                            )
+                                        }
+                                        className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                                        >
+
+                                        </input>
                                     </td>
                                     <td className="px-6 py-2 font-medium text-gray-900">
                                         <input
@@ -345,6 +384,9 @@ const Usuarios = ({ users, auth, cargo, logo, razon_social, AppName }) => {
                                             <option value="1">Si</option>
                                             <option value="0">No</option>
                                         </select>
+                                    </td>
+                                    <td className="px-6 py-2 font-medium text-gray-900">
+                                       <Button onClick={()=>{router.get(`/panela/usuarios/accesos/${user.id_empleados}`)}} color="blue">Accesos</Button>
                                     </td>
                                     {/* Agrega más celdas según la estructura de tu modelo de usuario */}
                                     {/* <td className="px-6 py-4">

@@ -24,6 +24,8 @@ use App\Models\Preguntas;
 use App\Models\Prespuesta;
 use App\Models\PosiblesRespuestasEvaluacionesClientes;
 use App\Models\PreguntasEvaluacionesClientes;
+use Illuminate\Support\Facades\Session;
+
 
 class PanelController extends Controller
 
@@ -112,6 +114,19 @@ class PanelController extends Controller
     return inertia::render('panel/Clientes', ['client' => $clientes]);
     }
 
+    public function Session(Request $request){
+        //dd($request->toArray());
+        $empresaId = $request->empresa['id'];
+        $razon_social = $request->empresa['razon_social'];
+        $logo = $request->empresa['ruta_logo'];
+
+        //dd($empresaId, $razon_social, $logo);
+
+        Session::put('empresa', $empresaId);
+        Session::put('logo_ruta',$logo);
+        Session::put('razon_social', $razon_social);
+        return back();
+    }
 
 
     public function create_clientes(Request $request){
@@ -159,7 +174,11 @@ class PanelController extends Controller
 
     public function usuarios()
     {
+        /**
+         * Esta vista es la de configuracion de usuarios
+         */
         $cargo = Roles::all();
+        $empresas = session()->get('empresas');
         $currentCargo = Auth::user()->cargo;
         if ($currentCargo < 3) {
             return inertia::render('panel/Resenas');
@@ -168,6 +187,7 @@ class PanelController extends Controller
             return inertia::render('panel/Usuarios', [
                 'users' => $users,
                 'cargo' => $cargo,
+                'empresas' => $empresas,
             ]);
         }
     }
@@ -340,12 +360,16 @@ class PanelController extends Controller
     }
 
     public function update(Request $request)
+    /**
+     * Actualiza los datos de los usuarios en la vista de configuracion de Usuarios
+     */
     {
         $data = $request->all();
         foreach ($data as $empleadoData) {
             $idEmpleado = $empleadoData['id_empleados'];
             $nombreCompleto = $empleadoData['nombre_completo'];
             $email = $empleadoData['email'];
+            $usuario = $empleadoData['usuario'];
             $telefono = $empleadoData['num_telefono'];
             $activo = $empleadoData['activo'];
             $cargo = $empleadoData['cargo'];
@@ -355,6 +379,7 @@ class PanelController extends Controller
                 $empleadoModel->update([
                     'nombre_completo' => $nombreCompleto,
                     'email' => $email,
+                    'usuario' => $usuario,
                     'num_telefono' => $telefono,
                     'activo' => $activo,
                     'cargo' => $cargo,
