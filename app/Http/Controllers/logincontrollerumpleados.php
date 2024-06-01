@@ -67,7 +67,7 @@ class logincontrollerumpleados extends Controller
       // dd($data->toArray());
         $empresa=Session::get('empresa');
         $empresas = $data->get('empresas');
-
+         //dd($empresas);
     $dataEmpleado =[
         'nombre_completo' =>  $nombre_completo = $data['empleado']['nombre_completo'],
         'email' =>   $email = $data['empleado']['email'],
@@ -78,8 +78,12 @@ class logincontrollerumpleados extends Controller
         'cargo'=>  $cargo = $data['empleado']['cargo'],
         'activo' =>   $activo = $data['activo'] === 'si' ? 1 : 0,
     ];
-    
-       // dd($dataEmpleado);
+
+        //  $cargo = Roles::find($dataEmpleado['cargo']);
+        //  $vistas = $cargo->accesos;
+        //  dd($vistas->toArray());
+
+         //dd($dataEmpleado);
          $usuario = usuarios_empleado::create($dataEmpleado);
         /**
          * -Sacar el id del usuario ya creado
@@ -89,9 +93,11 @@ class logincontrollerumpleados extends Controller
         $vistas = $cargo->accesos;
        // dd($vistas->toArray());
 
-        foreach ($vistas as $vista) {
-            $usuario->accesos()->attach($vista->id, ['id_parametro' => $empresa]);
-        }
+       foreach ($empresas as $empresa){
+            foreach ($vistas as $vista) {
+            $usuario->accesos()->attach($vista->id, ['id_parametro' => $empresa['id']]);
+        }   
+    }
 
         foreach($empresas as $empresa){
             $usuario->parametros()->attach($empresa['id']);
@@ -117,16 +123,15 @@ class logincontrollerumpleados extends Controller
         $rules = [
             'username' => 'required',
             'password' => 'required',
-            'empresa' => 'required',
         ];
+
         $customMessages = [
             'username.required'    => 'Usuario Es Obligatorio',
             'password.required'    => 'Contraseña Es Obligatorio',
         ];
 
         $validatedData = $data->validate($rules, $customMessages);
-        $credentials = $data->only('username', 'password');
-        //$usuario_estado_valid = usuarios_empleado::where('usuario','=',$data['username'])->pluck('activo')->first();
+         //$usuario_estado_valid = usuarios_empleado::where('usuario','=',$data['username'])->pluck('activo')->first();
 		//dd($usuario_estado_valid);
         //dd($data->toArray());
         $xyz = auth::guard('empleados')->attempt(['usuario' => $data->username, 'password' => $data->password],$data->remember);
@@ -157,10 +162,16 @@ class logincontrollerumpleados extends Controller
                 $empresa = Session::get('empresa');
 
                 $parametros = parametro::where('id', Session::get('empresa'))->select('ruta_logo', 'razon_social','correo')->first();
+                $Accesos = $empleado->accesos()->wherePivot('id_parametro', $empresa)->get();
                 Session::put('logo_ruta', $parametros->ruta_logo);
                 Session::put('razon_social', $parametros->razon_social);
                 Session::put('email_empresa', $parametros->correo);
+                Session::put('Accesos', $Accesos);
+                //$Accesos = Session::get('Accesos');
+
+                // dd($Accesos->toArray());
                 Session::save();  // dd($empresa);
+
                 $logo = Session::get('logo_ruta');
                 $razon_social = Session::get('razon_social');
             }

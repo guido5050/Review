@@ -35,6 +35,9 @@ class AppServiceProvider extends ServiceProvider
     },
     'empresas' => function() {
         return session('empresas');
+    },
+    'Accesos' => function() {
+        return session('Accesos');
     }
 ]);
     }

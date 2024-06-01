@@ -45,12 +45,14 @@ class usuarios_empleado extends Authenticatable
     {
         return $this->hasMany(Resena::class, 'id_moderador', 'id_empleado');
     }
-
+    //Arregla la relacion que sea de uno a muchos
     //Un usuario puede tener un solo rol como máximo
     // public function roles()
     // {
     //     return $this->belongsToMany(Roles::class, 'empleados_roles', 'id_empleados', 'role_id');
     // }
+       
+
     public function parametros()
     {
         return $this->belongsToMany(parametro::class, 'empleados_parametros', 'id_empleado', 'parametro_id');

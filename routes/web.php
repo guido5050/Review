@@ -88,9 +88,8 @@ Route::middleware('auth:empleados')->group(function () {
 //TODO:Rutas de Accesos de Usuarios
 Route::prefix('panela/usuarios/accesos/{usuario_id}')->group(function () {
     Route::get('/', [AccesoController::class, 'index'])->name('accesos');
-    Route::post('/create', [AccesoController::class, 'create_accesos'])->name('create_accesos');
-    Route::post('/update', [AccesoController::class, 'update_accesos'])->name('update_accesos');
-    Route::delete('/{id}', [AccesoController::class, 'delete_accesos'])->name('delete_accesos');
+    Route::post('/Asignar', [AccesoController::class, 'asignar_accesos'])->name('asignar_accesos');
+    Route::post('/Eliminar', [AccesoController::class, 'eliminar_accesos'])->name('eliminar_accesos');//Elimina Accesos y Acceso a la Empresa del Empleado
 })->middleware('auth:empleados');
 
 

@@ -12,12 +12,18 @@ class AccesosTableSeeder extends Seeder
      */
     public function run(): void
     {
-        
+
+        /**
+         * Aqui se hace un truncate de la tabla accesos para resetear la tabla
+         */
+
+        Acceso::truncate(); 
 
         $nombres_vistas = [
             'Evaluaciones a Empresa',
             'Evaluaciones a Clientes',
             'Lista de Clientes',
+            'configuracion de empresas',
         ];
 
         foreach ($nombres_vistas as $nombre_vista) {

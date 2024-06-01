@@ -160,7 +160,10 @@ export default function Menu_Item({
                                             <FaRegUser />
                                         </h1>
                                         <div className=" flex items-center justify-center">
-                                            <Dropdownx empresas={empresas} />
+                                            <Dropdownx
+                                            //razon_social = {razon_social}
+
+                                            empresas={empresas} />
                                         </div>
 
                                         <Menu

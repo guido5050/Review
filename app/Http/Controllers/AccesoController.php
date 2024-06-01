@@ -9,6 +9,9 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Session;
 use App\Models\Acceso;
 use App\Models\usuarios_empleado;
+use Illuminate\Support\Facades\DB;
+
+
 
 
 class AccesoController extends Controller
@@ -23,14 +26,88 @@ class AccesoController extends Controller
          * en la configuracion de la empresa
          */
 
-        $empleado =usuarios_empleado::find($usuario_id);
-        $Accesos = $empleado->accesos;
+        $empresa = session()->get('empresa');
 
-        return Inertia::render('panel/Accesos',
-        [
-            'accesos' => $Accesos,
-            'empleado' => $empleado
+
+
+        $empleado = usuarios_empleado::find($usuario_id);
+
+        $accesos = $empleado->accesos;
+
+        $EmpresasAs = $empleado->parametros;
+
+      //  dd($EmpresasAs->toArray());
+
+       // dd($accesos->toArray());
+        // Filtrar los accesos por la empresa actual
+        // $accesos = $empleado->accesos->filter(function ($acceso) use ($empresa) {
+        //     return $acceso->pivot->id_parametro === $empresa;
+        // });
+       // dd($accesos->toArray());
+
+        $asignaAccesos = Acceso::all();
+
+        return Inertia::render('panel/Accesos', [
+
+            'accesos' => $accesos,
+            'empleado' => $empleado,
+            'EmpleadoId' => $usuario_id,
+            'asignaAccesos' => $asignaAccesos,
+            'EmpleadoId' => $usuario_id,
+            'EmpresasAs' => $EmpresasAs,
+
         ]);
+    }
+
+    public function asignar_accesos(Request $request, $usuario_id){
+
+        //dd($request->toArray());
+        $idAcceso = $request->get('idAcceso');
+        $idEmpleado = $usuario_id; // Ahora obtenemos el id del empleado directamente de la ruta
+        $Estadocheckbox = $request->get('Checked');
+        $empresa = $request->get('empresa');
+
+        //dd($idAcceso, $idEmpleado, $Estadocheckbox, $empresa);
+
+        $empleado = usuarios_empleado::find($idEmpleado);
+
+        if($Estadocheckbox == 'true'){
+            $empleado->accesos()->attach($idAcceso, ['id_parametro' => $empresa]);
+        }else{
+            $empleado->accesos()->detach($idAcceso, ['id_parametro' =>$empresa]);
+        }
+
+    }
+
+    public function eliminar_accesos(Request $request, $usuario_id){
+
+      //dd($request->toArray());
+
+        $checked = $request->get('Checked');
+      //  dd($checked);
+        $idEmpleado = $usuario_id; // Ahora obtenemos el id del empleado directamente de la ruta
+        $empresa = $request->get('empresa');
+
+        if($checked == false ){
+
+            $empleado = usuarios_empleado::find($usuario_id);
+
+            $accesosIds = $empleado->accesos()->where('id_parametro', $empresa)->pluck('id_vista')->toArray();
+
+           //  dd($accesosIds);
+
+             $empleado->accesos()->wherePivot('id_parametro', $empresa)->detach($accesosIds);
+
+             $empleado->parametros()->detach($empresa);
+
+             return back();
+
+
+        }else{
+            dd('trueee');
+        }
+
+
     }
 
     /**

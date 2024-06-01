@@ -115,16 +115,21 @@ class PanelController extends Controller
     }
 
     public function Session(Request $request){
-        //dd($request->toArray());
+       // dd($request->toArray());
+
+        $user = Auth::user();
         $empresaId = $request->empresa['id'];
         $razon_social = $request->empresa['razon_social'];
         $logo = $request->empresa['ruta_logo'];
+        $accesos = $user->accesos()->wherePivot('id_parametro',$request->empresa['id'])->get();
 
-        //dd($empresaId, $razon_social, $logo);
-
+        Session::put('Accesos', $accesos);
         Session::put('empresa', $empresaId);
         Session::put('logo_ruta',$logo);
         Session::put('razon_social', $razon_social);
+
+        // $VerAccesos = Session::get('Accesos');
+        //  dd($VerAccesos->toArray());
         return back();
     }
 
@@ -179,17 +184,22 @@ class PanelController extends Controller
          */
         $cargo = Roles::all();
         $empresas = session()->get('empresas');
-        $currentCargo = Auth::user()->cargo;
-        if ($currentCargo < 3) {
-            return inertia::render('panel/Resenas');
-        } else {
-            $users = usuarios_empleado::all();
+
+        $currentEmpresa = parametro::find(session('empresa'));
+
+        $UsuarioDeEmpresa = $currentEmpresa->usuarios()->orderBy('id_empleado', 'desc')->get();
+
+      //  dd($UsuarioDeEmpresa->toArray());
+
+
+
+
             return inertia::render('panel/Usuarios', [
-                'users' => $users,
+                'users' => $UsuarioDeEmpresa,
                 'cargo' => $cargo,
                 'empresas' => $empresas,
             ]);
-        }
+
     }
 
     public function encuesta()
@@ -364,6 +374,7 @@ class PanelController extends Controller
      * Actualiza los datos de los usuarios en la vista de configuracion de Usuarios
      */
     {
+        //dd($request->toArray());
         $data = $request->all();
         foreach ($data as $empleadoData) {
             $idEmpleado = $empleadoData['id_empleados'];
@@ -373,23 +384,46 @@ class PanelController extends Controller
             $telefono = $empleadoData['num_telefono'];
             $activo = $empleadoData['activo'];
             $cargo = $empleadoData['cargo'];
+
             $identificacion = $empleadoData['num_identificacion'];
+
+
             $empleadoModel = usuarios_empleado::find($idEmpleado);
-            if ($empleadoModel) {
-                $empleadoModel->update([
-                    'nombre_completo' => $nombreCompleto,
-                    'email' => $email,
-                    'usuario' => $usuario,
-                    'num_telefono' => $telefono,
-                    'activo' => $activo,
-                    'cargo' => $cargo,
-                    'num_identificacion' => $identificacion,
-                ]);
-            }
+
+
+            $empleadoModel->cargo = $cargo;
+
+
+            $dirtyAttributes = $empleadoModel->getDirty();
+
+            if (!empty($dirtyAttributes)) {
+                 //dd($dirtyAttributes, $empleadoModel->nombre_completo );
+
+                $empleadoModel->accesos()->detach();
+                $Cargo = Roles::find($cargo);
+                $Acceso  = $Cargo->accesos()->get();
+
+                $Empresas = $empleadoModel->parametros()->get();
+               // dd($Empresas);
+                 foreach ($Empresas as $empresa){
+                    foreach ($Acceso as $vista) {
+                    $empleadoModel->accesos()->attach($vista->id, ['id_parametro' => $empresa['id']]);
+                }
+
+                }
+            $empleadoModel->nombre_completo = $nombreCompleto;
+            $empleadoModel->email = $email;
+            $empleadoModel->usuario = $usuario;
+            $empleadoModel->num_telefono = $telefono;
+            $empleadoModel->activo = $activo;
+            $empleadoModel->cargo = $cargo;
+            $empleadoModel->num_identificacion = $identificacion;
+            $empleadoModel->save();
         }
+
         return redirect()->route('usuarios');
     }
-
+    }
     public function create_roles(Request $request)
     {
         $validatedData = $request->validate([

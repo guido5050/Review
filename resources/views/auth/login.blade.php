@@ -68,7 +68,7 @@
                                             <label for="empresa"
                                                 class="col-md-12 col-form-label">{{ __('Empresa') }}</label>
 
-                                            <div class="col-md-12">
+                                            {{-- <div class="col-md-12">
                                                 <select id="empresa"
                                                     class="form-control @error('empresa') is-invalid @enderror"
                                                     name="empresa" required>
@@ -83,7 +83,7 @@
                                                         <strong>{{ $message }}</strong>
                                                     </span>
                                                 @enderror
-                                            </div>
+                                            </div> --}}
                                         </div>
                                         <!-- Fin del código del select de empresas -->
 

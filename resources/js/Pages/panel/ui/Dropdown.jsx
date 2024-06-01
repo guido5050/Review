@@ -1,21 +1,23 @@
 import React from "react";
+import { useState } from "react";
 import { Dropdown } from "flowbite-react";
 import { router } from "@inertiajs/react";
 
-const Dropdownx = ({ empresas }) => {
-
+const Dropdownx = ({ empresas}) => {
     const selectEmpresa = (id) => {
+
        const empresa = empresas.find((empresa) => empresa.id === id);
-        router.post(
+
+       router.post(
             "/panela/resenas/Session",
-            { empresa: empresa },
+            { empresa: empresa},{preserveState: false}
 
         );
 
     };
 
     return (
-        <Dropdown label="Empresas" dismissOnClick={false} color="none">
+        <Dropdown label={`Empresas`} dismissOnClick={false} color="none">
             {empresas.map((empresa) => {
                 return (
                     <Dropdown.Item
