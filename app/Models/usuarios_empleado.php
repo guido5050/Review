@@ -13,6 +13,7 @@ use App\Models\Acceso;
 class usuarios_empleado extends Authenticatable
 {
   use Notifiable;
+  protected $table = 'usuarios_empleados';
   protected $guard = 'empleados';
   protected $primaryKey = 'id_empleados';
   protected $fillable = [
@@ -28,7 +29,7 @@ class usuarios_empleado extends Authenticatable
     'remitente_correo',
     'autoriza',
     'aprueba',
-    'activo'
+    'activo',
   ];
   protected $hidden = [
         'contrasena', 'remember_token',
@@ -51,7 +52,7 @@ class usuarios_empleado extends Authenticatable
     // {
     //     return $this->belongsToMany(Roles::class, 'empleados_roles', 'id_empleados', 'role_id');
     // }
-       
+
 
     public function parametros()
     {

@@ -18,10 +18,12 @@ const Accesos = ({
     asignaAccesos,
     EmpleadoId,
 }) => {
+    console.log(empleado);
+    const [empresaAsig, setEmpresaAsig] = useState(EmpresasAs)
     //console.log(empresas);
-    console.log(accesos);
+   // console.log(accesos);
     //console.log(asignaAccesos);
-    console.log(EmpresasAs);
+   // console.log(EmpresasAs);
 
     const handleCheck = (idAcceso, Checked, empresaId) => {
         router.post(
@@ -64,6 +66,8 @@ const Accesos = ({
                             <ModalAsignarAccesos
                                 empresas={empresas}
                                 empleado={empleado}
+                                EmpleadoId={EmpleadoId}
+                                empresaAsig={empresaAsig}
                             />
                         </div>
                         {EmpresasAs.map((empresa, index) => (
@@ -77,7 +81,7 @@ const Accesos = ({
                                         defaultChecked={true}
                                         value={empresa.id}
                                         onClick={(e) => {
-                                            if (window.confirm('¿Estás seguro de que quieres Eliminar el Acceso para este Usuario?')) {
+                                            if (window.confirm(`¿Estás seguro de que quieres Eliminar el Acceso a: ${empresa.razon_social} para este Usuario:${empleado.nombre_completo} ?`)) {
                                                 handleCheckEliminarAccesos(empresa.id, e.target.checked);
                                             } else {
                                                 e.preventDefault();

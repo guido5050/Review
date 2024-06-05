@@ -370,11 +370,7 @@ class PanelController extends Controller
     }
 
     public function update(Request $request)
-    /**
-     * Actualiza los datos de los usuarios en la vista de configuracion de Usuarios
-     */
     {
-        //dd($request->toArray());
         $data = $request->all();
         foreach ($data as $empleadoData) {
             $idEmpleado = $empleadoData['id_empleados'];
@@ -382,47 +378,43 @@ class PanelController extends Controller
             $email = $empleadoData['email'];
             $usuario = $empleadoData['usuario'];
             $telefono = $empleadoData['num_telefono'];
-            $activo = $empleadoData['activo'];
+            $activo = intval($empleadoData['activo']) == 1 ? 1 : 0;
             $cargo = $empleadoData['cargo'];
-
             $identificacion = $empleadoData['num_identificacion'];
-
 
             $empleadoModel = usuarios_empleado::find($idEmpleado);
 
+            // Guarda el cargo antiguo
+            $cargoAntiguo = $empleadoModel->cargo;
 
+            // Asigna el nuevo cargo
             $empleadoModel->cargo = $cargo;
 
-
-            $dirtyAttributes = $empleadoModel->getDirty();
-
-            if (!empty($dirtyAttributes)) {
-                 //dd($dirtyAttributes, $empleadoModel->nombre_completo );
-
+            // Verifica si el cargo ha cambiado
+            if ($cargoAntiguo != $cargo) {
                 $empleadoModel->accesos()->detach();
                 $Cargo = Roles::find($cargo);
                 $Acceso  = $Cargo->accesos()->get();
 
                 $Empresas = $empleadoModel->parametros()->get();
-               // dd($Empresas);
-                 foreach ($Empresas as $empresa){
+                foreach ($Empresas as $empresa){
                     foreach ($Acceso as $vista) {
-                    $empleadoModel->accesos()->attach($vista->id, ['id_parametro' => $empresa['id']]);
+                        $empleadoModel->accesos()->attach($vista->id, ['id_parametro' => $empresa['id']]);
+                    }
                 }
+            }
 
-                }
-            $empleadoModel->nombre_completo = $nombreCompleto;
-            $empleadoModel->email = $email;
-            $empleadoModel->usuario = $usuario;
-            $empleadoModel->num_telefono = $telefono;
-            $empleadoModel->activo = $activo;
-            $empleadoModel->cargo = $cargo;
-            $empleadoModel->num_identificacion = $identificacion;
-            $empleadoModel->save();
+            $empleadoModel->update([
+                'nombre_completo' => $nombreCompleto,
+                'email' => $email,
+                'usuario' => $usuario,
+                'num_telefono' => $telefono,
+                'activo' => $activo,
+                'cargo' => $cargo,
+                'num_identificacion' => $identificacion,
+            ]);
         }
-
         return redirect()->route('usuarios');
-    }
     }
     public function create_roles(Request $request)
     {

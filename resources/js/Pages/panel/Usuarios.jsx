@@ -69,6 +69,8 @@ const Usuarios = ({
         );
     }
 
+    console.log(values);
+
     function handleSubmit(e) {
         e.preventDefault();
         router.post("/panela/usuarios/update", values, {

@@ -96,7 +96,7 @@ class logincontrollerumpleados extends Controller
        foreach ($empresas as $empresa){
             foreach ($vistas as $vista) {
             $usuario->accesos()->attach($vista->id, ['id_parametro' => $empresa['id']]);
-        }   
+        }
     }
 
         foreach($empresas as $empresa){

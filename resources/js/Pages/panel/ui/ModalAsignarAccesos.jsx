@@ -1,19 +1,43 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Checkbox, Label, Modal, Select } from "flowbite-react";
-
-const ModalAsignarAccesos = ({ empresas,asignaAccesos,empleado }) => {
+import { router } from '@inertiajs/react'
+const ModalAsignarAccesos = ({ empresas,empresaAsig,empleado,EmpleadoId }) => {
     const [openModal, setOpenModal] = useState(false);
     const [email, setEmail] = useState("");
     function onCloseModal() {
         setOpenModal(false);
-        setEmail("");
-    }
-    console.log(empleado);
-    // console.log(accesos);
+        setValue(empresasAsignadas[0].id)
 
-    const handleCheck = (id) => {
-        console.log(id);
+    }
+    const [empresaslogin, setEmpresasLogin] = useState(empresas);
+    const [empresasAsignadas, setEmpresasAsignadas] = useState(empresaAsig);
+    const [value, setValue]=useState(empresasAsignadas[0].id);
+
+
+    const handleCheck = (e) => {
+
+        const empresaId = Number(e.target.value);
+        setValue(empresaId);
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const existe=empresasAsignadas.find(empresa => empresa.id === value)?true:false;
+        console.log(existe);
+        if(existe){
+            //console.log('Ya existe');
+            alert(`La Empresa Seleccionada ya esta asignada al Usuario ${empleado.nombre_completo}`);
+        }else{
+            router.post(`/panela/usuarios/accesos/${EmpleadoId}/AsignarEmpresa`,
+                {
+                    empresa: value,
+                },
+                { preserveState: true },
+            );
+            onCloseModal();
+          }
+
     }
     return (
         <>
@@ -22,23 +46,22 @@ const ModalAsignarAccesos = ({ empresas,asignaAccesos,empleado }) => {
                 <Modal.Header />
                 <Modal.Body>
                     <div>
-                        <h1>Asignar Accesos</h1>
+                        <h1>Asignar Empresas</h1>
                     </div>
                     <div>
                         <h1>{}</h1>
                     </div>
-                    <form>
-                        <div className="flex justify-evenly flex-col  p-1 gap-y-2">
-                        <Label>Empresas</Label>
-                        <Select>
-                            {empresas.map((empresa, index) => (
-                                <option key={index} value={empresa.id}>
+                    <form onSubmit={handleSubmit}>
+                        <div className="flex justify-evenly flex-col  p-1 gap-y-7">
+                        <Select onChange={handleCheck}>
+                            {empresaslogin.map((empresa, index) => (
+                                <option className="font-extrabold text-[20px] " key={index} value={empresa.id}  defaultValue={empresa.id} >
                                     {empresa.razon_social}
                                 </option>
                             ))}
                         </Select>
+                        <Button type="submit" color="blue">Asignar</Button>
                         </div>
-
                     </form>
                 </Modal.Body>
             </Modal>

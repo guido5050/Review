@@ -90,6 +90,7 @@ Route::prefix('panela/usuarios/accesos/{usuario_id}')->group(function () {
     Route::get('/', [AccesoController::class, 'index'])->name('accesos');
     Route::post('/Asignar', [AccesoController::class, 'asignar_accesos'])->name('asignar_accesos');
     Route::post('/Eliminar', [AccesoController::class, 'eliminar_accesos'])->name('eliminar_accesos');//Elimina Accesos y Acceso a la Empresa del Empleado
+    Route::post('/AsignarEmpresa', [AccesoController::class, 'asignar_empresa'])->name('asignar_empresa');
 })->middleware('auth:empleados');
 
 

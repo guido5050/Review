@@ -79,6 +79,16 @@ class AccesoController extends Controller
 
     }
 
+    public function asignar_empresa(Request $request, $usuario_id){
+        // dd($request->toArray());
+         $idEmpresa = $request->empresa;
+        $empleado = usuarios_empleado::find($usuario_id);
+        $empleado->parametros()->attach($idEmpresa);
+        
+        //dd($idEmpresa,  $usuario_id, $empleado->toArray());
+    }
+
+
     public function eliminar_accesos(Request $request, $usuario_id){
 
       //dd($request->toArray());
