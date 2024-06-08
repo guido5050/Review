@@ -10,6 +10,7 @@ import ModalCrear_PosibleRazon from "./ui/ModalCrear_PosibleRazon";
 import ModalCrearPregunta from "./ui/ModalCrearPregunta";
 import ModalCrear_PosibleRazon_de_Estrellas from "./ui/ModalCrear_PosibleRazon_de_Estrellas";
 import ModalUpdateRazon from "./ui/ModalUpdateRazon";
+import AccesoDenegado from "./ui/AccesoDenegado";
 
 const ConfigEncuesta = ({
     auth,
@@ -19,8 +20,9 @@ const ConfigEncuesta = ({
     preguntas,
     estadoEncuesta,
     empresas,
+    Accesos,
 }) => {
-    console.log(preguntas);
+    console.log(Accesos);
     const [openModal, setOpenModal] = useState(false);
     const [puntuacion, setPuntuacion] = useState();
     const [preguntaId, setPreguntaId] = useState();
@@ -78,6 +80,7 @@ const ConfigEncuesta = ({
             AppName={AppName}
             empresas={empresas}
         >
+            {Accesos.find((acceso) => acceso.id === 5) ?(
             <div className="p-6 animate-fade-down animate-ease-out ">
                 <div className="flex items-center justify-start gap-x-2 ">
                     <ModalCrearPregunta />
@@ -247,7 +250,10 @@ const ConfigEncuesta = ({
                         </Accordion.Panel>
                     ))}
                 </Accordion>
-            </div>
+            </div>): (
+                <AccesoDenegado />
+            )}
+
         </Menu_Item>
     );
 };

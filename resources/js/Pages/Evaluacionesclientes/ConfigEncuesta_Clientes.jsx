@@ -7,7 +7,7 @@ import { Accordion, Alert, Button } from "flowbite-react";
 import { FaQuestionCircle, FaStar } from "react-icons/fa";
 import { LuPenSquare } from "react-icons/lu";
 import { router } from "@inertiajs/react";
-
+import AccesoDenegado from "../panel/ui/AccesoDenegado";
 const ConfigEncuesta_Clientes = ({
     auth,
     logo,
@@ -15,8 +15,8 @@ const ConfigEncuesta_Clientes = ({
     AppName,
     preguntas,
     empresas,
+   Accesos,
 }) => {
-    console.log(preguntas);
     const [modal, setModal] = useState(false);
     const [puntuacion, setPuntuacion] = useState();
     const [preguntaId, setPreguntaId] = useState();
@@ -85,7 +85,9 @@ const ConfigEncuesta_Clientes = ({
             AppName={AppName}
             empresas={empresas}
         >
-            <div className="p-6 animate-fade-down animate-ease-out ">
+            {Accesos.find((acceso) => acceso.id === 6) ?(
+                <>
+                 <div className="p-6 animate-fade-down animate-ease-out ">
                 <div className="mb-2">
                     <ModalCrearPreguntas_ev_clientes />
                 </div>
@@ -243,6 +245,13 @@ const ConfigEncuesta_Clientes = ({
                     ))}
                 </Accordion>
             </div>
+                </>
+            ): (
+                <AccesoDenegado />
+            )
+
+            }
+
         </Menu_Item>
     );
 };

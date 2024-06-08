@@ -41,7 +41,7 @@ const ModalAsignarAccesos = ({ empresas,empresaAsig,empleado,EmpleadoId }) => {
     }
     return (
         <>
-            <Button onClick={() => setOpenModal(true)}>Asignar Accesos</Button>
+            <Button  color="blue" onClick={() => setOpenModal(true) }>Asignar Accesos</Button>
             <Modal show={openModal} size="2xl" onClose={onCloseModal} popup>
                 <Modal.Header />
                 <Modal.Body>

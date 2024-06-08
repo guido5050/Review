@@ -24,6 +24,7 @@ use App\Models\Preguntas;
 use App\Models\Prespuesta;
 use App\Models\PosiblesRespuestasEvaluacionesClientes;
 use App\Models\PreguntasEvaluacionesClientes;
+use App\Models\Acceso;
 use Illuminate\Support\Facades\Session;
 
 
@@ -177,7 +178,7 @@ class PanelController extends Controller
         return inertia::render('panel/Resenas', ['resenas' => $resenas, 'estados' => $estados]);
     }
 
-    public function usuarios()
+    public function usuarios() //TODO: Metodo que retorna la vista de configuracion de usuarios
     {
         /**
          * Esta vista es la de configuracion de usuarios
@@ -189,15 +190,19 @@ class PanelController extends Controller
 
         $UsuarioDeEmpresa = $currentEmpresa->usuarios()->orderBy('id_empleado', 'desc')->get();
 
+
+
       //  dd($UsuarioDeEmpresa->toArray());
 
-
+         $Accesos = Acceso::all();
+        // dd($Accesos->toArray());
 
 
             return inertia::render('panel/Usuarios', [
                 'users' => $UsuarioDeEmpresa,
                 'cargo' => $cargo,
                 'empresas' => $empresas,
+                'AccesosT' => $Accesos,
             ]);
 
     }
@@ -418,17 +423,26 @@ class PanelController extends Controller
     }
     public function create_roles(Request $request)
     {
-        $validatedData = $request->validate([
-            'nombre' => 'required|string',
-            'descripcion' => 'required|string',
+        //dd( $request->toArray());
+        $role = $request->get('role');
+        $accesos = $request->get('Accesos');
+
+        //dd($request->toArray());
+
+        $RoleTable = Roles::create([
+            'nombre' => $role['nombre'],
+            'descripcion' => $role['descripcion'],
         ]);
-        $parametro = Roles::create([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
-        ]);
+
+        $rolModel = Roles::find($RoleTable->id);
+
+
+        foreach ($accesos as $acceso) {
+            $rolModel->accesos()->attach($acceso);
+        }
+
         return back();
     }
-
     public function update_roles(Request $request)
     {
         $data = $request->all();
@@ -447,19 +461,20 @@ class PanelController extends Controller
         return back();
     }
 
-    public function create(Request $request)
-    {
-        $validatedData = $request->validate([
-            'nombre' => 'required|string',
-            'email' => 'required|email',
-            'telefono' => 'required|string',
-        ]);
-        $parametro = new Parametro;
-        $parametro->nombre = $request->nombre;
-        $parametro->email = $request->email;
-        $parametro->telefono = $request->telefono;
-        $parametro->save();
-    }
+    // public function create(Request $request)
+    // {
+    //     dd($request->toArray());
+    //     $validatedData = $request->validate([
+    //         'nombre' => 'required|string',
+    //         'email' => 'required|email',
+    //         'telefono' => 'required|string',
+    //     ]);
+    //     $parametro = new Parametro;
+    //     $parametro->nombre = $request->nombre;
+    //     $parametro->email = $request->email;
+    //     $parametro->telefono = $request->telefono;
+    //     $parametro->save();
+    // }
 
     public function delete($id_usuario)
     {
@@ -617,7 +632,7 @@ class PanelController extends Controller
             'redesSociales' => $redesSociales,
         ];
         $html = view('Mail.Plantilla_orison', $data)->render();
-        return inertia::render('panel/Preview_Mail', ['html' => $html , 'clienteId' => $clienteId, 'plantilla'=> $plantilla]);
+        return inertia::render('panel/Preview_Mail', ['html' => $html , 'clienteId' => $clienteId, 'plantilla'=> $plantilla, 'ClienteNombre' => $nombre]);
     }
     //TODO: Configuracion de Plantillas de correo
     public function configmail(){

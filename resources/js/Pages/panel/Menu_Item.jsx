@@ -10,6 +10,8 @@ import { RiUserSettingsLine } from "react-icons/ri";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa6";
 import Dropdownx from "./ui/Dropdown";
+import { Tooltip } from "flowbite-react";
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -89,7 +91,7 @@ export default function Menu_Item({
                                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                                         {/* Mobile menu button*/}
 
-                                        <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                                        <Disclosure.Button className="relative inline-flex items-center  justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                                             <span className="absolute -inset-0.5" />
                                             <span className="sr-only">
                                                 Open main menu
@@ -160,17 +162,20 @@ export default function Menu_Item({
                                             <FaRegUser />
                                         </h1>
                                         <div className=" flex items-center justify-center">
-                                            <Dropdownx
+                                           <Dropdownx
                                             //razon_social = {razon_social}
 
                                             empresas={empresas} />
+
+
+
                                         </div>
 
                                         <Menu
                                             as="div"
                                             className="relative ml-3 "
                                         >
-                                            <div>
+                                            <Tooltip content ="Configuraciones de Empresas">
                                                 <Menu.Button className="relative flex rounded-full  text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                                     <span className="absolute -inset-1.5" />
                                                     <span className="sr-only">
@@ -182,7 +187,7 @@ export default function Menu_Item({
                                                         className="animate-pulse"
                                                     />
                                                 </Menu.Button>
-                                            </div>
+                                            </Tooltip>
                                             <Transition
                                                 as={Fragment}
                                                 enter="transition ease-out duration-100"
@@ -192,7 +197,8 @@ export default function Menu_Item({
                                                 leaveFrom="transform opacity-100 scale-100"
                                                 leaveTo="transform opacity-0 scale-95"
                                             >
-                                                <Menu.Items className="absolute  right-0 z-10 mt-2 w-72 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ">
+
+                                                <Menu.Items className="absolute  right-0 z-10 mt-2 w-72 origin-top-right rounded-md bg-red  shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ">
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <Link

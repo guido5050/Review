@@ -34,16 +34,10 @@ class AccesoController extends Controller
 
         $accesos = $empleado->accesos;
 
+
+
         $EmpresasAs = $empleado->parametros;
 
-      //  dd($EmpresasAs->toArray());
-
-       // dd($accesos->toArray());
-        // Filtrar los accesos por la empresa actual
-        // $accesos = $empleado->accesos->filter(function ($acceso) use ($empresa) {
-        //     return $acceso->pivot->id_parametro === $empresa;
-        // });
-       // dd($accesos->toArray());
 
         $asignaAccesos = Acceso::all();
 
@@ -53,7 +47,6 @@ class AccesoController extends Controller
             'empleado' => $empleado,
             'EmpleadoId' => $usuario_id,
             'asignaAccesos' => $asignaAccesos,
-            'EmpleadoId' => $usuario_id,
             'EmpresasAs' => $EmpresasAs,
 
         ]);
@@ -84,7 +77,7 @@ class AccesoController extends Controller
          $idEmpresa = $request->empresa;
         $empleado = usuarios_empleado::find($usuario_id);
         $empleado->parametros()->attach($idEmpresa);
-        
+
         //dd($idEmpresa,  $usuario_id, $empleado->toArray());
     }
 

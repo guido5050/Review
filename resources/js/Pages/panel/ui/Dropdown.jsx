@@ -17,7 +17,7 @@ const Dropdownx = ({ empresas}) => {
     };
 
     return (
-        <Dropdown label={`Empresas`} dismissOnClick={false} color="none">
+        <Dropdown label={`Empresas Asignadas`} dismissOnClick={false} color="none">
             {empresas.map((empresa) => {
                 return (
                     <Dropdown.Item

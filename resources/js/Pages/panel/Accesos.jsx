@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import Swal from "sweetalert2";
 import { router } from "@inertiajs/react";
 import Menu_Item from "./Menu_Item";
 import { Checkbox } from "flowbite-react";
@@ -18,12 +19,12 @@ const Accesos = ({
     asignaAccesos,
     EmpleadoId,
 }) => {
-    console.log(empleado);
-    const [empresaAsig, setEmpresaAsig] = useState(EmpresasAs)
+    //console.log( asignaAccesos);
+    const [empresaAsig, setEmpresaAsig] = useState(EmpresasAs);
     //console.log(empresas);
-   // console.log(accesos);
+    console.log(accesos);
     //console.log(asignaAccesos);
-   // console.log(EmpresasAs);
+    // console.log(EmpresasAs);
 
     const handleCheck = (idAcceso, Checked, empresaId) => {
         router.post(
@@ -38,14 +39,15 @@ const Accesos = ({
     };
 
     const handleCheckEliminarAccesos = (empresaId, Checked) => {
-        router.post(
-            `/panela/usuarios/accesos/${EmpleadoId}/Eliminar`,
-            {
-                empresa: empresaId,
-                Checked: Checked,
-            },
-            { preserveState: false }
-        );
+        console.log(empresaId, Checked);
+        // router.post(
+        //     `/panela/usuarios/accesos/${EmpleadoId}/Eliminar`,
+        //     {
+        //         empresa: empresaId,
+        //         Checked: Checked,
+        //     },
+        //     { preserveState: false }
+        // );
     };
 
     return (
@@ -59,7 +61,7 @@ const Accesos = ({
             <>
                 <div className="flex flex-col p-8  justify-center gap-y-4">
                     <div>
-                        <div className="flex justify-between items-center">
+                        <div className="flex w-[20%] flex-col">
                             <h1 className="font-extrabold text-2xl">
                                 {empleado.nombre_completo}
                             </h1>
@@ -70,63 +72,87 @@ const Accesos = ({
                                 empresaAsig={empresaAsig}
                             />
                         </div>
-                        {EmpresasAs.map((empresa, index) => (
-                            <div key={index} className=" ">
-                                <div className="flex gap-x-1 items-center m-3 justify-start">
-                                    <p className="font-extrabold text-[40px] ">
-                                        {empresa.razon_social}
-                                    </p>
-                                    <Checkbox
-                                        className="w-[30px] h-[30px]"
-                                        defaultChecked={true}
-                                        value={empresa.id}
-                                        onClick={(e) => {
-                                            if (window.confirm(`¿Estás seguro de que quieres Eliminar el Acceso a: ${empresa.razon_social} para este Usuario:${empleado.nombre_completo} ?`)) {
-                                                handleCheckEliminarAccesos(empresa.id, e.target.checked);
-                                            } else {
-                                                e.preventDefault();
-                                            }
-                                        }}
-                                    />
-                                </div>
-                                <div>
-                                    <hr />
-                                </div>
-                                <div className="flex flex-col gap-y-2  ">
-                                    {asignaAccesos.map((a, index) => (
-                                        <div key={index} className=" ">
-                                            <div className="bg-gray-200 rounded-lg flex items-center gap-x-2 p-2 w-1/4">
-                                                <Checkbox
-                                                    value={a.id}
-                                                    defaultChecked={
-                                                        accesos.find(
-                                                            (acceso) =>
-                                                                acceso.id ===
-                                                                    a.id &&
-                                                                acceso.pivot
-                                                                    .id_parametro ===
-                                                                    empresa.id
-                                                        )
-                                                            ? true
-                                                            : false
-                                                    }
-                                                    onClick={(e) =>
-                                                        handleCheck(
-                                                            a.id,
-                                                            e.target.checked,
-                                                            empresa.id
-                                                        )
-                                                    }
-                                                />
-                                                <p key={index}>
-                                                    {a.nombre_vista}
-                                                </p>
+                        {EmpresasAs.map((empresa, index) => {
+                            const accesosPorEmpresa = accesos.filter(
+                                (acceso) =>
+                                    acceso.pivot.id_parametro === empresa.id
+                            );
+                            return (
+                                <div key={index} className=" ">
+                                    <div className="flex gap-x-1 items-center m-3 justify-start">
+                                        <p className="font-extrabold text-[40px] ">
+                                            {empresa.razon_social} - Accesos - {accesosPorEmpresa.length}
+                                        </p>
+                                        <Checkbox
+                                            className="w-[30px] h-[30px]"
+                                            // defaultChecked={true}
+                                            checked={true}
+                                            value={empresa.id}
+                                            onClick={async (e) => {
+                                                const result = await Swal.fire({
+                                                    title: "Confirmación",
+                                                    text: `¿Estás seguro de que quieres Eliminar el Acceso a: ${empresa.razon_social} para este Usuario:${empleado.nombre_completo} ?`,
+                                                    icon: "warning",
+                                                    showCancelButton: true,
+                                                    confirmButtonText:
+                                                        "Sí, eliminar",
+                                                    cancelButtonText:
+                                                        "No, cancelar",
+                                                    allowOutsideClick: false, // No permite cerrar la modal al hacer clic fuera
+                                                    allowEscapeKey: false, // No permite cerrar la modal al presionar ESC
+                                                });
+
+                                                if (result.isConfirmed) {
+                                                    handleCheckEliminarAccesos(
+                                                        empresa.id,
+                                                        e.target.checked
+                                                    );
+                                                } else {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <hr />
+                                    </div>
+                                    <div className="flex flex-col gap-y-2  ">
+                                        {asignaAccesos.map((a, index) => (
+                                            <div key={index} className=" ">
+                                                <div className="bg-gray-200 rounded-lg flex items-center gap-x-2 p-2 w-1/4">
+                                                    <Checkbox
+                                                        value={a.id}
+                                                        defaultChecked={
+                                                            accesos.find(
+                                                                (acceso) =>
+                                                                    acceso.id ===
+                                                                        a.id &&
+                                                                    acceso.pivot
+                                                                        .id_parametro ===
+                                                                        empresa.id
+                                                            )
+                                                                ? true
+                                                                : false
+                                                        }
+                                                        onClick={(e) =>
+                                                            handleCheck(
+                                                                a.id,
+                                                                e.target
+                                                                    .checked,
+                                                                empresa.id
+                                                            )
+                                                        }
+                                                    />
+                                                    <p key={index}>
+                                                        {a.nombre_vista}
+                                                    </p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </>

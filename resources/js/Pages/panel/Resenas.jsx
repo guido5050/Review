@@ -10,7 +10,7 @@ import { useState } from "react";
 import  AccesoDenegado from "../panel/ui/AccesoDenegado";
 
 const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados, empresas, Accesos }) => {
-    console.log(resenas);
+    //console.log(resenas);
     const [currentPage, setCurrentPage] = useState(resenas.current_page);
     const onPageChange = (page) => {
         console.log(page);
@@ -31,7 +31,7 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados, empresas
                 AppName={AppName}
                 empresas={empresas}
             >
-                {Accesos.some((acceso) => acceso.id === 1) ? (
+                {Accesos.find((acceso) => acceso.id === 1) ? (
                           <div className=" animate-fade-down animate-ease-out p-8">
                           <div>
                               <div className="flex overflow-x-auto sm:justify-end justify-center ">
@@ -153,8 +153,7 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados, empresas
 
                       </div>
                 ) : (
-
-                <AccesoDenegado/>
+                     <AccesoDenegado/>
                 )
 
                 }

@@ -1,4 +1,5 @@
 import React from "react";
+import Swal from "sweetalert2";
 import { RiMailAddFill } from "react-icons/ri";
 import { router } from "@inertiajs/react";
 import { useState } from "react";
@@ -34,19 +35,25 @@ FormularioMail = ({
         if (selectedId === 0) {
             router.post("/panela/config.mail/create", values, {
                 onSuccess: () => {
-                    setAlertcreate(true);
-                    setTimeout(() => {
-                        setAlertcreate(false);
-                    }, 2500);
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Plantilla de Correo Creada",
+                        showConfirmButton: false,
+                        timer: 2000,
+                      })
                 },
             });
         } else {
             router.post("/panela/config.mail/update", values,{
                 onSuccess: () => {
-                    setAlertupdate(true);
-                    setTimeout(() => {
-                        setAlertupdate(false);
-                    }, 2500);
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Plantilla de Correo Actualizada",
+                        showConfirmButton: false,
+                        timer: 2000
+                      })
                 },
 
             });

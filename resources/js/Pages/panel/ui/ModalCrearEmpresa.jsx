@@ -6,6 +6,7 @@ import { router } from "@inertiajs/react";
 import { FaSquareFacebook } from "react-icons/fa6";
 import { FaInstagram } from "react-icons/fa";
 import { TbWorld } from "react-icons/tb";
+import Swal from "sweetalert2";
 
 const ModalCrearEmpresa = () => {
     const [openModal, setOpenModal] = useState(false);
@@ -67,6 +68,13 @@ const ModalCrearEmpresa = () => {
         router.post("/panela/empresa/crear", formData, {
             onSuccess: () => {
                 setImage(null);
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Empresa creada correctamente",
+                    showConfirmButton: false,
+                    timer: 2000,
+                });
             },
         });
 
@@ -180,7 +188,6 @@ const ModalCrearEmpresa = () => {
                                 id="facebook"
                                 type="text"
                                 placeholder="Inserta la url"
-                                //defaultValue={facebook}
                                 onChange={handleChange}
                                 className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                             />
@@ -193,7 +200,6 @@ const ModalCrearEmpresa = () => {
                                 id="instagram"
                                 type="text"
                                 placeholder="Inserta la url"
-                                //defaultValue={instagram}
                                 onChange={handleChange}
                                 className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                             />

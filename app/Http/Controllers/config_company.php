@@ -7,7 +7,7 @@ use Response;
 use Inertia\Inertia;
 use App\Models\parametro;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\usuarios_empleado;
 class config_company extends Controller {
 
 public function datos_empresas(){
@@ -28,7 +28,7 @@ public function datos_empresas(){
            // dd($config_current->toArray());
 	}
 
-    
+
 
 
     /**
@@ -124,16 +124,6 @@ public function store_data(Request $data)
 
     public function create_empresa(Request $request)
     {
-
-       // dd($request->toArray());
-        // Validar el request
-        // $request->validate([
-        //     'ruta_logo' => 'required',
-        //     // Agrega aquí las validaciones para los demás campos
-        // ]);
-
-
-
         // Decodificar la imagen
         $imagen = $request->ruta_logo;
         $imagen = str_replace('data:image/jpeg;base64,', '', $imagen);
@@ -175,6 +165,29 @@ public function store_data(Request $data)
                 // 'url_icono' => ... // Asegúrate de establecer esto si es necesario
             ]);
         }
+
+        //Asignacion de roles y Accesos
+
+        $admin =usuarios_empleado::where('nombre_completo','Admin')->first();
+
+        $Accesos = \App\Models\Acceso::all();
+
+        if($admin){
+
+            $admin->parametros()->attach($id_empresa);
+
+            foreach ($Accesos as $acceso) {
+
+                $admin->accesos()->attach($acceso->id, ['id_parametro' => $id_empresa]);
+            }
+
+        }
+
+
+
+
+
+
 
         // Crear las redes sociales
 
