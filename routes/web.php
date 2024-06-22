@@ -11,7 +11,7 @@ use App\Http\Controllers\logincontrollerumpleados;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\Evaluaciones_Clientes;
 use App\Http\Controllers\AccesoController;
-
+use App\Http\Controllers\SendEmailController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -105,6 +105,20 @@ Route::middleware('auth:empleados')->group(function () {
     Route::post('/panela/config.mail/create',[PanelController::class,'create_mail'])->name('create_mail');
 
 });
+
+//TODO: Rutas de Email programado
+Route::prefix('Mailable')->group(function(){
+Route::get('/',[SendEmailController::class,'index'])->name('index');
+Route::get('/Reservas/{idreserva}',[SendEmailController::class,'generarLink'])->name('generarLink');
+Route::get('/Reservas/{idreserva}/enviar',[SendEmailController::class,'enviarEmail'])->name('enviarEmail');
+Route::get('/programado',[SendEmailController::class,'programado'])->name('programado');
+
+})->middleware('auth:empleados');
+
+
+
+
+
 
 
 // TODO:empresa____

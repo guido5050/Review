@@ -21,10 +21,7 @@ const Accesos = ({
 }) => {
     //console.log( asignaAccesos);
     const [empresaAsig, setEmpresaAsig] = useState(EmpresasAs);
-    //console.log(empresas);
-    console.log(accesos);
-    //console.log(asignaAccesos);
-    // console.log(EmpresasAs);
+
 
     const handleCheck = (idAcceso, Checked, empresaId) => {
         router.post(
@@ -41,7 +38,7 @@ const Accesos = ({
     const handleCheckEliminarAccesos = (empresaId, Checked) => {
         console.log(empresaId, Checked);
         // router.post(
-        //     `/panela/usuarios/accesos/${EmpleadoId}/Eliminar`,
+        //     `/panela/usuarios/accesos/${EmpleadoId}/Eliminarm 
         //     {
         //         empresa: empresaId,
         //         Checked: Checked,

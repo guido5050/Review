@@ -31,16 +31,17 @@ class usuarios_empleado extends Authenticatable
     'aprueba',
     'activo',
   ];
-  protected $hidden = [
+     protected $hidden = [
         'contrasena', 'remember_token',
-    ];
-  public function getAuthPassword() {
+     ];
+   public function getAuthPassword() {
     return $this->contrasena;
-  }
-  public function evaluaciones_clientes(): HasMany
-  {
+   }
+
+   public function evaluaciones_clientes(): HasMany
+   {
     return $this->hasMany(EvaluacionesClientes::class, 'id_moderador', 'id_empleado');
-  }
+   }
 
     public function resenasAprobadas(): HasMany
     {

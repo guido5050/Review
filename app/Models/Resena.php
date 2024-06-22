@@ -27,6 +27,7 @@ class Resena extends Model
     'publicado',
     'Puntuacion_global',
    ];
+
 /**
  * Para hacer las relaciones en laravel cuando se usa el metodo convencional(explicado en la documentacion) no
  * se espesifican las llaves id de las tablas en este caso si... puesto que las tablas no han sido creadas por migraciones
@@ -38,13 +39,20 @@ class Resena extends Model
 
  //Aqui hacemos el motodo de user usando el tipado decimos que devuelve BelongTo
  //Estamos en el modelo Resena hacemos la relacion que tiene la tabla resenas con usuarios es decir una resena pertenece a un usuario
+
  public function UsuariosClientes(): BelongsTo
  {
      return $this->belongsTo(UsuariosClientes::class, 'id_usuario', 'id_cliente');
+     //id_usurios en mi tabla de Resenas y id_cliente en mi tabla de usuarios
  }
 
  public function UsuarioModerador(): BelongsTo
  {
      return $this->belongsTo(Usuarios_empleado::class, 'id_moderador', 'id_empleados');
  }
+
+ 
+
+
+
 }

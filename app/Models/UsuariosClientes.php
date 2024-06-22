@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Resena;
 
 class UsuariosClientes extends Model
@@ -23,7 +24,7 @@ class UsuariosClientes extends Model
         'num_identificacion',
     ];
 
-    public function Resena(): HasMany
+    public function Resena()
     {
         return $this->hasMany(Resena::class, 'id_usuario', 'id_cliente');
      }

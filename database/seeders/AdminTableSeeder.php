@@ -47,7 +47,7 @@ class AdminTableSeeder extends Seeder
             // foreach ($empresas as $empresa) {
             //     $admin->parametros()->syncWithoutDetaching($empresa);
             // }
-
+            
 
         }
     }

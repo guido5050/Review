@@ -51,7 +51,8 @@ class OrisonContactMailable extends Mailable
      */
     public function envelope(): Envelope
     {
-       $email = session('email_empresa'); // Asegúrate de que 'email_empresa' es la clave correcta para el correo electrónico de la empresa en tu sesión
+       $email = session('email_empresa')  ? session('email_empresa') : 'news@cratingexpress.com' ;
+       // Asegúrate de que 'email_empresa' es la clave correcta para el correo electrónico de la empresa en tu sesión
        return new Envelope(
         from: New Address($email, session('razon_social')), // Utiliza el correo electrónico de la empresa
         subject: $this->asunto, //Asunto dinamico
@@ -66,7 +67,7 @@ class OrisonContactMailable extends Mailable
      * la funcion content() retorna la vista
      * que se va a enviar
      */
-    
+
     public function build()
     {
        // dd($this->nombre, $this->url, $this->titulo, $this->cuerpo, $this->logo);

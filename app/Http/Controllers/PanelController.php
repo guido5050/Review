@@ -187,10 +187,15 @@ class PanelController extends Controller
         $empresas = session()->get('empresas');
 
         $currentEmpresa = parametro::find(session('empresa'));
+         // ...
 
-        $UsuarioDeEmpresa = $currentEmpresa->usuarios()->orderBy('id_empleado', 'desc')->get();
+        if (Auth::user()->nombre_completo == 'Admin') {
 
+            $UsuarioDeEmpresa = usuarios_empleado::orderBy('id_empleados', 'desc')->get();
 
+        } else {
+            $UsuarioDeEmpresa = $currentEmpresa->usuarios()->orderBy('id_empleados', 'desc')->get();
+        }
 
       //  dd($UsuarioDeEmpresa->toArray());
 
@@ -585,7 +590,7 @@ class PanelController extends Controller
         try {
             $cliente = UsuariosClientes::where('id_cliente', $clienteId)->select('nombre_completo', 'email')->first();
             $correo_current = Correo::where('id_correo', $plantilla)->select('titulo', 'cuerpo', 'asunto')->first();
-             $asunto = $correo_current->asunto;
+            $asunto = $correo_current->asunto;
             $url = "generarResena?id_reserva=122&id_usuario={$clienteId}&id_empresa=".session('empresa');
             $logo = session('logo_ruta');
             $titulo = $correo_current->titulo;
@@ -595,7 +600,15 @@ class PanelController extends Controller
             $email= $cliente->email;
             //dd($email);
            //TODO: Metodo que se encarga de enviar el correo
-            Mail::to($email)->send(new OrisonContactMailable($cliente->nombre_completo, $url, $titulo, $cuerpo, $logo, $data,$asunto));
+            Mail::to($email)->send(new OrisonContactMailable(
+                $cliente->nombre_completo,
+                 $url,
+                 $titulo,
+                 $cuerpo,
+                 $logo,
+                 $data,
+                 $asunto
+                ));
 
         } catch (\Exception $e) {
             \Log::error('Error al enviar correo: ' . $e->getMessage());
