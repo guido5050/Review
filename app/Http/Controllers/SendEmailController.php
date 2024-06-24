@@ -30,12 +30,43 @@ class SendEmailController extends Controller
 
     public function programado(){
 
-        $reserva = ReservasEncabezado::select('fecha_out_prev')->get()->toArray(); //Buscamos la reserva por el id with('cuentasclientes.clientes')
-        //dd($reserva);
         $fechaActual = Carbon::now()->subDays(2)->format('Y-m-d');
+
+        $reserva = ReservasEncabezado::select('fecha_out_prev','id_reservas','ref_id_cuenta','evaluacion')->where('fecha_out_prev',$fechaActual)
+            ->with([
+                'cuentasclientes' => function ($query) {
+                    $query->select('id_cuentas', 'evaluacion', 'ref_id_cliente');
+                },
+                'cuentasclientes.clientes' => function($query){
+                    $query->select('id_cliente','email','nombre_completo','id_empresa');
+                }
+            ])->get()->toArray();
+
+         //dd($reserva);
+
+
+        foreach($reserva as $reserva){
+
+            if($fechaActual === $reserva['fecha_out_prev']  && $reserva['evaluacion'] === 0 && $reserva['cuentasclientes']['evaluacion'] === 0
+            && $reserva['cuentasclientes']['clientes']['email'] != null){
+
+                dump(
+                    $reserva['fecha_out_prev'],
+                     $reserva['id_reservas'] ,
+                     $reserva['ref_id_cuenta'],
+                     $reserva['evaluacion'],
+                      $reserva['cuentasclientes']['evaluacion'],
+                      $reserva['cuentasclientes']['clientes']['email']
+                    );
+            }
+
+
+        }
+
+        dd($fechaActual);
+
         $compare=Carbon::create($reserva->fecha_out_prev)->format('Y-m-d');
 
-         dd($fechaActual,$compare);
 
         //fUNCION QUE COMPARA LAS FECHAS DE LAS RESERVAS DE HACE DOS DIAS Y DEVUELVE LAS RESERVAS QUE COINCIDEN
         //dd( $FechaActual);
