@@ -30,9 +30,11 @@ class SendEmailController extends Controller
 
     public function programado(){
 
-        $fechaActual = Carbon::now()->subDays(2)->format('Y-m-d');
+        //dd('hola');
 
-        $reserva = ReservasEncabezado::select('fecha_out_prev','id_reservas','ref_id_cuenta','evaluacion')->where('fecha_out_prev',$fechaActual)
+        $fechaActual = Carbon::now()->subDays(2)->format('Y-m-d'); //Resto dos dias a la fecha actual
+
+        $reservas = ReservasEncabezado::select('fecha_out_prev','id_reservas','ref_id_cuenta','evaluacion')->where('fecha_out_prev',$fechaActual)
             ->with([
                 'cuentasclientes' => function ($query) {
                     $query->select('id_cuentas', 'evaluacion', 'ref_id_cliente');
@@ -40,48 +42,52 @@ class SendEmailController extends Controller
                 'cuentasclientes.clientes' => function($query){
                     $query->select('id_cliente','email','nombre_completo','id_empresa');
                 }
-            ])->get()->toArray();
+            ])->get();
 
-         //dd($reserva);
+         dd($reservas->toArray());
 
 
-        foreach($reserva as $reserva){
+        foreach($reservas as $reserva){
 
-            if($fechaActual === $reserva['fecha_out_prev']  && $reserva['evaluacion'] === 0 && $reserva['cuentasclientes']['evaluacion'] === 0
-            && $reserva['cuentasclientes']['clientes']['email'] != null){
+            if($fechaActual === $reserva->fecha_out_prev  && $reserva->evaluacion === 0 && $reserva->cuentasclientes->evaluacion === 0
+             && $reserva->cuentasclientes->clientes->email != null) {
 
-                dump(
-                    $reserva['fecha_out_prev'],
-                     $reserva['id_reservas'] ,
-                     $reserva['ref_id_cuenta'],
-                     $reserva['evaluacion'],
-                      $reserva['cuentasclientes']['evaluacion'],
-                      $reserva['cuentasclientes']['clientes']['email']
-                    );
+                $correo_current = Correo::where('id_empresa', $reserva->cuentasclientes->clientes->id_empresa)
+                ->select('titulo', 'cuerpo', 'asunto')->first();
+
+                $nombre = $reserva->cuentasclientes->clientes->nombre_completo;
+                $url = "generarResena?id_reserva={$reserva->id_reservas}&id_usuario={$reserva->cuentasclientes->clientes->id_cliente}&id_empresa={$reserva->cuentasclientes->clientes->id_empresa}";
+                $titulo = $correo_current->titulo;
+                $cuerpo = $correo_current->cuerpo;
+                $asunto = $correo_current->asunto;
+                $logo = parametro::where('id', $reserva->cuentasclientes->clientes->id_empresa)->select('ruta_logo')->first();
+                $data = RedesSociales::where('id_empresa', $reserva->cuentasclientes->clientes->id_empresa)->get()->toArray();
+
+                try {
+                    Mail::to($reserva->cuentasclientes->clientes->email)->send(new OrisonContactMailable(
+                        $nombre,
+                        $url,
+                        $titulo,
+                        $cuerpo,
+                        $logo->ruta_logo,
+                        $data,
+                        $asunto
+                    ));
+
+                    $reserva->evaluacion = 1; //Actualizo el campo evaluacion de la tabla 'reservas_encabezado'
+                    $reserva->cuentasclientes->evaluacion = 1; // Actualizo el campo evaluacion de la tabla 'cuentas_clientes_encabezado'
+
+                    $reserva->cuentasclientes->save();
+                    $reserva->save();
+
+                } catch (\Exception $e) {
+                    \Log::error('Error al enviar correo: ' . $e->getMessage());
+                }
             }
-
-
         }
 
-        dd($fechaActual);
 
-        $compare=Carbon::create($reserva->fecha_out_prev)->format('Y-m-d');
-
-
-        //fUNCION QUE COMPARA LAS FECHAS DE LAS RESERVAS DE HACE DOS DIAS Y DEVUELVE LAS RESERVAS QUE COINCIDEN
-        //dd( $FechaActual);
-
-        $reservas = ReservasEncabezado::where('fecha_out_prev',$FechaCompare)->get();
-
-        if($cliente->email && $fechaActual === $compare){
-
-            // dd('tiene correo y la fecha coicide', $fechaActual,$compare);
-
-          }else{
-
-           //dd('no ti ene');
-          }
-         // dd($oneDay);
+       Return back();
 
     }
 
@@ -135,7 +141,7 @@ class SendEmailController extends Controller
 
 
 
-        //dd($reserva->evaluacion);
+        dd($reserva->evaluacion);
         try {
             //code...
             Mail::to($email)->send(new OrisonContactMailable(
@@ -156,7 +162,8 @@ class SendEmailController extends Controller
             \Log::error('Error al enviar correo: ' . $e->getMessage());
         }
 
-        return back();
+        dd($fechaActual);
+       /// return back();
 
     }
 
