@@ -10,7 +10,7 @@ import { useState } from "react";
 import  AccesoDenegado from "../panel/ui/AccesoDenegado";
 
 const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados, empresas, Accesos }) => {
-    //console.log(resenas);
+    console.log(Accesos);
     const [currentPage, setCurrentPage] = useState(resenas.current_page);
     const onPageChange = (page) => {
         console.log(page);

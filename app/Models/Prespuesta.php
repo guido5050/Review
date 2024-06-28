@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Prespuesta extends Model
 {
     use HasFactory;
-
+    //Tabla que guarda las posibles respuestas a las preguntas
     protected $table = 'posiblesrespuestas';
     protected $primaryKey = 'id_posiblesRespuestas';
 

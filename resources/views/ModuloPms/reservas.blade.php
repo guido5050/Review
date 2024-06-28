@@ -31,10 +31,12 @@
                         <td>{{ $reserva['fecha'] }}</td>
                         <td>{{ $reserva['fecha_out_prev'] }}</td>
                         <td>
-                            <a class="pointer-events-none" href="{{ url('Mailable/Reservas/'. $reserva['id_reservas'])}}">Generar-link</a>
+                            <a class="pointer-events-none"
+                                href="{{ url('Mailable/Reservas/' . $reserva['id_reservas']) }}">Generar-link</a>
                         </td>
                         <th>
-                            <a href="{{ route('enviarEmail', ['idreserva' => $reserva['id_reservas']]) }}">Enviar Correo</a>
+                            <a href="{{ route('enviarEmail', ['idreserva' => $reserva['id_reservas']]) }}">Enviar
+                                Correo</a>
                         </th>
                         <th>
                             <a href="{{ route('programado') }}">Programado</a>

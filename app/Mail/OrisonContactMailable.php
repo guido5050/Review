@@ -74,7 +74,7 @@ class OrisonContactMailable extends Mailable
 
         $empresa = session('empresa');
 
-        $view = 'Mail.Plantilla_Orison';
+        $view = 'Mail.Plantilla_orison';
         return $this->view($view)
                     ->with([
                         'nombre' => $this->nombre,

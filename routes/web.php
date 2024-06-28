@@ -109,9 +109,10 @@ Route::middleware('auth:empleados')->group(function () {
 //TODO: Rutas de Email programado
 Route::prefix('Mailable')->group(function(){
 Route::get('/',[SendEmailController::class,'index'])->name('index');
+
 Route::get('/Reservas/{idreserva}',[SendEmailController::class,'generarLink'])->name('generarLink');
 Route::get('/Reservas/{idreserva}/enviar',[SendEmailController::class,'enviarEmail'])->name('enviarEmail');
-Route::get('/programado',[SendEmailController::class,'programado'])->name('programado');
+Route::get('/programado',[SendEmailController::class,'programado_Evaluaciona_automaticas'])->name('programado');
 
 })->middleware('auth:empleados');
 

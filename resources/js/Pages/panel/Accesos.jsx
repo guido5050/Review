@@ -37,14 +37,14 @@ const Accesos = ({
 
     const handleCheckEliminarAccesos = (empresaId, Checked) => {
         console.log(empresaId, Checked);
-        // router.post(
-        //     `/panela/usuarios/accesos/${EmpleadoId}/Eliminarm 
-        //     {
-        //         empresa: empresaId,
-        //         Checked: Checked,
-        //     },
-        //     { preserveState: false }
-        // );
+        router.post(
+            `/panela/usuarios/accesos/${EmpleadoId}/Eliminar`,
+            {
+                empresa: empresaId,
+                Checked: Checked,
+            },
+            { preserveState: false }
+        );
     };
 
     return (

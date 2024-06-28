@@ -10,6 +10,7 @@ use App\Models\Resena;
 class UsuariosClientes extends Model
 {
     use HasFactory;
+    
     protected $table = 'usuarios_clientes';
     //protected $primarykey= 'id_preguntas';
     protected $primaryKey = 'id_cliente';

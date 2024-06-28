@@ -59,6 +59,7 @@ class usuarios_empleado extends Authenticatable
     {
         return $this->belongsToMany(parametro::class, 'empleados_parametros', 'id_empleado', 'parametro_id');
     }
+    
     public function accesos()
     {
         return $this->belongsToMany(Acceso::class, 'user_accesos', 'id_empleado', 'id_vista')

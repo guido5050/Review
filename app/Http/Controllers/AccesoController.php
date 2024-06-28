@@ -84,14 +84,14 @@ class AccesoController extends Controller
 
     public function eliminar_accesos(Request $request, $usuario_id){
 
-      //dd($request->toArray());
+      // dd($request->toArray());
 
         $checked = $request->get('Checked');
-      //  dd($checked);
+        //dd($checked);
         $idEmpleado = $usuario_id; // Ahora obtenemos el id del empleado directamente de la ruta
         $empresa = $request->get('empresa');
 
-        if($checked == false ){
+        if($checked == true ){
 
             $empleado = usuarios_empleado::find($usuario_id);
 
@@ -106,8 +106,6 @@ class AccesoController extends Controller
              return back();
 
 
-        }else{
-            dd('trueee');
         }
 
 

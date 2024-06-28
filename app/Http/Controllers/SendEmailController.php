@@ -28,10 +28,11 @@ class SendEmailController extends Controller
         return view('ModuloPms.reservas',['reservas' => $reservas]);
     }
 
-    public function programado(){
 
+
+    public function programado_Evaluaciona_automaticas()
+    {
         //dd('hola');
-
         $fechaActual = Carbon::now()->subDays(2)->format('Y-m-d'); //Resto dos dias a la fecha actual
 
         $reservas = ReservasEncabezado::select('fecha_out_prev','id_reservas','ref_id_cuenta','evaluacion')->where('fecha_out_prev',$fechaActual)
@@ -44,12 +45,12 @@ class SendEmailController extends Controller
                 }
             ])->get();
 
-         dd($reservas->toArray());
+        // dd($reservas->toArray());
 
 
         foreach($reservas as $reserva){
 
-            if($fechaActual === $reserva->fecha_out_prev  && $reserva->evaluacion === 0 && $reserva->cuentasclientes->evaluacion === 0
+            if($fechaActual === $reserva->fecha_out_prev  && $reserva->evaluacion === null && $reserva->cuentasclientes->evaluacion === null
              && $reserva->cuentasclientes->clientes->email != null) {
 
                 $correo_current = Correo::where('id_empresa', $reserva->cuentasclientes->clientes->id_empresa)
@@ -63,8 +64,10 @@ class SendEmailController extends Controller
                 $logo = parametro::where('id', $reserva->cuentasclientes->clientes->id_empresa)->select('ruta_logo')->first();
                 $data = RedesSociales::where('id_empresa', $reserva->cuentasclientes->clientes->id_empresa)->get()->toArray();
 
+
+                //$reserva->cuentasclientes->clientes->email
                 try {
-                    Mail::to($reserva->cuentasclientes->clientes->email)->send(new OrisonContactMailable(
+                    Mail::to('wgarcia6508@gmail.com')->send(new OrisonContactMailable(
                         $nombre,
                         $url,
                         $titulo,
@@ -105,10 +108,6 @@ class SendEmailController extends Controller
         $clienteId = $cliente->id_cliente; //Obtenemos el id del cliente
         //dd($idreserva,$clienteId,$idEmpresa, $nombre);
 
-        //Datos del correo(consulta);
-        $plantilla = Correo::where('id_empresa',$idEmpresa)->first();
-
-       // dd($plantilla);
         $S_evlauacion = "https://satars.orisonhostels.com/";
         $url = $S_evlauacion."generarResena?id_reserva={$idreserva}&id_usuario={$clienteId}&id_empresa={$idEmpresa}";
         //dd($url);
@@ -139,12 +138,10 @@ class SendEmailController extends Controller
 
         $data = RedesSociales::where('id_empresa', $idEmpresa)->get()->toArray();
 
-
-
-        dd($reserva->evaluacion);
+       // dd($reserva->evaluacion);
         try {
             //code...
-            Mail::to($email)->send(new OrisonContactMailable(
+            Mail::to('wgarcia6508@gmail.com')->send(new OrisonContactMailable(
                 $nombre,
                 $url,
                 $correo_current->titulo,
@@ -162,8 +159,8 @@ class SendEmailController extends Controller
             \Log::error('Error al enviar correo: ' . $e->getMessage());
         }
 
-        dd($fechaActual);
-       /// return back();
+       // dd($fechaActual);
+        return back();
 
     }
 

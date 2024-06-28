@@ -8,7 +8,7 @@ use App\Models\usuarios_empleado;
 
 class parametro extends Model
 {
-    //protected $table = 'parametro';//
+    protected $table = 'parametros';
   	protected $primaryKey = 'id';
       protected $fillable = ['ruta_logo', 'correo', 'razon_social', 'ruc', 'telefono', 'direccion_local', 'item_source', 'moneda_item_source'];
 

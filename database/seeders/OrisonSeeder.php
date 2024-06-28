@@ -8,6 +8,7 @@ use App\Models\Correo;
 use App\Models\usuarios_empleado;
 use App\Models\Acceso;
 use App\Models\Preguntas;
+use App\Models\Prespuesta;
 class OrisonSeeder extends Seeder
 {
     /**
@@ -62,12 +63,14 @@ class OrisonSeeder extends Seeder
             ['titulo' => '¿Como estuvo la Comunicacion?'],
             ['titulo' => '¿Que tal el Checkin?'],
         ];
+
         foreach($preguntas as $pregunta)
         {
-            Preguntas::create([
+         $preguntas =  Preguntas::create([
                 'titulo' => $pregunta['titulo'],
                 'id_empresa' => $orison->id,
             ]);
+
         }
     }
 
