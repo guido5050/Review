@@ -8,9 +8,10 @@ import { router } from "@inertiajs/react";
 import { Pagination } from "flowbite-react";
 import { useState } from "react";
 import  AccesoDenegado from "../panel/ui/AccesoDenegado";
+import BarraEstaDistica from "./components/BarraEstaDistica";
 
 const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados, empresas, Accesos }) => {
-    console.log(Accesos);
+    console.log(resenas);
     const [currentPage, setCurrentPage] = useState(resenas.current_page);
     const onPageChange = (page) => {
         console.log(page);
@@ -150,7 +151,10 @@ const Resenas = ({ auth, resenas, logo, razon_social, AppName, estados, empresas
                               </Table.Body>
                           </Table>
                           </div>
+                          <div >
 
+                         <BarraEstaDistica/>
+                          </div>
                       </div>
                 ) : (
                      <AccesoDenegado/>
