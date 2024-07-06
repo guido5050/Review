@@ -21,10 +21,6 @@ class SendEmailController extends Controller
     public function index(){
         $reservas = ReservasEncabezado::all();
 
-
-
-
-
         return view('ModuloPms.reservas',['reservas' => $reservas]);
     }
 
@@ -32,7 +28,6 @@ class SendEmailController extends Controller
 
     public function programado_Evaluaciona_automaticas()
     {
-        //dd('hola');
         $fechaActual = Carbon::now()->subDays(2)->format('Y-m-d'); //Resto dos dias a la fecha actual
 
         $reservas = ReservasEncabezado::select('fecha_out_prev','id_reservas','ref_id_cuenta','evaluacion')->where('fecha_out_prev',$fechaActual)
@@ -45,7 +40,7 @@ class SendEmailController extends Controller
                 }
             ])->get();
 
-        // dd($reservas->toArray());
+        //dd($reservas->toArray());
 
 
         foreach($reservas as $reserva){

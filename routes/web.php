@@ -12,6 +12,7 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\Evaluaciones_Clientes;
 use App\Http\Controllers\AccesoController;
 use App\Http\Controllers\SendEmailController;
+use App\Http\Controllers\GraficasController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -109,7 +110,6 @@ Route::middleware('auth:empleados')->group(function () {
 //TODO: Rutas de Email programado
 Route::prefix('Mailable')->group(function(){
 Route::get('/',[SendEmailController::class,'index'])->name('index');
-
 Route::get('/Reservas/{idreserva}',[SendEmailController::class,'generarLink'])->name('generarLink');
 Route::get('/Reservas/{idreserva}/enviar',[SendEmailController::class,'enviarEmail'])->name('enviarEmail');
 Route::get('/programado',[SendEmailController::class,'programado_Evaluaciona_automaticas'])->name('programado');
@@ -117,8 +117,12 @@ Route::get('/programado',[SendEmailController::class,'programado_Evaluaciona_aut
 })->middleware('auth:empleados');
 
 
+//TODO:Rutas de Barras de Estadisticas
+Route::prefix('estadistica')->group(function(){
+Route::get('/',[GraficasController::class,'GraficaporMes'])->name('GraficaporMes');
 
-
+}
+)->middleware('auth:empleados');
 
 
 

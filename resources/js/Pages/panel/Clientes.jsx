@@ -10,18 +10,10 @@ import {
     Tooltip,
 } from "flowbite-react";
 import { BiX } from "react-icons/bi";
-
-import {
-    MdKeyboardDoubleArrowLeft,
-    MdKeyboardDoubleArrowRight,
-} from "react-icons/md";
-import { HiMiniDocumentArrowUp } from "react-icons/hi2";
-
 import Menu_Item from "./Menu_Item";
 import BtnPrimary from "./ui/BtnPrimary";
 import ModalResenas from "./ui/ModalResenas";
 import { TbMailUp } from "react-icons/tb";
-import { AiFillPlusCircle } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
 import ModalCrearClientes from "./ui/ModalCrearClientes";
 import { Pagination } from "flowbite-react";

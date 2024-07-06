@@ -25,6 +25,8 @@ use App\Models\Prespuesta;
 use App\Models\PosiblesRespuestasEvaluacionesClientes;
 use App\Models\PreguntasEvaluacionesClientes;
 use App\Models\Acceso;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Support\Facades\Session;
 
 
@@ -162,20 +164,104 @@ class PanelController extends Controller
         return redirect()->back();
     }
 
-    public function resenas()
-
+    public function resenas(Request $request)
     {
+       // $busqueda = $request->query('busqueda');
+        $StartDate =$request->query('startDate') ;
+        $EndDate =  $request->query('endDate') ;
+        $Searchyear = $request->query('year');
+        $promedioporAño = null;
+        $promedioporMes = null;
+
+
+        //dd($StartDate, $EndDate);
         $id_empresa = session('empresa');
-        $resenas = Resena::with('UsuariosClientes')
+
+        if($StartDate != null && $EndDate != null){
+
+            $StartDate = Carbon::parse($StartDate)->format('Y-m-d');
+            $EndDate = Carbon::parse($EndDate)->format('Y-m-d');
+
+            $resenas = Resena::with('UsuariosClientes')
+            ->where('id_empresa', $id_empresa)
+            ->whereBetween('fecha', [$StartDate, $EndDate])
+            ->orderBy('id_resena', 'desc')
+            ->paginate(10);
+
+            $promedioporAño = Resena::select(
+                DB::raw('MONTH(fecha) as MesNumerico'),
+                DB::raw('DATE_FORMAT(fecha, "%M") as Mes'),
+                DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
+            )
+                ->whereBetween('fecha', [$StartDate, $EndDate])
+                ->groupBy(DB::raw('MONTH(fecha)'), DB::raw('DATE_FORMAT(fecha, "%M")'))
+                ->orderBy('MesNumerico', 'asc')
+                ->get();
+
+                $promedioporMes = Resena::select(
+                    DB::raw('DATE(fecha) as Dia'),
+                    DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
+                )
+                ->whereMonth('fecha', 7)
+                ->groupBy(DB::raw('DATE(fecha)'))
+                ->get();
+             //dd($promedioporMes->toArray());
+        }else{
+            $resenas = Resena::with('UsuariosClientes')
             ->where('id_empresa', $id_empresa)
             ->orderBy('id_resena', 'desc')
             ->paginate(10);
-        $estados=Estados::all()->groupBy('id_estado');
+
+            $year = Carbon::parse($Searchyear)->format('Y');
+
+            $promedioporAño = Resena::select(
+                DB::raw('MONTH(fecha) as MesNumerico'),
+                DB::raw('DATE_FORMAT(fecha, "%M") as Mes'),
+                DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
+            )
+                ->whereYear('fecha', $year)
+                ->groupBy(DB::raw('MONTH(fecha)'), DB::raw('DATE_FORMAT(fecha, "%M")'))
+                ->orderBy('MesNumerico', 'asc')
+                ->get();
+
+                $promedioporMes = Resena::select(
+                    DB::raw('DATE(fecha) as Dia'),
+                    DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
+                )
+                ->whereMonth('fecha', 7)
+                ->groupBy(DB::raw('DATE(fecha)'))
+                ->get();
+        }
+
+        if($Searchyear != null)
+        {
+            $year = Carbon::parse($Searchyear)->format('Y');
+            $promedioporAño = Resena::select(
+                DB::raw('MONTH(fecha) as MesNumerico'),
+                DB::raw('DATE_FORMAT(fecha, "%M") as Mes'),
+                DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
+            )
+                ->whereYear('fecha', $year)
+                ->groupBy(DB::raw('MONTH(fecha)'), DB::raw('DATE_FORMAT(fecha, "%M")'))
+                ->orderBy('MesNumerico', 'asc')
+                ->get();
+
+            $resenas = Resena::with('UsuariosClientes')
+            ->where('id_empresa', $id_empresa)
+            ->whereYear('fecha', $year)
+            ->orderBy('id_resena', 'desc')
+            ->paginate(10);
+            }
 
 
+        $estados = Estados::all()->groupBy('id_estado');
 
-
-        return inertia::render('panel/Resenas', ['resenas' => $resenas, 'estados' => $estados]);
+        return inertia::render('panel/Resenas', [
+            'resenas' => $resenas,
+             'estados' => $estados,
+              'promedioAño' => $promedioporAño,
+              'promedioMes' => $promedioporMes,
+              ]);
     }
 
     public function usuarios() //TODO: Metodo que retorna la vista de configuracion de usuarios
