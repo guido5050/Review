@@ -9,6 +9,7 @@ import {
     Tooltip,
     Breadcrumb,
 } from "flowbite-react";
+import Buttonprimary from "../components/Buttonprimary";
 import { HiHome } from "react-icons/hi";
 import { FaStar } from "react-icons/fa";
 import { FaRegCommentDots } from "react-icons/fa";
@@ -19,7 +20,7 @@ import { LuMessageCircle } from "react-icons/lu";
 import { BsCalendar2Date } from "react-icons/bs";
 import { IoIosCheckmark } from "react-icons/io";
 import { router } from "@inertiajs/react";
-
+import Linkprimary from "../components/Linkprimary";
 import ModalResenasComentarios from "./ui/ModalResenasComentarios";
 import Resenas from "./Resenas";
 
@@ -41,7 +42,7 @@ const GestionarResenas = ({
 }) => {
     // Transforma respuestas en un objeto donde cada clave es un título de pregunta
     // y cada valor es un objeto que contiene un array de respuestas y la puntuación total para esa pregunta
-
+    console.log(moderador);
     const respuestasAgrupadas = Object.values(respuestas)
         .flat()
         .reduce((acc, respuesta) => {
@@ -57,7 +58,6 @@ const GestionarResenas = ({
                 respuesta.puntuacion; //Saco la puntuacion individual por cada pregunta;
             return acc;
         }, {});
-        console.log(respuestas);
     const AprobarResena = () => {
         router.post(
             "/panela/resenas/publicar",
@@ -102,7 +102,7 @@ const GestionarResenas = ({
                                 {" "}
                                 {/* por si toca poner un elemento a abjo lo deje flex-col */}
                                 <div className="flex gap-x-3 items-center ">
-                                    <div className="bg-blue-600 rounded-lg w-[100px]">
+                                    <div className="bg-pink-600 rounded-lg w-[100px]">
                                         <Tooltip content="Puntuacion Global">
                                             <p
                                                 className="font-extrabold text-[50px] p-3 text-center  rounded-lg cursor-pointer"
@@ -147,18 +147,18 @@ const GestionarResenas = ({
                         </div>
                         <div className="flex items-end justify-between ">
                             <p className="font-extrabold text-blue-800 md:text-xl">
-                                {moderador === "Reseña no aprobada"
-                                    ? `${moderador}`
-                                    : `Aprobada por el admin:  ${moderador} 📌`}
+                                {moderador === 0
+                                    ? `Reseña pendiente de aprobación`
+                                    : `Aprobada por :  ${moderador} 📌`}
                             </p>
                             <Tooltip content="Aprobar esta reseña">
-                                <Button
-                                    color="success"
+                                <Buttonprimary
+
                                     onClick={AprobarResena}
-                                    disabled={moderador != "Reseña no aprobada"}
+                                    disabled={moderador !== 0 }
                                 >
                                     Aprobar
-                                </Button>
+                                </Buttonprimary>
                             </Tooltip>
                         </div>
                         <hr className="border-t border-gray-200 my-4" />{" "}
@@ -251,7 +251,6 @@ const GestionarResenas = ({
                                             </Table.Cell>
                                             <Table.Cell>
                                                 <div className="overflow-auto max-h-[200px]">
-                                                    <Badge className="">
                                                         <div className="flex items-center gap-x-1">
                                                             <h1>
                                                                 {" "}
@@ -267,7 +266,7 @@ const GestionarResenas = ({
                                                                 size={""}
                                                             />
                                                         </div>
-                                                    </Badge>
+
                                                     {comentarios[idPregunta] &&
                                                         comentarios[
                                                             idPregunta

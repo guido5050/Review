@@ -13,6 +13,7 @@ import { IoIosAlert } from "react-icons/io";
 import { FaSquareFacebook } from "react-icons/fa6";
 import { FaInstagram } from "react-icons/fa";
 import { TbWorld } from "react-icons/tb";
+import Buttonprimary from "../components/Buttonprimary";
 import AccesoDenegado from "./ui/AccesoDenegado";
 import Swal from "sweetalert2";
 
@@ -300,12 +301,12 @@ const Parametros_de_Empresa = ({
                                     className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                                 />
                             </div>
-                            <button
+                            <Buttonprimary
                                 type="submit"
                                 className="bg-blue-500 text-white p-2 rounded mt-3 hover:bg-blue-700 transition-all duration-200 ease-in-out"
                             >
                                 Actualizar
-                            </button>
+                            </Buttonprimary>
                         </form>
                     </div>
                 ) : (

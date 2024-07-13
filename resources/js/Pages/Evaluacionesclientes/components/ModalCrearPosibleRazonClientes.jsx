@@ -8,6 +8,7 @@ import {
 } from "flowbite-react";
 import { useState } from "react";
 import { router } from "@inertiajs/react";
+import Buttonprimary from "@/Pages/components/Buttonprimary";
 
 const ModalCrearPosibleRazonClientes = ({
     modal,
@@ -46,7 +47,6 @@ const ModalCrearPosibleRazonClientes = ({
             },
         });
     }
-    console.log(values);
     return (
         <>
             {/* <Button color="blue" onClick={() => setOpenModal(true)}>
@@ -81,9 +81,9 @@ const ModalCrearPosibleRazonClientes = ({
                                 onChange={handleChange}
                             />
                             <div className="w-full mt-2">
-                                <Button color="blue" type="submit">
+                                <Buttonprimary color="blue" type="submit">
                                     crear
-                                </Button>
+                                </Buttonprimary>
                             </div>
                         </form>
                     </div>

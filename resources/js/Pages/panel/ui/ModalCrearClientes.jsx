@@ -6,9 +6,10 @@ import {
     Modal,
     TextInput,
     Tooltip,
-} from "flowbite-react";
+}
+from "flowbite-react";
+import Buttonprimary from "@/Pages/components/Buttonprimary";
 import { HiHome } from "react-icons/hi";
-
 import BtnPrimary from "./BtnPrimary";
 import { router } from "@inertiajs/react";
 
@@ -58,12 +59,12 @@ const ModalCrearClientes = () => {
     return (
         <>
             <Tooltip content="Agregar Cliente con sus Datos">
-                <BtnPrimary
+                <Buttonprimary
                     onClick={() => setOpenModal(true)}
-                    className={"bg-blue-700"}
+
                 >
                     <span className="whitespace-nowrap">Agregar Cliente</span>
-                </BtnPrimary>
+                </Buttonprimary>
             </Tooltip>
             <Modal show={openModal} size="xl" popup onClose={onCloseModal}>
                 <Modal.Header />
@@ -84,6 +85,7 @@ const ModalCrearClientes = () => {
                                     required
                                     onChange={handleChange}
                                     placeholder="Nombre completo"
+                                    className="focus:bg-pink-200"
                                 />
                             </div>
                             <div className="mb-2 block">
@@ -136,9 +138,9 @@ const ModalCrearClientes = () => {
                                 />
                             </div>
 
-                            <BtnPrimary className={"bg-blue-700"} type="submit">
+                            <Button gradientMonochrome="pink"  type="submit" >
                                 Agregar Cliente
-                            </BtnPrimary>
+                            </Button>
                         </form>
                     </div>
                 </Modal.Body>

@@ -13,6 +13,7 @@ use App\Http\Controllers\Evaluaciones_Clientes;
 use App\Http\Controllers\AccesoController;
 use App\Http\Controllers\SendEmailController;
 use App\Http\Controllers\GraficasController;
+use App\Http\Controllers\PasswordChangedController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,11 +25,7 @@ use App\Http\Controllers\GraficasController;
 |
 */
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
-//Route::get('/datos_empresas',[config_company::class,'datos_empresas'])->middleware('auth:empleados');
 
-//Route::get('/roles',[PanelController::class,'roles'])->middleware('auth:empleados');
-
-//Route::get('/panela',[PanelController::class,'index'])->name('index')->middleware('auth:empleados');
 
 Route::get('/',[PanelController::class,'resenas'])->middleware('auth');
 Route::get('/panela/clientes',[PanelController::class,'clientes'])->name('clientes')->middleware('auth:empleados'); //Mostrar clientes
@@ -58,8 +55,6 @@ Route::group([ 'middleware' => 'auth:empleados'], function () {
 });
 
 
-
-
 Route::middleware('auth:empleados')->prefix('panela/resenas/')->group(function () {
     Route::get('{userClienteId}/{Idresena}', [PanelController::class,'gestionar']);
     Route::post('comentario', [PanelController::class,'comentarios_admin']); //ComentariosGuardados por el admin de resenas
@@ -67,6 +62,8 @@ Route::middleware('auth:empleados')->prefix('panela/resenas/')->group(function (
     Route::post('Session', [PanelController::class,'Session'])->name('Session'); //Cambia la Session de usuario de las empresas que tiene asignadas
 });
 
+
+Route::post('changePassword',[PasswordChangedController::class,'passwordchanged'])->name('passwordchanged');//TODO:Ruta para cambiar la contraseña
 
 Route::post('/panela/usuarios/update',[PanelController::class,'update'])->name('update');
 Route::post('/panela/usuarios/roles/create',[PanelController::class,'create_roles'])->name('create_role')->middleware('auth:empleados');
@@ -120,9 +117,7 @@ Route::get('/programado',[SendEmailController::class,'programado_Evaluaciona_aut
 //TODO:Rutas de Barras de Estadisticas
 Route::prefix('estadistica')->group(function(){
 Route::get('/',[GraficasController::class,'GraficaporMes'])->name('GraficaporMes');
-
-}
-)->middleware('auth:empleados');
+})->middleware('auth:empleados');
 
 
 

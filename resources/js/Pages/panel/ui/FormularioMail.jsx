@@ -5,6 +5,7 @@ import { router } from "@inertiajs/react";
 import { useState } from "react";
 import { HiInformationCircle } from "react-icons/hi";
 import { Alert } from "flowbite-react";
+import Buttonprimary from "@/Pages/components/Buttonprimary";
 
 const
 FormularioMail = ({
@@ -220,7 +221,7 @@ FormularioMail = ({
                         ></textarea>
                     </div>
                 </div>
-                <button
+                <Buttonprimary
                     type="submit"
                     className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
                 >
@@ -228,7 +229,7 @@ FormularioMail = ({
                         ? "Actualizar"
                         : "Crear"}{" "}
                     Plantilla
-                </button>
+                </Buttonprimary>
             </form>
         </>
     );

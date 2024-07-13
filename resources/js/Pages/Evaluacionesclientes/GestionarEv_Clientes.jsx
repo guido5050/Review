@@ -3,7 +3,7 @@ import Menu_Item from "../panel/Menu_Item";
 import ModalComentarioEncuesta from "./components/ModalComentarioEncuesta";
 import { Card, Table, Button, Tooltip, Breadcrumb } from "flowbite-react";
 import { HiHome } from "react-icons/hi";
-
+import Buttonprimary from "../components/Buttonprimary";
 import { BsCalendar2Date } from "react-icons/bs";
 
 const GestionarEv_Clientes = ({
@@ -52,7 +52,7 @@ const GestionarEv_Clientes = ({
                                 <div className="flex gap-x-3   ">
                                     {evaluacion.puntuacion_global && (
                                         <Tooltip content="Puntuacion Globla">
-                                            <div className="bg-blue-600 rounded-lg w-[100px]">
+                                            <div className="bg-pink-600 rounded-lg w-[100px]">
                                                 <p
                                                     className="font-extrabold text-[50px] p-3 text-center  rounded-lg cursor-pointer"
                                                     title="puntuacion del cliente al finalizar la reseña"

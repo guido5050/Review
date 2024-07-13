@@ -8,6 +8,7 @@ import {
     Label,
     Breadcrumb,
     Tooltip,
+    Button,
 } from "flowbite-react";
 import { BiX } from "react-icons/bi";
 import Menu_Item from "./Menu_Item";
@@ -18,6 +19,8 @@ import { FaSearch } from "react-icons/fa";
 import ModalCrearClientes from "./ui/ModalCrearClientes";
 import { Pagination } from "flowbite-react";
 import AccesoDenegado from "./ui/AccesoDenegado";
+import Buttonprimary from "../components/Buttonprimary";
+import Linkprimary from "../components/Linkprimary";
 const Clientes = ({
     client,
     encuesta,
@@ -245,9 +248,8 @@ const Clientes = ({
                                              {encuesta === true &&
                                              estadoPreguntas === true ? (
                                                  <Tooltip content="Enviar Evaluacion al Cliente por medio de Correo Electronico!">
-                                                     <BtnPrimary
-                                                         className="bg-blue-600 hover:bg-blue-500 flex items-center justify-center sm:text-sm "
-                                                         onClick={() => {
+                                                     <Buttonprimary
+                                                             onClick={() => {
                                                              setModalOpen(true);
                                                              setClienteId(
                                                                  cliente.id_cliente
@@ -269,27 +271,31 @@ const Clientes = ({
                                                          <span className="whitespace-nowrap">
                                                              Enviar Evaluacion
                                                          </span>
-                                                     </BtnPrimary>
+                                                         <TbMailUp
+                                                                 size={"20px"}
+                                                                 className="ml-1" // Añade un margen a la derecha del icono
+                                                             />
+                                                     </Buttonprimary>
                                                  </Tooltip>
                                              ) : (
-                                                 <Link
+                                                 <Linkprimary
                                                      title="Si ve este boton es por que no ha configurado la encuesta"
                                                      href="/panela/encuesta"
                                                      className="text-white inline-block bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                                                  >
                                                      Editar Encuesta
-                                                 </Link>
+                                                 </Linkprimary>
                                              )}
                                          </Table.Cell>
                                          <Table.Cell>
-                                             <Link
+                                             <Linkprimary
                                                  href={`/panela/evaluaciones_clientes/${cliente.id_cliente}`}
-                                                 className="text-white inline-block bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                                
                                              >
                                                  <span className="whitespace-nowrap">
                                                      Evaluar cliente
                                                  </span>
-                                             </Link>
+                                             </Linkprimary>
                                          </Table.Cell>
                                      </Table.Row>
                                  ))}

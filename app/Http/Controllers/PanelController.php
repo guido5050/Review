@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\Resena;
 use App\Models\usuarios_empleado;
@@ -14,7 +15,6 @@ use App\Models\parametro;
 use App\Models\Roles;
 use Inertia\Inertia;
 use App\Mail\OrisonContactMailable;
-use Illuminate\Support\Facades\Mail;
 use App\Models\Correo;
 use App\Models\RedesSociales;
 use App\Models\PreguntasClientes;
@@ -167,17 +167,20 @@ class PanelController extends Controller
     public function resenas(Request $request)
     {
        // $busqueda = $request->query('busqueda');
+       $fechaActual = Carbon::now()->format('Y-m-d');
+       //dd($fechaActual);
+
         $StartDate =$request->query('startDate') ;
         $EndDate =  $request->query('endDate') ;
         $Searchyear = $request->query('year');
+        $SearchMonth = $request->query('month');
         $promedioporAño = null;
         $promedioporMes = null;
+        $promeYear=null;
 
-
-        //dd($StartDate, $EndDate);
         $id_empresa = session('empresa');
 
-        if($StartDate != null && $EndDate != null){
+        if($StartDate != null && $EndDate != null){ //TODO filtrar por rango de fechas
 
             $StartDate = Carbon::parse($StartDate)->format('Y-m-d');
             $EndDate = Carbon::parse($EndDate)->format('Y-m-d');
@@ -187,6 +190,16 @@ class PanelController extends Controller
             ->whereBetween('fecha', [$StartDate, $EndDate])
             ->orderBy('id_resena', 'desc')
             ->paginate(10);
+
+            $promeYear = Resena::select(
+                DB::raw('YEAR(fecha) as Ano'),
+                DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
+            )
+            ->whereYear('fecha', $fechaActual)
+            ->groupBy(DB::raw('YEAR(fecha)'))
+            ->first();
+
+            //dd($promeYear->toArray());
 
             $promedioporAño = Resena::select(
                 DB::raw('MONTH(fecha) as MesNumerico'),
@@ -198,6 +211,8 @@ class PanelController extends Controller
                 ->orderBy('MesNumerico', 'asc')
                 ->get();
 
+                //dd($promedioporAño);
+
                 $promedioporMes = Resena::select(
                     DB::raw('DATE(fecha) as Dia'),
                     DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
@@ -205,6 +220,9 @@ class PanelController extends Controller
                 ->whereMonth('fecha', 7)
                 ->groupBy(DB::raw('DATE(fecha)'))
                 ->get();
+
+
+
              //dd($promedioporMes->toArray());
         }else{
             $resenas = Resena::with('UsuariosClientes')
@@ -219,6 +237,7 @@ class PanelController extends Controller
                 DB::raw('DATE_FORMAT(fecha, "%M") as Mes'),
                 DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
             )
+                ->where('id_empresa', $id_empresa)
                 ->whereYear('fecha', $year)
                 ->groupBy(DB::raw('MONTH(fecha)'), DB::raw('DATE_FORMAT(fecha, "%M")'))
                 ->orderBy('MesNumerico', 'asc')
@@ -228,12 +247,23 @@ class PanelController extends Controller
                     DB::raw('DATE(fecha) as Dia'),
                     DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
                 )
+                ->where('id_empresa', $id_empresa)
+                ->whereYear('fecha', $year)
                 ->whereMonth('fecha', 7)
                 ->groupBy(DB::raw('DATE(fecha)'))
                 ->get();
+                $promeYear = Resena::select(
+                    DB::raw('YEAR(fecha) as Ano'),
+                    DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
+                )
+                ->whereYear('fecha', $fechaActual)
+                ->groupBy(DB::raw('YEAR(fecha)'))
+                ->first();
+
+               // dd($promeYear->toArray());
         }
 
-        if($Searchyear != null)
+        if($Searchyear != null) //TODO:Cuando se busca por año
         {
             $year = Carbon::parse($Searchyear)->format('Y');
             $promedioporAño = Resena::select(
@@ -241,6 +271,7 @@ class PanelController extends Controller
                 DB::raw('DATE_FORMAT(fecha, "%M") as Mes'),
                 DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
             )
+                ->where('id_empresa', $id_empresa)
                 ->whereYear('fecha', $year)
                 ->groupBy(DB::raw('MONTH(fecha)'), DB::raw('DATE_FORMAT(fecha, "%M")'))
                 ->orderBy('MesNumerico', 'asc')
@@ -251,8 +282,67 @@ class PanelController extends Controller
             ->whereYear('fecha', $year)
             ->orderBy('id_resena', 'desc')
             ->paginate(10);
+            $promeYear = Resena::select(
+                DB::raw('YEAR(fecha) as Ano'),
+                DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
+            )
+            ->whereYear('fecha', $year)
+            ->groupBy(DB::raw('YEAR(fecha)'))
+            ->first();
+
+           // dd($promeYear->toArray());
             }
 
+        if($SearchMonth != null){ //TODO: Cuando se Busca por Mes
+            $month = Carbon::parse($SearchMonth);
+            $year = $month->year;
+            $month = $month->month;
+
+
+            $promedioporMes = Resena::select(
+                DB::raw('DATE(fecha) as Dia'),
+                DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
+            )
+            ->where('id_empresa', $id_empresa)
+            ->whereYear('fecha', $year) //en el año
+            ->whereMonth('fecha', $month)//en el mes
+
+            ->groupBy(DB::raw('DATE(fecha)'))
+            ->get();
+
+           /// dd($promedioporMes->toArray());
+
+           $promedioporAño = Resena::select(
+            DB::raw('MONTH(fecha) as MesNumerico'),
+            DB::raw('DATE_FORMAT(fecha, "%M") as Mes'),
+            DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
+        )
+            ->where('id_empresa', $id_empresa)
+            ->whereYear('fecha', $year)
+            ->groupBy(DB::raw('MONTH(fecha)'), DB::raw('DATE_FORMAT(fecha, "%M")'))
+            ->orderBy('MesNumerico', 'asc')
+            ->get();
+
+
+
+            $resenas = Resena::with('UsuariosClientes')
+            ->where('id_empresa', $id_empresa)
+            ->whereMonth('fecha', $month)
+            ->whereYear('fecha', $year)
+            ->orderBy('id_resena', 'desc')
+            ->paginate(10);
+           // dd($resenas->toArray());
+
+           $promeYear = Resena::select(
+            DB::raw('YEAR(fecha) as Ano'),
+            DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
+        )
+        ->whereYear('fecha', $year)
+        ->groupBy(DB::raw('YEAR(fecha)'))
+        ->first();
+
+       // dd($promeYear->toArray());
+        }
 
         $estados = Estados::all()->groupBy('id_estado');
 
@@ -261,6 +351,7 @@ class PanelController extends Controller
              'estados' => $estados,
               'promedioAño' => $promedioporAño,
               'promedioMes' => $promedioporMes,
+              'promeYear' => $promeYear,
               ]);
     }
 
@@ -584,8 +675,9 @@ class PanelController extends Controller
 
         $resena = Resena::with(['UsuariosClientes', 'UsuarioModerador'])
             ->where('id_usuario', $userClienteId)
+            ->where('id_resena', $Idresena)
             ->first();
-        //dd($resena->toArray());
+        // dd($resena->toArray());
         $Comentarios = Comentarios::where('id_resena', $Idresena)->get()->groupBy('id_preguntas');
 
        /// dd($Comentarios->toArray());
@@ -595,8 +687,8 @@ class PanelController extends Controller
          $id_resena = $resena->id_resena;
          $reserva = $resena->id_reserva;
          $fecha = $resena->fecha;
-        $moderador = $resena->UsuarioModerador ? $resena->UsuarioModerador->nombre_completo:'Reseña no aprobada';
-        //dd($moderador);
+         $moderador = $resena->id_moderador ? $resena->UsuarioModerador->nombre_completo:0;
+        // dd($moderador);
         // Si no se encontró ninguna reseña, redirige de vuelta con un mensaje de error
         if (!$resena) {
             return redirect()->back()->with('error', 'No se encontró ninguna reseña para este usuario');
@@ -632,6 +724,7 @@ class PanelController extends Controller
         //TODO: Metodo de aprobar resena para publicar en la vista ADMIN de resenas a empresa
         //idresena
         //estado
+        //dd($request->toArray());
         $userId = Auth::id();
         $id_resena = $request->idresena;
         $estado = $request->estado;

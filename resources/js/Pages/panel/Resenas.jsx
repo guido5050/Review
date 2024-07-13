@@ -3,8 +3,11 @@
 import React from "react";
 import Menu_Item from "./Menu_Item";
 import { Table, Rating, Button, Tooltip } from "flowbite-react";
+import Buttonprimary from "../components/Buttonprimary";
+import { startOfYear, endOfYear } from "date-fns";
 import { router } from "@inertiajs/react";
 import { Pagination } from "flowbite-react";
+import { BsCalendar2Date } from "react-icons/bs";
 import { useState } from "react";
 import AccesoDenegado from "../panel/ui/AccesoDenegado";
 import BarraEstaDistica from "./components/BarraEstaDisticaporMes";
@@ -19,7 +22,6 @@ import "react-datepicker/dist/react-datepicker.css";
 const Resenas = ({
     auth,
     resenas,
-    years,
     logo,
     razon_social,
     AppName,
@@ -36,15 +38,17 @@ const Resenas = ({
     // por lo que sumamos 1 para obtener un número de 1 (enero) a 12 (diciembre)
     const currentDay = date.getDay(); //Aqui obtengo el dia de la semana
 
-    const [month, setMonth] = useState(currentMonth);
+    const [month, setMonth] = useState(new Date());
+
     const [day, setDay] = useState(currentDay);
 
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
 
+    const currentYearStart = startOfYear(new Date());
+    const currentYearEnd = endOfYear(new Date());
 
     const onPageChange = (page) => {
-        console.log(page);
         router.get(
             route("resenas", { page: page }),
             {},
@@ -69,14 +73,34 @@ const Resenas = ({
         setStartDate(new Date());
         setEndDate(new Date());
     };
+    const filtroporMes = () => {
+        router.get(
+            route("resenas", { month: month }),
+            {},
+            { preserveState: true}
+        );
+        handleButtonClick();
+    };
 
     const resetearfiltro = () => {
         router.get(route("resenas"));
     };
 
+    const handleButtonClick = () => {
+        const [monthValue, yearValue] = month.split("/");
+        const newYear = new Date(yearValue, monthValue - 1).getFullYear();
+        setYear(newYear);
+    };
+
     const renderYearContent = (year) => {
         const tooltipText = `Tooltip for year: ${year}`;
         return <span title={tooltipText}>{year}</span>;
+    };
+    const renderMonthContent = (month, shortMonth, longMonth, day) => {
+        const fullYear = new Date(day).getFullYear();
+        const tooltipText = `Tooltip for month: ${longMonth} ${fullYear}`;
+
+        return <span title={tooltipText}>{shortMonth}</span>;
     };
     //TODO: Este componente es la vista de Evaluaciones a Empresas
 
@@ -91,62 +115,103 @@ const Resenas = ({
             >
                 {Accesos.find((acceso) => acceso.id === 1) ? (
                     <div className=" animate-fade-down animate-ease-out p-8">
-                        <div className="  flex justify-between items-end  py-2">
-                            <div className="max-w-md flex gap-x-3  ">
+                        <div className="  flex  py-2 gap-y-3  flex-col ">
+                            <div className="max-w-md flex gap-x-3 whitespace-nowrap items-center ">
+                                <Label>Fecha Inicio</Label>
                                 <DatePicker
                                     selected={startDate}
                                     showIcon
+                                    icon={<BsCalendar2Date className="ml-3" />}
                                     onChange={(date) => setStartDate(date)}
                                     selectsStart
                                     locale={es}
                                     startDate={startDate}
+                                    minDate={currentYearStart}
+                                    maxDate={currentYearEnd}
                                     endDate={endDate}
-                                    className="rounded-lg"
+                                    className="rounded-lg  flex items-center text-center ml-3"
                                 />
+                                <Label>Fecha Fin</Label>
                                 <DatePicker
                                     selected={endDate}
                                     showIcon
+                                    icon={<BsCalendar2Date />}
                                     locale={es}
                                     onChange={(date) => setEndDate(date)}
                                     selectsEnd
                                     startDate={startDate}
-                                    className="rounded-lg"
+                                    className="rounded-lg  flex items-center text-center "
+                                    maxDate={currentYearEnd}
                                     endDate={endDate}
                                     minDate={startDate}
                                 />
 
-                                <Button
+                                <Buttonprimary
+                                    size={'sm'}
                                     onClick={() => {
                                         filtrofecha();
                                     }}
-                                    color="blue"
-                                >
-                                    Filtrar <FaFilter className="ml-2" />{" "}
-                                </Button>
+                                    >
+                                    Filtrar Por Rango{" "}
+                                    <FaFilter className="ml-2" />{" "}
+                                </Buttonprimary>
 
-                                <DatePicker
-                                    selected={year}
-                                    onChange={(date) => setYear(date)}
-                                    className="rounded-lg"
-                                    renderYearContent={renderYearContent}
-                                    showYearPicker
-                                    dateFormat="yyyy"
-                                />
-                                <Button
-                                    color="blue"
+                                <Buttonprimary
+                                    size={'sm'}
                                     className="whitespace-nowrap"
-                                    onClick={filtroporaño}
-                                >
-                                    Filtrar por año
-                                </Button>
-                                <Button
-                                    className="whitespace-nowrap"
-                                    color="blue"
                                     onClick={resetearfiltro}
                                 >
                                     Resetear Filtro{" "}
                                     <MdFilterAltOff className="ml-2" />
-                                </Button>
+                                </Buttonprimary>
+                            </div>
+                            <div className="flex items-center gap-x-3   ">
+                                <Label>Filtrar por año</Label>
+                                <DatePicker
+                                    showIcon
+                                    icon={<BsCalendar2Date />}
+                                    selected={year}
+                                    onChange={(date) => setYear(date)}
+                                    className="rounded-lg  flex items-center text-center"
+                                    renderYearContent={renderYearContent}
+                                    showYearPicker
+                                    dateFormat="yyyy"
+                                />
+                                <Buttonprimary
+                                    size={'sm'}
+                                    className="whitespace-nowrap"
+                                    onClick={filtroporaño}
+                                >
+                                    Filtrar por año
+                                    <FaFilter className="ml-2" />
+                                </Buttonprimary>
+                            </div>
+                            <div
+                                id="filtro por mes "
+                                className="flex items-center gap-x-3"
+                            >
+                                <Label>Filtrar por mes</Label>
+                                <DatePicker
+                                    showIcon
+                                    selected={month}
+                                    onChange={(date) => {
+                                        setMonth(date), setYear(date);
+                                    }}
+                                    locale={es}
+                                    icon={<BsCalendar2Date />}
+                                    renderMonthContent={renderMonthContent}
+                                    showMonthYearPicker
+                                    className="rounded-lg flex items-center text-center"
+                                    dateFormat="MM/yyyy"
+                                />
+                                <Buttonprimary
+                                    onClick={filtroporMes}
+                                    size={'sm'}
+
+                                >
+                                    Filtrar por mes
+                                    <FaFilter className="ml-2" />
+                                </Buttonprimary>
                             </div>
 
                             <div className="flex overflow-x-auto sm:justify-end justify-center ">
@@ -171,9 +236,7 @@ const Resenas = ({
                                     <Table.HeadCell>
                                         Comentario Final
                                     </Table.HeadCell>
-                                    <Table.HeadCell>
-                                        fecha
-                                    </Table.HeadCell>
+                                    <Table.HeadCell>fecha</Table.HeadCell>
                                     <Table.HeadCell>Estado</Table.HeadCell>
                                     <Table.HeadCell> </Table.HeadCell>
                                 </Table.Head>
@@ -222,7 +285,14 @@ const Resenas = ({
                                             <Table.Cell className="font-extrabold text-black whitespace-nowrap">
                                                 <p>
                                                     {resena.comentario
-                                                        ? resena.comentario
+                                                        ? resena.comentario.substring(
+                                                              0,
+                                                              70
+                                                          ) +
+                                                          (resena.comentario
+                                                              .length > 70
+                                                              ? "..."
+                                                              : "")
                                                         : "no-comentario"}
                                                 </p>
                                             </Table.Cell>
@@ -263,8 +333,8 @@ const Resenas = ({
 
                                             <Table.Cell className="font-extrabold text-white ">
                                                 <Tooltip content="Ver los Detalles de la evaluacion">
-                                                    <Button
-                                                        color="blue"
+                                                    <Buttonprimary
+                                                        gradientMonochrome="pink"
                                                         onClick={() => {
                                                             router.visit(
                                                                 `/panela/resenas/${resena.id_usuario}/${resena.id_resena}`
@@ -272,7 +342,7 @@ const Resenas = ({
                                                         }}
                                                     >
                                                         Gestionar
-                                                    </Button>
+                                                    </Buttonprimary>
                                                 </Tooltip>
                                             </Table.Cell>
                                         </Table.Row>
@@ -282,11 +352,12 @@ const Resenas = ({
                         </div>
                         <div>
                             <BarraEstaDistica
-                            promediopormes={promedioAño}
-                            year = {year}
+                                promediopormes={promedioAño}
+                                year={year}
                             />
                             <BarraEstaDisticaporDia
-                            promedioMes={promedioMes}
+                                month={month}
+                                promedioMes={promedioMes}
                             />
                         </div>
                     </div>

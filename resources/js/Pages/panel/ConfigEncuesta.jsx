@@ -22,7 +22,6 @@ const ConfigEncuesta = ({
     empresas,
     Accesos,
 }) => {
-    console.log(Accesos);
     const [openModal, setOpenModal] = useState(false);
     const [puntuacion, setPuntuacion] = useState();
     const [preguntaId, setPreguntaId] = useState();

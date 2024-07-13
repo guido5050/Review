@@ -6,6 +6,7 @@ import { router } from "@inertiajs/react";
 import parse from "html-react-parser";
 import { MdEmail } from "react-icons/md";
 import { TiArrowBackOutline } from "react-icons/ti";
+import Linkprimary from "../components/Linkprimary";
 
 
 const Preview_Mail = ({ html, clienteId, plantilla,ClienteNombre }) => {
@@ -16,13 +17,12 @@ const Preview_Mail = ({ html, clienteId, plantilla,ClienteNombre }) => {
         <>
             <div className="flex flex-col h-screen justify-between">
                 <div className="flex   px-4 py-2 mt-0 bg-gray-900  justify-between ">
-                    <Link
+                    <Linkprimary
                         onClick={() => window.history.back()}
-                        className="text-white flex items-center gap-x-2 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     >
                         <TiArrowBackOutline size={"20px"} /> Volver
-                    </Link>
-                    <Link
+                    </Linkprimary>
+                    <Linkprimary
                        onClick={ async (e) => {
                         const result = await Swal.fire({
                             title: "Confirmación",
@@ -58,7 +58,7 @@ const Preview_Mail = ({ html, clienteId, plantilla,ClienteNombre }) => {
                         className="text-white animate-pulse animate-ease-in flex items-center gap-x-2 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     >
                         Enviar correo <MdEmail size={"20px"} />
-                    </Link>
+                    </Linkprimary>
                 </div>
                 {emailHtml && (
                     <div className="border-8 p-10 mx-auto w-full md:w-1/2 lg:w-1/3 overflow-y-auto max-h-[700px]">

@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Label, Modal, Textarea, Tooltip } from "flowbite-react";
 import { useState } from "react";
 import { router } from "@inertiajs/react";
+import Buttonprimary from "@/Pages/components/Buttonprimary";
 
 import { LuMessageCircle } from "react-icons/lu";
 
@@ -44,9 +45,9 @@ const ModalResenasComentarios = ({ idPregunta, idresena, user }) => {
     return (
         <>
             <Tooltip content="Deja un comentario sobre la pregunta" >
-            <Button color="blue" size={"sm"} onClick={() => setOpenModal(true)  } className="whitespace-nowrap">
+            <Buttonprimary color="blue" size={"sm"} onClick={() => setOpenModal(true)  } className="whitespace-nowrap">
             Dejar Comentario
-            </Button>
+            </Buttonprimary>
             </Tooltip>
             <Modal show={openModal} size="2xl" onClose={onCloseModal} popup>
                 <Modal.Header />

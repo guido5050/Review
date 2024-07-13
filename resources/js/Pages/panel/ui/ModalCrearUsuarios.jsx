@@ -2,6 +2,7 @@ import { Select, Label, Modal, TextInput, Checkbox } from "flowbite-react";
 import { useState } from "react";
 import BtnPrimary from "./BtnPrimary";
 import { router } from "@inertiajs/react";
+import Buttonprimary from "@/Pages/components/Buttonprimary";
 
 const ModalCrearUsuarios = ({
     modal_crearusuarios,
@@ -248,12 +249,12 @@ const ModalCrearUsuarios = ({
                             </div>
                             <div className="flex justify-between"></div>
                             <div className="w-full">
-                                <BtnPrimary
+                                <Buttonprimary
                                     type="submit"
                                     className={" hover:bg-blue-500 bg-blue-600"}
                                 >
                                     Crear Usuario
-                                </BtnPrimary>
+                                </Buttonprimary>
                             </div>
                         </div>
 

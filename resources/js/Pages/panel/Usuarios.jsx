@@ -9,9 +9,17 @@ import BtnPanel from "./ui/BtnPanel";
 import ModalAlert from "./ui/ModalAlert";
 import ModalCrearUsuarios from "./ui/ModalCrearUsuarios";
 import ModalCrearRoles from "./ui/ModalCrearRoles";
+import PasswordChangeModal from "./components/PasswordChangeModal";
 import { Alert, Button } from "flowbite-react";
+import { RiLockPasswordFill } from "react-icons/ri";
 import Tabsx from "./ui/Tabs";
+import { CiEdit } from "react-icons/ci";
+import Buttonprimary from "../components/Buttonprimary";
 import AccesoDenegado from "./ui/AccesoDenegado";
+import { BiSolidEdit } from "react-icons/bi";
+
+import { FaUserPlus } from "react-icons/fa6";
+
 
 const Usuarios = ({
     users,
@@ -127,7 +135,6 @@ const Usuarios = ({
         setModal_CrearRoles(true);
     };
 
-    console.log(cargo);
 
     return (
         <>
@@ -197,14 +204,15 @@ const Usuarios = ({
                             <h1 className="text-2xl font-bold mb-2 mt-3">
                                 Lista de Usuarios:
                             </h1>
-                            <BtnPanel
+                            <Buttonprimary
                                 type={"button"}
                                 span={"+"}
                                 className={""}
                                 onClick={handleCrearUsuarios}
                             >
-                                Crear usuarios
-                            </BtnPanel>
+                                Crear usuarios <FaUserPlus className="ml-1" />
+
+                            </Buttonprimary>
                         </div>
                         <form
                             className="relative sm:rounded-lg flex flex-col items-center p-5"
@@ -257,11 +265,18 @@ const Usuarios = ({
                                         >
                                             Activo
                                         </th>
+
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-xl  font-extrabold"
                                         >
                                             Accesos
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-6 py-3 text-xl  font-extrabold"
+                                        >
+                                            Activo
                                         </th>
                                         {/* Agrega más encabezados según la estructura de tu modelo de usuario */}
                                     </tr>
@@ -416,7 +431,7 @@ const Usuarios = ({
                                                 </select>
                                             </td>
                                             <td className="px-6 py-2 font-medium text-gray-900">
-                                                <Button
+                                                <Buttonprimary
                                                     disabled={
                                                         user.nombre_completo ==
                                                         "Admin"
@@ -431,7 +446,10 @@ const Usuarios = ({
                                                     color="blue"
                                                 >
                                                     Accesos
-                                                </Button>
+                                                </Buttonprimary>
+                                            </td>
+                                            <td className="whitespace-nowrap">
+                                              <PasswordChangeModal user ={user}/>
                                             </td>
                                             {/* Agrega más celdas según la estructura de tu modelo de usuario */}
                                             {/* <td className="px-6 py-4">
@@ -464,15 +482,15 @@ const Usuarios = ({
                             </table>
 
                             <div className="w-full mb-5 relative mt-5 flex justify-end">
-                                <BtnPanel
+                                <Buttonprimary
                                     type={"onSubmit"}
                                     className={
                                         " bg-green-500 hover:bg-green-400 relative "
                                     }
-                                    span={<FiEdit size={"15px"} />}
                                 >
-                                    Actualizar Usuarios
-                                </BtnPanel>
+                                    Actualizar Usuarios <BiSolidEdit   className = "ml-1"/>
+
+                                </Buttonprimary>
                             </div>
                         </form>
                         {/*TODO: fin del primer form */}
@@ -548,20 +566,21 @@ const Usuarios = ({
                                             <td className="px-6 py-2 font-medium text-gray-900">
                                                 {rol.activo}
                                             </td>
+
+
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                             <div className="w-full mb-5 relative mt-5 flex justify-end">
-                                <BtnPanel
+                                <Buttonprimary
                                     type={"onSubmit"}
                                     className={
                                         " bg-green-500 hover:bg-green-400 relative "
                                     }
-                                    span={<FiEdit size={"15px"} />}
                                 >
-                                    Actualizar Roles
-                                </BtnPanel>
+                                    Actualizar Roles <BiSolidEdit className = "ml-1"/>
+                                </Buttonprimary>
                             </div>
                         </form>
                     </div>

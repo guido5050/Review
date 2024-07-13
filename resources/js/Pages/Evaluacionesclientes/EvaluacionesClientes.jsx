@@ -4,6 +4,7 @@ import { Table, Button, Tooltip } from "flowbite-react";
 import { Link, router } from "@inertiajs/react";
 import { Rating, Pagination } from "flowbite-react";
 import  AccesoDenegado from "../panel/ui/AccesoDenegado";
+import Buttonprimary from "../components/Buttonprimary";
 const EvaluacionesClientes = ({
     auth,
     razon_social,
@@ -122,7 +123,7 @@ const EvaluacionesClientes = ({
                                                 </Table.Cell>
                                                 <Table.Cell>
                                                     <Tooltip content="Ver los Detatalles de la Evaluacion">
-                                                        <Button
+                                                        <Buttonprimary
                                                             onClick={() => {
                                                                 gestionar(
                                                                     evaluacion.id_cliente,
@@ -132,7 +133,7 @@ const EvaluacionesClientes = ({
                                                             color="blue"
                                                         >
                                                             Gestionar
-                                                        </Button>
+                                                        </Buttonprimary>
                                                     </Tooltip>
                                                 </Table.Cell>
                                             </Table.Row>

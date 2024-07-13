@@ -7,6 +7,7 @@ import { RiMailSettingsLine } from "react-icons/ri";
 import { Badge } from "flowbite-react";
 import { HiInformationCircle } from "react-icons/hi";
 import { Alert } from "flowbite-react";
+import Buttonprimary from "../components/Buttonprimary";
 import AccesoDenegado from "./ui/AccesoDenegado";
 
 const ConfigPlantilla = ({

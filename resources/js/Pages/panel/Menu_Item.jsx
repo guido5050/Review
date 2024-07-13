@@ -65,7 +65,7 @@ export default function Menu_Item({
                     <link rel="icon" href={`${logo}`} />
                 </Head>
 
-                <Disclosure as="nav" className=" py-2 shadow-lg ">
+                <Disclosure as="nav" className=" py-2 shadow-lg font-extrabold  ">
                     {({ open }) => (
                         <>
                             {/* {btnconfig && <Modal setBtnconfig={setBtnconfig}></Modal>} */}
@@ -118,8 +118,8 @@ export default function Menu_Item({
                                                 className="w-[30px] h-auto px-0.1 rounded-xl"
                                             />
                                         </div> */}
-                                        <div className="sm:ml-6 hidden md:block ">
-                                            <div className="flex space-x-3 items-center">
+                                        <div className="sm:ml-6 hidden md:block  ">
+                                            <div className="flex space-x-3 items-center font-extrabold ">
                                                 {navigation.map(
                                                     (item, index) => (
                                                         <Link
@@ -135,8 +135,8 @@ export default function Menu_Item({
                                                             className={classNames(
                                                                 activeItem ===
                                                                     item.name
-                                                                    ? " text-black bg-slate-200 border-b-2 border-black  hover:bg-slate-200 hover:text-black"
-                                                                    : "text-gray-500 hover:text-black",
+                                                                    ? " text-black text-3xl bg-slate-200 border-b-2 border-black  hover:bg-slate-200 hover:text-black"
+                                                                    : "text-gray-500 hover:text-black text-3xl",
                                                                 "rounded-md px-3 py-2 text-sm font-medium flex items-center justify-center",
                                                                 index === 0
                                                                     ? "border-2 border-black"
@@ -196,7 +196,7 @@ export default function Menu_Item({
                                                 leave="transition ease-in duration-75"
                                                 leaveFrom="transform opacity-100 scale-100"
                                                 leaveTo="transform opacity-0 scale-95"
-                                            >   
+                                            >
 
                                                 <Menu.Items className="absolute bg-white right-0 z-10 mt-2 w-72 origin-top-right rounded-md bg-red  shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ">
                                                     <Menu.Item>

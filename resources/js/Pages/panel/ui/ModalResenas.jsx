@@ -3,10 +3,12 @@ import { Button, Modal, TextInput, Tooltip } from "flowbite-react";
 import { MdContentCopy, MdOutlineMarkEmailUnread } from "react-icons/md";
 import { Link } from "@inertiajs/react";
 import { Alert, Badge, Select, Label } from "flowbite-react";
+import Buttonprimary from "@/Pages/components/Buttonprimary";
+import Linkprimary from "@/Pages/components/Linkprimary";
 
 import BtnPrimary from "./BtnPrimary";
 
-const ModalResenas = ({
+const   ModalResenas = ({
     email,
     modalOpen,
     onClose,
@@ -53,12 +55,12 @@ const ModalResenas = ({
                         <strong>{nombreCliente}</strong>
                     </div>
                     <div className="p-2 flex flex-col gap-y-3 rounded-lg">
-                        <Badge className="text-sm">
+                        <div className="text-sm">
                             {`#cliente:`}
                             <strong>{clienteId}</strong>
-                        </Badge>
+                        </div>
                         {email ? (
-                            <Badge className="text-sm font-bold">{`email: ${email}`}</Badge>
+                            <div className="text-sm font-bold">{`email: ${email}`}</div>
                         ) : (
                             <Alert color="warning" withBorderAccent>
                                 <span>
@@ -114,32 +116,31 @@ const ModalResenas = ({
                             {selectPlantilla ? (
 
                               <Tooltip content="Ver el Preview de la plantilla de Correo Antes de Enviar el Correo">
-                                <Link
+                                <Linkprimary
                                     href={`/preview.email/mail/${clienteId}/${selectPlantilla}`}
                                     method="get"
-                                    className="text-white mt-5 inline-block bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                                     preserveState
                                 >
                                     Ver-Preview correo
-                                </Link>
+                                </Linkprimary>
                                 </Tooltip>
                             ) : (
-                               <Link
+                               <Linkprimary
                                href="/panela/config.mail"
                                className="text-white inline-block bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                                preserveState
-                               >Crear plantilla</Link>
+                               >Crear plantilla</Linkprimary>
                             )}
 
                         </>
                     )}
 
-                    <BtnPrimary
+                    <Buttonprimary
                         className={"bg-blue-600 hover:bg-blue-800"}
                         onClick={generateLink}
                     >
                         Generar link
-                    </BtnPrimary>
+                    </Buttonprimary>
 
                     <div className="flex items-center">
                         <TextInput
@@ -151,13 +152,13 @@ const ModalResenas = ({
                             required
                             className="flex-grow mr-2"
                         />
-                        <BtnPrimary
-                            className="bg-blue-600 hover:bg-blue-800 py-2"
+                        <Buttonprimary
+                            className=" py-2"
                             onClick={copyToClipboard}
                             span={<MdContentCopy size={"18px"} />}
                         >
                             Copiar
-                        </BtnPrimary>
+                        </Buttonprimary>
                     </div>
                 </div>
             </Modal.Body>

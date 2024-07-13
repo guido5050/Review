@@ -1,6 +1,7 @@
 import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { router } from "@inertiajs/react";
+import Buttonprimary from "@/Pages/components/Buttonprimary";
 
 const ModalCrearPreguntas_ev_clientes = () => {
     const [openModal, setOpenModal] = useState(false);
@@ -36,9 +37,9 @@ const ModalCrearPreguntas_ev_clientes = () => {
 
     return (
         <>
-            <Button color="blue" onClick={() => setOpenModal(true)}>
+            <Buttonprimary  onClick={() => setOpenModal(true)}>
                 Crear Pregunta
-            </Button>
+            </Buttonprimary>
             <Modal show={openModal} size="xl" onClose={onCloseModal} popup>
                 <Modal.Header />
                 <Modal.Body>

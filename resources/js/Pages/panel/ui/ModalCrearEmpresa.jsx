@@ -6,6 +6,7 @@ import { router } from "@inertiajs/react";
 import { FaSquareFacebook } from "react-icons/fa6";
 import { FaInstagram } from "react-icons/fa";
 import { TbWorld } from "react-icons/tb";
+import Buttonprimary from "@/Pages/components/Buttonprimary";
 import Swal from "sweetalert2";
 
 const ModalCrearEmpresa = () => {
@@ -83,12 +84,12 @@ const ModalCrearEmpresa = () => {
 
     return (
         <>
-            <Button
+            <Buttonprimary
                 className="px-20 mt-12 bg-blue-600 hover:bg-blue-700 transition-all duration-200 ease-in-out"
                 onClick={() => setOpenModal(true)}
             >
                 Crear Empresa
-            </Button>
+            </Buttonprimary>
             <Modal show={openModal} size="xl" onClose={onCloseModal} popup>
                 <Modal.Header />
                 <Modal.Body>
@@ -248,12 +249,11 @@ const ModalCrearEmpresa = () => {
                                 className="px-2 py-1 w-full rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                             />
                         </div>
-                        <button
+                        <Buttonprimary
                             type="submit"
-                            className="bg-blue-500 text-white p-2 rounded mt-3 hover:bg-blue-700 transition-all duration-200 ease-in-out"
                         >
                             Crear Empresa
-                        </button>
+                        </Buttonprimary>
                     </form>
                 </Modal.Body>
             </Modal>

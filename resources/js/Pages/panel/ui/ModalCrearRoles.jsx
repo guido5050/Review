@@ -3,6 +3,7 @@ import { router } from "@inertiajs/react";
 import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
 import BtnPrimary from "./BtnPrimary";
 import Swal from "sweetalert2";
+import Buttonprimary from "@/Pages/components/Buttonprimary";
 
 const ModalCrearRoles = ({ cargo, Accesos }) => {
     console.log(Accesos);
@@ -53,7 +54,7 @@ const ModalCrearRoles = ({ cargo, Accesos }) => {
 
     const handleCheck = (id, checked) => {
 
-        
+
 
         let index = AccesoSeleccionado.indexOf(id);
 
@@ -68,9 +69,9 @@ const ModalCrearRoles = ({ cargo, Accesos }) => {
 
     return (
         <>
-            <Button onClick={() => setOpenModal(true)} color="blue">
+            <Buttonprimary onClick={() => setOpenModal(true)} color="blue">
                 Crear Rol
-            </Button>
+            </Buttonprimary>
 
             <Modal show={openModal} size="2xl" onClose={onCloseModal} popup>
                 <Modal.Header />
@@ -146,12 +147,11 @@ const ModalCrearRoles = ({ cargo, Accesos }) => {
                                 ))}
                             </div>
                             <div className="w-full">
-                                <BtnPrimary
+                                <Buttonprimary
                                     type="submit"
-                                    className={" hover:bg-blue-500 bg-blue-600"}
                                 >
                                     Crear Rol
-                                </BtnPrimary>
+                                </Buttonprimary>
                             </div>
                         </div>
                     </Modal.Body>
