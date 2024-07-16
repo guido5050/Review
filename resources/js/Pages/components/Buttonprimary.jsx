@@ -6,7 +6,6 @@ export default function Buttonprimary({ children, onClick, type, disabled, class
         <Button
             size={size}
             className={className}
-            gradientMonochrome="pink"
             onClick={onClick}
             type={type}
             disabled={disabled}

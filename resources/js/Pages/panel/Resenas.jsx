@@ -30,6 +30,7 @@ const Resenas = ({
     Accesos,
     promedioMes,
     promedioAño,
+    promeYear,
 }) => {
     const [year, setYear] = useState(new Date());
 
@@ -68,7 +69,7 @@ const Resenas = ({
         router.get(
             route("resenas", { year: year }),
             {},
-            { preserveState: true }
+            { preserveState: true  }
         );
         setStartDate(new Date());
         setEndDate(new Date());
@@ -166,7 +167,7 @@ const Resenas = ({
                                 </Buttonprimary>
                             </div>
                             <div className="flex items-center gap-x-3   ">
-                                <Label>Filtrar por año</Label>
+                                <Label>Buscar por año</Label>
                                 <DatePicker
                                     showIcon
                                     icon={<BsCalendar2Date />}
@@ -354,9 +355,11 @@ const Resenas = ({
                             <BarraEstaDistica
                                 promediopormes={promedioAño}
                                 year={year}
+                                promeYear={promeYear}
                             />
                             <BarraEstaDisticaporDia
                                 month={month}
+                                year={year}
                                 promedioMes={promedioMes}
                             />
                         </div>

@@ -26,7 +26,7 @@ class SendEmailController extends Controller
 
 
 
-    public function programado_Evaluaciona_automaticas()
+    public function programado_Evaluacion_automaticas()
     {
         $fechaActual = Carbon::now()->subDays(2)->format('Y-m-d'); //Resto dos dias a la fecha actual
 
@@ -125,7 +125,10 @@ class SendEmailController extends Controller
 
         $email = $cliente->email;
 
+        
         $url = "generarResena?id_reserva={$idreserva}&id_usuario={$clienteId}&id_empresa={$idEmpresa}";
+
+
 
         $correo_current = Correo::where('id_empresa', $idEmpresa)->select('titulo', 'cuerpo', 'asunto')->first();
 

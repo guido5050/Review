@@ -25,15 +25,17 @@ export default function Menu_Item({
     AppName,
     empresas,
 }) {
+
+    //${razon_social}
     const navigation = [
         {
-            name: `Evaluaciones a: ${razon_social} `,
+            name: `Evaluacion de Clientes:  `,
             href: "/panela/resenas",
             current: true,
             method: "get",
         },
         {
-            name: "Evaluaciones a clientes",
+            name: "Evaluación a Clientes",
             href: "/panela/evaluaciones_clientes/show",
             current: false,
         },
@@ -137,7 +139,7 @@ export default function Menu_Item({
                                                                     item.name
                                                                     ? " text-black text-3xl bg-slate-200 border-b-2 border-black  hover:bg-slate-200 hover:text-black"
                                                                     : "text-gray-500 hover:text-black text-3xl",
-                                                                "rounded-md px-3 py-2 text-sm font-medium flex items-center justify-center",
+                                                                "rounded-md px-3 py-2 text-lg font-extrabold whitespace-nowrap  flex items-center justify-center",
                                                                 index === 0
                                                                     ? "border-2 border-black"
                                                                     : ""

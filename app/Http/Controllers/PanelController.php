@@ -169,7 +169,6 @@ class PanelController extends Controller
        // $busqueda = $request->query('busqueda');
        $fechaActual = Carbon::now()->format('Y-m-d');
        //dd($fechaActual);
-
         $StartDate =$request->query('startDate') ;
         $EndDate =  $request->query('endDate') ;
         $Searchyear = $request->query('year');
@@ -179,6 +178,8 @@ class PanelController extends Controller
         $promeYear=null;
 
         $id_empresa = session('empresa');
+
+      //  dd($id_empresa);
 
         if($StartDate != null && $EndDate != null){ //TODO filtrar por rango de fechas
 
@@ -195,6 +196,7 @@ class PanelController extends Controller
                 DB::raw('YEAR(fecha) as Ano'),
                 DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
             )
+            ->where('id_empresa', $id_empresa)
             ->whereYear('fecha', $fechaActual)
             ->groupBy(DB::raw('YEAR(fecha)'))
             ->first();
@@ -206,6 +208,7 @@ class PanelController extends Controller
                 DB::raw('DATE_FORMAT(fecha, "%M") as Mes'),
                 DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
             )
+                ->where('id_empresa', $id_empresa)
                 ->whereBetween('fecha', [$StartDate, $EndDate])
                 ->groupBy(DB::raw('MONTH(fecha)'), DB::raw('DATE_FORMAT(fecha, "%M")'))
                 ->orderBy('MesNumerico', 'asc')
@@ -217,6 +220,7 @@ class PanelController extends Controller
                     DB::raw('DATE(fecha) as Dia'),
                     DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
                 )
+                ->where('id_empresa', $id_empresa)
                 ->whereMonth('fecha', 7)
                 ->groupBy(DB::raw('DATE(fecha)'))
                 ->get();
@@ -256,6 +260,7 @@ class PanelController extends Controller
                     DB::raw('YEAR(fecha) as Ano'),
                     DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
                 )
+                ->where('id_empresa', $id_empresa)
                 ->whereYear('fecha', $fechaActual)
                 ->groupBy(DB::raw('YEAR(fecha)'))
                 ->first();
@@ -286,6 +291,7 @@ class PanelController extends Controller
                 DB::raw('YEAR(fecha) as Ano'),
                 DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
             )
+            ->where('id_empresa', $id_empresa)
             ->whereYear('fecha', $year)
             ->groupBy(DB::raw('YEAR(fecha)'))
             ->first();
@@ -337,11 +343,12 @@ class PanelController extends Controller
             DB::raw('YEAR(fecha) as Ano'),
             DB::raw('ROUND(AVG(Puntuacion_global), 1) as promedio')
         )
+        ->where('id_empresa', $id_empresa)
         ->whereYear('fecha', $year)
         ->groupBy(DB::raw('YEAR(fecha)'))
         ->first();
 
-       // dd($promeYear->toArray());
+       //dd($promeYear->toArray());
         }
 
         $estados = Estados::all()->groupBy('id_estado');

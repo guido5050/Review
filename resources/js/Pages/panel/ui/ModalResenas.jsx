@@ -136,7 +136,7 @@ const   ModalResenas = ({
                     )}
 
                     <Buttonprimary
-                        className={"bg-blue-600 hover:bg-blue-800"}
+                        className={""}
                         onClick={generateLink}
                     >
                         Generar link
