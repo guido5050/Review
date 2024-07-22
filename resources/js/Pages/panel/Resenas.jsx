@@ -8,7 +8,10 @@ import { startOfYear, endOfYear } from "date-fns";
 import { router } from "@inertiajs/react";
 import { Pagination } from "flowbite-react";
 import { BsCalendar2Date } from "react-icons/bs";
-import { useState } from "react";
+import { GrPieChart } from "react-icons/gr";
+import { BsFillPieChartFill } from "react-icons/bs";
+import { FcDoughnutChart } from "react-icons/fc";
+import { useState, useMemo } from "react";
 import AccesoDenegado from "../panel/ui/AccesoDenegado";
 import BarraEstaDistica from "./components/BarraEstaDisticaporMes";
 import BarraEstaDisticaporDia from "./components/BarraEstaDisticaporDia";
@@ -32,6 +35,7 @@ const Resenas = ({
     promedioAño,
     promeYear,
 }) => {
+
     const [year, setYear] = useState(new Date());
 
     const date = new Date(); //fecha actual
@@ -86,6 +90,8 @@ const Resenas = ({
     const resetearfiltro = () => {
         router.get(route("resenas"));
     };
+
+
 
     const handleButtonClick = () => {
         const [monthValue, yearValue] = month.split("/");
@@ -186,7 +192,9 @@ const Resenas = ({
                                     Filtrar por año
                                     <FaFilter className="ml-2" />
                                 </Buttonprimary>
+
                             </div>
+
                             <div
                                 id="filtro por mes "
                                 className="flex items-center gap-x-3"
@@ -214,7 +222,13 @@ const Resenas = ({
                                     <FaFilter className="ml-2" />
                                 </Buttonprimary>
                             </div>
-
+                            <div>
+                                <Buttonprimary
+                                onClick={() => {
+                                    router.get(route('graficapastel'));
+                                }}
+                                >Informe de Retroalimentación <BsFillPieChartFill className="ml-2" /></Buttonprimary>
+                            </div>
                             <div className="flex overflow-x-auto sm:justify-end justify-center ">
                                 <Pagination
                                     currentPage={resenas.current_page}

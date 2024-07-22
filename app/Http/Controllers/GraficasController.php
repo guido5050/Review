@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\Resena;
 use Carbon\Carbon;
 use DB;
+use App\Models\Preguntas;
 
 class GraficasController extends Controller
 {
@@ -63,4 +64,64 @@ class GraficasController extends Controller
         ]);
     }
 
+    public function graficapastel_index(Request $request){
+
+
+        //dd($request->get('fecha'));
+
+        $empresaId = session('empresa'); // ID de la empresa "Orison"
+
+
+
+        $fecha = Carbon::parse($request->get('fecha'))->format('Y-m'); // Mes y año para filtrar
+
+
+
+        // Obtener todas las preguntas disponibles para la empresa y el mes especificado
+        $preguntas = Preguntas::where('id_empresa', $empresaId)
+            ->pluck('id_preguntas');
+      //  dd($preguntas);
+        // Inicializar un arreglo para almacenar los datos de cada pregunta
+        $datosDiagramas = [];
+
+        // Iterar sobre cada pregunta para obtener los datos del diagrama de pastel
+        foreach ($preguntas as $preguntaId) {
+
+            $datos = DB::table('preguntas_clientes')
+                ->select(
+                    'preguntas.titulo AS pregunta',
+                    'preguntas_clientes.NombreRespuesta AS NombreRespuesta',
+                    DB::raw('COUNT(*) AS cantidad')
+                )
+                ->join('resenas', 'preguntas_clientes.id_resena', '=', 'resenas.id_resena')
+                ->join('preguntas', 'preguntas_clientes.id_preguntas', '=', 'preguntas.id_preguntas')
+                ->where('preguntas_clientes.id_preguntas', $preguntaId)
+                ->where('resenas.id_empresa', $empresaId)
+                ->where(DB::raw("DATE_FORMAT(resenas.fecha, '%Y-%m')"), $fecha)
+                ->groupBy('preguntas.titulo', 'preguntas_clientes.NombreRespuesta')
+                ->get();
+
+              //  dd($datos->toArray());
+                if($datos->isNotEmpty()){
+                    $datosDiagramas[] = [
+                        'pregunta' => $datos->first()->pregunta,
+                        'datos' => $datos->map(function ($dato) {
+                            return [
+                                'name' => $dato->NombreRespuesta,
+                                'value' => $dato->cantidad,
+                            ];
+                        }),
+                    ];
+                }
+
+
+        }
+       //dd($datosDiagramas);
+       //dd("Aqui termina");
+
+        return inertia::render('panel/GraficaPastelIndex', [
+            'fecha' => $fecha,
+            'datosDiagramas' => $datosDiagramas
+        ]);
+    }
 }

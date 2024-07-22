@@ -120,7 +120,9 @@ Route::prefix('estadistica')->group(function(){
 Route::get('/',[GraficasController::class,'GraficaporMes'])->name('GraficaporMes');
 })->middleware('auth:empleados');
 
-
+Route::prefix('graficapastel')->group(function(){
+Route::get('/',[GraficasController::class,'graficapastel_index'])->name('graficapastel');
+})->middleware('auth:empleados');
 
 
 
